@@ -1,6 +1,6 @@
 from django.urls import path
-from .api import api
+from prototyping.api.license_api import api as license_api
 
 urlpatterns = [
-    path('api/', api.urls)
+    path('api/', license_api.urls)
 ]

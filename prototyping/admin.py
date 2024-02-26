@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import LicenseManagementDse
+from prototyping.models.license_models import LicenseManagementDse
 
 
 admin.site.register(LicenseManagementDse)
