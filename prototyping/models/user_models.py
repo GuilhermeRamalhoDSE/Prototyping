@@ -2,7 +2,7 @@ from django.db import models
 from prototyping.models.license_models import LicenseManagementDse
 
 class User(models.Model):
-    customer = models.ForeignKey(
+    license_id = models.ForeignKey(
         LicenseManagementDse,
         on_delete=models.CASCADE,
         verbose_name='ID Cliente',
