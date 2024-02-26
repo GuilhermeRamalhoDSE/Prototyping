@@ -1,22 +1,22 @@
 from django.db import models
-from prototyping.models.license_models import LicenseManagementDse
+from prototyping.models.license_models import License
 
 class User(models.Model):
-    license_id = models.ForeignKey(
-        LicenseManagementDse,
+    license = models.ForeignKey(
+        License,
         on_delete=models.CASCADE,
-        verbose_name='ID Cliente',
+        verbose_name='License ID',  # Atualizado para inglês
         related_name='users'
     )
-    first_name = models.CharField(max_length=255, verbose_name='Nome')
-    last_name = models.CharField(max_length=255, verbose_name='Cognome')
+    first_name = models.CharField(max_length=255, verbose_name='First Name')  
+    last_name = models.CharField(max_length=255, verbose_name='Last Name')  
     email = models.EmailField(unique=True, verbose_name='Email')
-    role = models.CharField(max_length=255, verbose_name='Ruolo')
-    password = models.CharField(max_length=255, verbose_name='Password')
-    
+    role = models.CharField(max_length=255, verbose_name='Role') 
+    password = models.CharField(max_length=255, verbose_name='Password')  
+
     class Meta:
-        verbose_name = 'Utente'
-        verbose_name_plural = 'Utenti'
+        verbose_name = 'User'  
+        verbose_name_plural = 'Users'  
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
