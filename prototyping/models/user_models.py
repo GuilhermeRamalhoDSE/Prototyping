@@ -5,7 +5,7 @@ class User(models.Model):
     license = models.ForeignKey(
         License,
         on_delete=models.CASCADE,
-        verbose_name='License ID',  # Atualizado para inglês
+        verbose_name='License ID',  
         related_name='users'
     )
     first_name = models.CharField(max_length=255, verbose_name='First Name')  
