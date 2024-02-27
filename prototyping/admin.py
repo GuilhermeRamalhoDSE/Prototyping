@@ -2,6 +2,7 @@ from django.contrib import admin
 from prototyping.models.license_models import License
 from prototyping.models.user_models import User
 from prototyping.models.chassis_models import Chassis
+from prototyping.models.aptica_models import Aptica
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -73,3 +74,19 @@ class ChassisAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(license=request.user.license)
+    
+@admin.register(Aptica)
+class ApticaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'license', 'hand', 'mac_address')
+    search_fields = ('mac_address',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(license=request.user.license.id)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "license" and not request.user.is_superuser:
+            kwargs["queryset"] = License.objects.filter(id=request.user.license.id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)

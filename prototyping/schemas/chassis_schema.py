@@ -15,4 +15,4 @@ class ChassisSchema(ChassisBaseSchema):
     last_modified: datetime = Field(None, alias='data_ultima_modifica')
 
     class Config:
-        orm_mode = True
+        from_attributes = True
