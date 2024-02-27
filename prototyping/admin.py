@@ -1,6 +1,7 @@
 from django.contrib import admin
 from prototyping.models.license_models import License
 from prototyping.models.user_models import User
+from prototyping.models.chassis_models import Chassis
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -56,10 +57,19 @@ class UserAdmin(BaseUserAdmin):
     
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "user_permissions" and not request.user.is_superuser:
-            # Aqui filtramos para mostrar apenas permissões relacionadas ao modelo User, por exemplo.
             user_content_type = ContentType.objects.get_for_model(User)
             kwargs["queryset"] = Permission.objects.filter(content_type=user_content_type)
-            # Adapte este filtro conforme necessário para suas necessidades específicas.
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 admin.site.register(User, UserAdmin)
+
+@admin.register(Chassis)
+class ChassisAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'creation_date', 'last_modified_date', 'file')
+    search_fields = ('name',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(license=request.user.license)
