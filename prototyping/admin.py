@@ -6,6 +6,7 @@ from prototyping.models.aptica_models import Aptica
 from prototyping.models.element_models import Element
 from prototyping.models.component_model import Component
 from prototyping.models.client_models import Client
+from prototyping.models.project_models import Project
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -144,3 +145,9 @@ class ClientAdmin(admin.ModelAdmin):
         if db_field.name == "license" and not request.user.is_superuser:
             kwargs["queryset"] = License.objects.filter(id=request.user.license.id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'client', 'creation_date', 'last_release_date']
+    search_fields = ['name', 'client__name']
+    filter_horizontal = ['users']
