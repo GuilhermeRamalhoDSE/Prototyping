@@ -8,6 +8,7 @@ from prototyping.models.component_model import Component
 from prototyping.models.client_models import Client
 from prototyping.models.project_models import Project
 from prototyping.models.message_models import Message
+from prototyping.models.release_models import Release
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -207,3 +208,16 @@ class MessageAdmin(admin.ModelAdmin):
         elif db_field.name == "user" and not request.user.is_superuser:
             kwargs["queryset"] = User.objects.filter(license=request.user.license)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+@admin.register(Release)
+class ReleaseAdmin(admin.ModelAdmin):
+    list_display = ('id', 'client_id', 'project_id', 'name', 'file', 'creation_date')
+    search_fields = ('name', 'client_id__name', 'project_id__name')  
+    list_filter = ('client_id', 'project_id', 'creation_date')
+    date_hierarchy = 'creation_date'  
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs 
+        return qs.filter(client_id=request.user.client_id)
