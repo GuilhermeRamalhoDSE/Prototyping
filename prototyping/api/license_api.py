@@ -5,14 +5,14 @@ from prototyping.models.license_models import License
 from prototyping.schemas.license_schema import LicenseSchema, LicenseCreateSchema, LicenseUpdateSchema
 
 
-license_router = Router()
+license_router = Router(tags=['Licenses'])
 
-@license_router.post("/licenses/", response={201: LicenseSchema}, tags=['Licenses'])
+@license_router.post("/licenses/", response={201: LicenseSchema})
 def create_license(request, payload: LicenseCreateSchema):
     license_obj = License.objects.create(**payload.dict())
     return LicenseSchema.from_orm(license_obj)
 
-@license_router.get("/licenses/", response=List[LicenseSchema], tags=['Licenses'])
+@license_router.get("/licenses/", response=List[LicenseSchema])
 def read_licenses(request, license_id: int = Query(None), name: str = Query(None)):
     filters = {}
     if license_id is not None:
@@ -23,7 +23,7 @@ def read_licenses(request, license_id: int = Query(None), name: str = Query(None
     licenses = License.objects.filter(**filters)
     return [LicenseSchema.from_orm(license) for license in licenses]
 
-@license_router.put("/licenses/{license_id}/", response=LicenseSchema, tags=['Licenses'])
+@license_router.put("/licenses/{license_id}/", response=LicenseSchema)
 def update_license(request, license_id: int, payload: LicenseUpdateSchema):
     license_obj = get_object_or_404(License, id=license_id)
     for attr, value in payload.dict(exclude_unset=True).items():
@@ -31,7 +31,7 @@ def update_license(request, license_id: int, payload: LicenseUpdateSchema):
     license_obj.save()
     return LicenseSchema.from_orm(license_obj)
 
-@license_router.delete("/licenses/{license_id}/", tags=['Licenses'])
+@license_router.delete("/licenses/{license_id}/")
 def delete_license(request, license_id: int):
     license_obj = get_object_or_404(License, id=license_id)
     license_obj.delete()
