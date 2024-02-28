@@ -10,5 +10,5 @@ class Aptica(models.Model):
         return f"{self.get_hand_display()} - {self.mac_address}"
 
     class Meta:
-        verbose_name = _("Aptica")
-        verbose_name_plural = _("Aptiche")
+        verbose_name = _("Aptic")
+        verbose_name_plural = _("Aptic")
