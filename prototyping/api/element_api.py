@@ -6,7 +6,7 @@ from prototyping.schemas.element_schema import ElementIn, ElementOut
 
 element_router = Router()
 
-@element_router.post("/", response=ElementOut, tags=["Elements"])
+@element_router.post("/", response={201: ElementOut}, tags=["Elements"])
 def create_element(request, payload: ElementIn):
     element = Element.objects.create(**payload.dict())
     return element

@@ -4,6 +4,7 @@ from prototyping.models.user_models import User
 from prototyping.models.chassis_models import Chassis
 from prototyping.models.aptica_models import Aptica
 from prototyping.models.element_models import Element
+from prototyping.models.component_model import Component
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
@@ -103,3 +104,20 @@ class ElementAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(chassis__license=request.user.license)
+    
+@admin.register(Component)
+class ComponentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 'version_id', 'name', 'position_x', 'position_y', 'position_z',
+        'rotation_x', 'rotation_y', 'rotation_z', 'rotation_w',
+        'area_radius', 'haptic_stiffness', 'haptic_temperature', 'haptic_texture'
+    )
+    search_fields = ('name',)
+    list_filter = ('version_id',)
+    fields = (
+        'version_id', 'name', 'position_x', 'limit_position_x', 'position_y', 'limit_position_y',
+        'position_z', 'limit_position_z', 'rotation_x', 'limit_rotation_x',
+        'rotation_y', 'limit_rotation_y', 'rotation_z', 'limit_rotation_z',
+        'rotation_w', 'limit_rotation_w', 'area_radius', 'haptic_stiffness',
+        'haptic_temperature', 'haptic_texture'
+    )
