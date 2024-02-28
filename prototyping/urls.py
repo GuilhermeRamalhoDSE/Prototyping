@@ -8,6 +8,7 @@ from .router.element_route import element_router
 from .router.component_route import component_router
 from .router.client_route import client_router
 from .router.project_route import project_router
+from .router.message_route import message_router
 
 api = NinjaAPI()
 
@@ -19,6 +20,7 @@ api.add_router("/elements", element_router)
 api.add_router("/components", component_router)
 api.add_router("/clients", client_router)
 api.add_router("/projects", project_router)
+api.add_router("/message", message_router)
 
 urlpatterns = [
     path("api/", api.urls),
