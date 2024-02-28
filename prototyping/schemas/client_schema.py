@@ -1,14 +1,14 @@
 from ninja import Schema
 
-class ClienteIn(Schema):
+class ClientIn(Schema):
     name: str
     email: str
     address: str
-    telephone: str
+    phone: str
 
-class ClienteOut(Schema):
+class ClientOut(Schema):
     id: int
     name: str
     email: str
     address: str
-    telephone: str
+    phone: str
