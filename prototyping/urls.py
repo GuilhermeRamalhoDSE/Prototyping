@@ -1,11 +1,11 @@
 from django.urls import path
 from ninja import NinjaAPI
-from .api.license_api import license_router
-from .api.user_api import user_router
-from .api.chassis_api import chassis_router
-from .api.aptica_api import aptica_router
-from .api.element_api import element_router
-from .api.component_api import component_router
+from .router.license_route import license_router
+from .router.user_route import user_router
+from .router.chassis_route import chassis_router
+from .router.aptica_route import aptica_router
+from .router.element_route import element_router
+from .router.component_route import component_router
 
 api = NinjaAPI()
 
