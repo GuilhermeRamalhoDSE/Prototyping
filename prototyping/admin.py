@@ -8,3 +8,4 @@ from prototyping.admins.client_admin import ClientAdmin
 from prototyping.admins.project_admin import ProjectAdmin
 from prototyping.admins.message_admin import MessageAdmin
 from prototyping.admins.release_admin import ReleaseAdmin 
+from prototyping.admins.component_release_admin import ComponentReleaseAdmin 
