@@ -25,9 +25,37 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/animate.css/animate.min.css",
+              "src/assets/glyphicons/glyphicons.css",
+              "src/assets/font-awesome/css/font-awesome.min.css",
+              "src/assets/material-design-icons/material-design-icons.css",
+              "src/assets/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/styles/app.css",
+              "src/assets/styles/font.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/libs/jquery/jquery/dist/jquery.js",
+              "src/libs/jquery/tether/dist/js/tether.min.js",
+              "src/libs/jquery/bootstrap/dist/js/bootstrap.js",
+              "src/libs/jquery/underscore/underscore-min.js",
+              "src/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js",
+              "src/libs/jquery/PACE/pace.min.js",
+              "src/scripts/config.lazyload.js",
+              "src/scripts/palette.js",
+              "src/scripts/ui-load.js",
+              "src/scripts/ui-jp.js",
+              "src/scripts/ui-include.js",
+              "src/scripts/ui-device.js",
+              "src/scripts/ui-form.js",
+              "src/scripts/ui-nav.js",
+              "src/scripts/ui-screenfull.js",
+              "src/scripts/ui-scroll-to.js",
+              "src/scripts/ui-toggle-class.js",
+              "src/scripts/app.js",
+              "src/libs/jquery/jquery-pjax/jquery.pjax.js",
+              "src/scripts/ajax.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -96,5 +124,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "7cc575ba-6069-4926-b197-ff66f64f4555"
   }
 }
