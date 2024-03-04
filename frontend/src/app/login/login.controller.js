@@ -7,7 +7,7 @@ angular.module('frontend').controller('LoginController', ['$scope', 'AuthService
 
     $scope.login = function() {
         AuthService.login($scope.credentials).then(function() {
-            $state.go('home');
+            $state.go('base.home');
         }, function(error) {
             alert('Login failed!');
             console.error(error);

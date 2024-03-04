@@ -8,7 +8,7 @@ angular.module('frontend', ['ui.router'])
             $state.go('login'); 
         } else if (toState.name === 'login' && AuthService.isAuthenticated()) {
             event.preventDefault();
-            $state.go('home'); 
+            $state.go('base.home'); 
         }
     });
 }]);
