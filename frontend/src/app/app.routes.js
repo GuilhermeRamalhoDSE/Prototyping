@@ -14,8 +14,8 @@ angular.module('frontend')
     })
     .state('base.licenses', {
         url: '/licenses',
-        templateUrl: 'app/licenses/licenses.html',
-        controller: 'LicensesController'
+        templateUrl: 'app/licenses/license.html',
+        controller: 'LicenseController'
     })
     .state('login', {
         url: '/login',

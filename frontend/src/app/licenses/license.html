@@ -1,0 +1,20 @@
+<div ng-controller="LicenseController">
+    <h2>Licenses</h2>
+    <form ng-submit="createLicense()">
+        <input type="text" class="md-input" ng-model="newLicense.name" placeholder="Name" required>
+        <input type="email" class="md-input" ng-model="newLicense.email" placeholder="Email" required>
+        <input type="text" class="md-input" ng-model="newLicense.address" placeholder="Address" required>
+        <input type="text" class="md-input" ng-model="newLicense.tel" placeholder="Phone" required>
+        <input type="text" class="md-input" ng-model="newLicense.license_code" placeholder="License Code" required>
+        <label>Active: <input type="checkbox" class="primary" ng-model="newLicense.active"></label>
+        <input type="date" class="md-input" ng-model="newLicense.start_date" placeholder="Start Date" required>
+        <input type="date" class="md-input" ng-model="newLicense.end_date" placeholder="End Date" required>
+        <button type="submit" class="btn primary btn-block p-x-md">Submit</button>
+    </form>
+
+    <ul>
+        <li ng-repeat="license in licenses">
+            {{ license.name }} - {{ license.email }}
+        </li>
+    </ul>
+</div>

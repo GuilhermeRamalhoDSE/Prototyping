@@ -1,3 +1,11 @@
 <body>
-    <h1>Essa eh a home page</h1>
+    <div ng-controller="LicenseController">
+        <h2>Licenses</h2>
+        <ul>
+            <li ng-repeat="license in licenses">
+                {{ license.name }} - {{ license.email }}
+            </li>
+        </ul>
+    </div>
+
 </body>
