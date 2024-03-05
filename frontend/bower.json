@@ -1,0 +1,17 @@
+{
+  "name": "frontend",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Guilherme Ramalho <guilherme.ramalho@gruppodse.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/GuilhermeRamalhoDSE/Prototyping",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
