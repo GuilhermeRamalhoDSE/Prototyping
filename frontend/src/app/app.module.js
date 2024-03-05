@@ -1,4 +1,7 @@
 angular.module('frontend', ['ui.router'])
+.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('AuthInterceptor');
+}])
 .run(['$rootScope', '$state', 'AuthService', function($rootScope, $state, AuthService) {
     $rootScope.$on('$stateChangeStart', function(event, toState) {
         var requireLogin = toState.data && toState.data.requireLogin;
@@ -12,3 +15,5 @@ angular.module('frontend', ['ui.router'])
         }
     });
 }]);
+
+

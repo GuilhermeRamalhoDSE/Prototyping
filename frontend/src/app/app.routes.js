@@ -7,6 +7,11 @@ angular.module('frontend')
         abstract: true,
         templateUrl: 'app/base.html',
     })
+    $stateProvider
+    .state('list', {
+        abstract: true,
+        templateUrl: 'app/list.html',
+    })
     .state('base.home', {
         url: '/home',
         templateUrl: 'app/home/home.html',

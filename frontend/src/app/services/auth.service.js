@@ -21,5 +21,9 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
         return !!($window.localStorage.getItem('jwtToken') || $window.sessionStorage.getItem('jwtToken'));
     };
 
+    authService.getToken = function() {
+        return $window.localStorage.getItem('jwtToken') || $window.sessionStorage.getItem('jwtToken');
+    };
+
     return authService;
 }]);
