@@ -18,8 +18,13 @@ angular.module('frontend')
         controller: 'HomeController'
     })
     .state('base.licenses', {
-        url: '/licenses',
+        url: '/licenses/new',
         templateUrl: 'app/licenses/license.html',
+        controller: 'LicenseController'
+    })
+    .state('base.list_licenses', {
+        url: '/licenses/list',
+        templateUrl: 'app/licenses/licenses-view.html',
         controller: 'LicenseController'
     })
     .state('login', {

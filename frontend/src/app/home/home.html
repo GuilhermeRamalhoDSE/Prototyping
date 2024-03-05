@@ -1,10 +1,5 @@
-<body>
-    <div ng-controller="LicenseController">
-        <h2>Licenses</h2>
-        <ul>
-            <li ng-repeat="license in licenses">
-                {{ license.name }} - {{ license.email }}
-            </li>
-        </ul>
-    </div>
-</body>
+<div ng-controller="HomeController">
+
+    <div ng-include="'app/licenses/licenses-view.html'"></div>
+   
+</div>
