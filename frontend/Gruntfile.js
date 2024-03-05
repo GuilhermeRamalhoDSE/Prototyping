@@ -6,39 +6,53 @@ module.exports = function(grunt) {
             target: {
                 files: [{
                     expand: true,
-                    cwd: 'src/css', // Seu diretório de CSS fonte
+                    cwd: 'src/assets/css',
                     src: ['*.css', '!*.min.css'],
-                    dest: 'dist/css', // Seu diretório de destino para CSS minificado
+                    dest: 'dist/assets/css',
                     ext: '.min.css'
                 }]
             }
         },
 
         uglify: {
-            options: {
-                manage: false
-            },
             my_target: {
                 files: {
-                    'dist/js/app.min.js': ['src/js/**/*.js'] // Adapte as pastas ao seu projeto
+                    'dist/app/app.min.js': ['src/app/**/*.js'],
+                    'dist/libs/libs.min.js': ['src/libs/**/*.js'] 
                 }
             }
         },
 
         watch: {
-            scripts: {
-                files: ['src/js/**/*.js', 'src/css/**/*.css'],
-                tasks: ['uglify', 'cssmin'],
-                options: {
-                    spawn: false,
-                },
+            css: {
+                files: ['src/assets/css/**/*.css'],
+                tasks: ['cssmin']
             },
+            js: {
+                files: ['src/app/**/*.js', 'src/libs/**/*.js'],
+                tasks: ['uglify']
+            }
+        },
+
+        connect: {
+            server: {
+                options: {
+                    port: 8080,
+                    base: 'dist',
+                    open: true,
+                    livereload: true,
+                    hostname: 'localhost'
+                }
+            }
         }
     });
 
+ 
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-
+    grunt.loadNpmTasks('grunt-contrib-connect'); 
     grunt.registerTask('default', ['cssmin', 'uglify']);
+    grunt.registerTask('serve', ['connect:server', 'watch']); 
+    grunt.registerTask('build', ['cssmin', 'uglify']);
 };
