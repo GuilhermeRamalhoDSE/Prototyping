@@ -2,10 +2,12 @@ from ninja import Schema
 from typing import Optional
 
 class UserSchema(Schema):
+    id: int  
     first_name: str
     last_name: str
     email: str
     role: str
+    is_staff: Optional[bool] = False  
     
 
 class UserCreateSchema(Schema):

@@ -31,5 +31,15 @@ angular.module('frontend')
         url: '/login',
         templateUrl: 'app/login/login.html',
         controller: 'LoginController'
-    });
+    })
+    .state('base.user-new', {
+        url: '/user/new',
+        templateUrl: 'app/users/user-new.html',
+        controller: 'UserController'
+    })
+    .state('base.user-view', {
+        url: '/user/list',
+        templateUrl: 'app/users/user-view.html',
+        controller: 'UserController'
+    })
 }]);

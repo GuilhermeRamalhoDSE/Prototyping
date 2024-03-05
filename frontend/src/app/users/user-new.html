@@ -1,0 +1,53 @@
+<!-- ############ PAGE START-->
+<div class="padding" ng-controller="UserController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h2>{{isEditing ? 'Update User' : 'Create User'}}</h2>
+                </div>
+                <div class="box-divider m-0"></div>
+                <div class="box-body">
+                    <form ng-submit="isEditing ? updateUser() : createUser()">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" ng-model="formUser.first_name"
+                                placeholder="First Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" ng-model="formUser.last_name"
+                                placeholder="Last Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" ng-model="formUser.email" placeholder="Email"
+                                required>
+                        </div>
+                        <div class="form-group" ng-if="!isEditing">
+                            <label>Password</label>
+                            <input type="password" class="form-control" ng-model="formUser.password"
+                                placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" class="form-control" ng-model="formUser.role" placeholder="Role"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Is Staff</label>
+                            <input type="checkbox" ng-model="formUser.is_staff">
+                        </div>
+                        <div class="form-group">
+                            <label>License ID</label>
+                            <input type="number" class="form-control" ng-model="formUser.license_id"
+                                placeholder="License ID" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{isEditing ? 'Update' : 'Submit'}}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ############ PAGE END-->
