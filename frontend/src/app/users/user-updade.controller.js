@@ -14,7 +14,7 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
         }).catch(function(error) {
             console.error('Error fetching user:', error);
         });
-    };
+    }; 
     
     $scope.updateUser = function() {
         var userDataToUpdate = {

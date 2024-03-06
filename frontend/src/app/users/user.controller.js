@@ -13,11 +13,12 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
 
     $scope.createUser = function() {
         UserService.createUser($scope.formUser).then(function(response) {
-            console.log('User created successfully:', response.data);
+            alert('User created successfully');
             $scope.getAllUsers();
             $scope.resetForm();
+            $state.go('base.user-view'); 
         }).catch(function(error) {
-            console.error('Error creating user:', error);
+            alert('Error creating user:', error);
         });
     };
 
