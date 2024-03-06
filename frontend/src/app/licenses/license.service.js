@@ -7,16 +7,22 @@ angular.module('frontend').factory('LicenseService', ['$http', function($http) {
         return $http.get(baseUrl);
     };
 
+    service.getById = function(licenseId) {
+        return $http.get(baseUrl, {
+            params: { license_id: licenseId } 
+        });
+    };
+    
     service.create = function(licenseData) {
         return $http.post(baseUrl, licenseData);
     };
 
     service.update = function(id, licenseData) {
-        return $http.put(`${baseUrl}/${id}`, licenseData);
+        return $http.put(`${baseUrl}${id}`, licenseData);
     };
 
     service.delete = function(id) {
-        return $http.delete(`${baseUrl}/${id}`);
+        return $http.delete(`${baseUrl}${id}`);
     };
 
     return service;

@@ -27,12 +27,14 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
     };  
 
     $scope.deleteUser = function(userId) {
-        UserService.deleteUser(userId).then(function(response) {
-            console.log('User successfully deleted:', response.data);
-            $scope.getAllUsers();
-        }).catch(function(error) {
-            console.error('Error deleting user:', error);
-        });
+        if (confirm('Are you sure you want to delete this license?')) {
+            UserService.deleteUser(userId).then(function(response) {
+                console.log('User successfully deleted:', response.data);
+                $scope.getAllUsers();
+            }).catch(function(error) {
+                console.error('Error deleting user:', error);
+            });
+        }
     };
 
     $scope.resetForm = function() {

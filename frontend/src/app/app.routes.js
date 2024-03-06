@@ -25,6 +25,12 @@ angular.module('frontend')
         controller: 'LicenseController'
     })
     $stateProvider
+    .state('base.licenses-update', {
+        url: '/licenses/update/:licenseId',
+        templateUrl: 'app/licenses/update-license.html',
+        controller: 'LicenseUpdateController'
+    })
+    $stateProvider
     .state('base.list_licenses', {
         url: '/licenses/list',
         templateUrl: 'app/licenses/licenses-view.html',

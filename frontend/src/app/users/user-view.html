@@ -28,7 +28,10 @@
                         <td>{{ user.first_name }}</td>
                         <td>{{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
-                        <td><span ng-show="user.is_staff">✔</span><span ng-show="!user.is_staff">✖</span></td>
+                        <td>
+                            <i class="fa fa-check text-success" ng-show="user.is_staff"></i>
+                            <i class="fa fa-times text-danger" ng-show="!user.is_staff"></i>
+                        </td>
                         <td>{{ user.role }}</td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editUser(user.id)">Edit</button>
