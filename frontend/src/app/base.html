@@ -32,7 +32,7 @@
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
-                            <li>
+                            <li ng-if="isSuperuser()">
                                 <a>
                                     <span class="nav-caret">
                                         <i class="fa fa-caret-down"></i>
@@ -61,7 +61,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <li ng-if="isSuperuser() || isStaff()">
                                 <a>
                                     <span class="nav-caret">
                                         <i class="fa fa-caret-down"></i>

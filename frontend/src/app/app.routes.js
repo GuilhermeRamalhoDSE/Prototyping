@@ -1,41 +1,6 @@
 angular.module('frontend')
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/login');
-
-    $stateProvider
-    .state('base', {
-        abstract: true,
-        templateUrl: 'app/base.html',
-    })
-    $stateProvider
-    .state('list', {
-        abstract: true,
-        templateUrl: 'app/list.html',
-    })
-    $stateProvider
-    .state('base.home', {
-        url: '/home',
-        templateUrl: 'app/home/home.html',
-        controller: 'HomeController'
-    })
-    $stateProvider
-    .state('base.licenses', {
-        url: '/licenses/new',
-        templateUrl: 'app/licenses/license.html',
-        controller: 'LicenseController'
-    })
-    $stateProvider
-    .state('base.licenses-update', {
-        url: '/licenses/update/:licenseId',
-        templateUrl: 'app/licenses/update-license.html',
-        controller: 'LicenseUpdateController'
-    })
-    $stateProvider
-    .state('base.list_licenses', {
-        url: '/licenses/list',
-        templateUrl: 'app/licenses/licenses-view.html',
-        controller: 'LicenseController'
-    })
     $stateProvider
     .state('login', {
         url: '/login',
@@ -43,21 +8,80 @@ angular.module('frontend')
         controller: 'LoginController'
     })
     $stateProvider
+    .state('base', {
+        abstract: true,
+        templateUrl: 'app/base.html',
+        data: {
+            requireLogin: true
+        }
+    })
+    $stateProvider
+    .state('base.home', {
+        url: '/home',
+        templateUrl: 'app/home/home.html',
+        controller: 'HomeController',
+        data: {
+            requireLogin: true
+        }
+    })
+    $stateProvider
+    .state('base.licenses', {
+        url: '/licenses/new',
+        templateUrl: 'app/licenses/license.html',
+        controller: 'LicenseController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser'] 
+        }
+    })
+    $stateProvider
+    .state('base.licenses-update', {
+        url: '/licenses/update/:licenseId',
+        templateUrl: 'app/licenses/update-license.html',
+        controller: 'LicenseUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser'] 
+        }
+    })
+    $stateProvider
+    .state('base.list_licenses', {
+        url: '/licenses/list',
+        templateUrl: 'app/licenses/licenses-view.html',
+        controller: 'LicenseController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser'] 
+        }
+    })
+    $stateProvider
     .state('base.user-new', {
         url: '/user/new',
         templateUrl: 'app/users/user-new.html',
-        controller: 'UserController'
+        controller: 'UserController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
     })
     $stateProvider
     .state('base.user-view', {
         url: '/user/list',
         templateUrl: 'app/users/user-view.html',
-        controller: 'UserController'
+        controller: 'UserController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
     })
     $stateProvider
     .state('base.user-update', {
         url: '/user/update/:userId',
         templateUrl: 'app/users/update-user.html',
-        controller: 'UserUpdateController'
+        controller: 'UserUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
     })
 }]);
