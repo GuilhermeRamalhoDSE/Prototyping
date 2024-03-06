@@ -19,5 +19,9 @@ angular.module('frontend').factory('UserService', ['$http', function($http) {
         return $http.delete(`${baseUrl}${id}`);
     };
 
+    service.getUserById = function(userId) {
+        return $http.get(baseUrl, { params: { user_id: userId } });
+    };
+    
     return service;
 }]);

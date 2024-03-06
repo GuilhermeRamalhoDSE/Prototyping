@@ -1,6 +1,6 @@
-angular.module('frontend').controller('UserController', ['$scope', 'UserService', function($scope, UserService) {
+angular.module('frontend').controller('UserController', ['$scope', 'UserService', '$state', function($scope, UserService, $state) {
     $scope.users = [];
-    $scope.formUser = {}; // Usado tanto para criar quanto para editar
+    $scope.formUser = {}; 
     $scope.isEditing = false;
 
     $scope.getAllUsers = function() {
@@ -21,20 +21,9 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
         });
     };
 
-    $scope.selectUserForEdit = function(user) {
-        $scope.formUser = angular.copy(user);
-        $scope.isEditing = true;
-    };
-
-    $scope.updateUser = function() {
-        UserService.updateUser($scope.formUser.id, $scope.formUser).then(function(response) {
-            console.log('User updated successfully:', response.data);
-            $scope.getAllUsers();
-            $scope.resetForm();
-        }).catch(function(error) {
-            console.error('Error updating user:', error);
-        });
-    };
+    $scope.editUser = function(userId) {
+        $state.go('base.user-update', { userId: userId });
+    };  
 
     $scope.deleteUser = function(userId) {
         UserService.deleteUser(userId).then(function(response) {

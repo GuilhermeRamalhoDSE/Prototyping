@@ -2,7 +2,7 @@ from ninja import Router, Query
 from typing import List, Optional
 from django.shortcuts import get_object_or_404
 from prototyping.models.user_models import User
-from prototyping.schemas.user_schema import UserSchema, UserCreateSchema
+from prototyping.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema
 from prototyping.auth import JWTAuth
 
 user_router = Router(tags=['Users'])
@@ -21,9 +21,9 @@ def read_users(request, user_id: Optional[int] = Query(None)):
     return users
 
 @user_router.put("/{user_id}", response=UserSchema, auth=JWTAuth())
-def update_user(request, user_id: int, data: UserCreateSchema):
+def update_user(request, user_id: int, data: UserUpdateSchema):
     user = get_object_or_404(User, id=user_id)
-    for attribute, value in data.dict().items():
+    for attribute, value in data.dict(exclude_none=True).items():
         setattr(user, attribute, value)
     user.save()
     return user

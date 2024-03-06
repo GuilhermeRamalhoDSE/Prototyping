@@ -1,14 +1,14 @@
 <!-- ############ PAGE START-->
-<div class="padding" ng-controller="UserController">
+<div class="padding" ng-controller="UserUpdateController">
     <div class="row">
         <div class="col-md-12">
             <div class="box">
                 <div class="box-header">
-                    <h2>Create User</h2>
+                    <h2>Update User</h2>
                 </div>
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
-                    <form ng-submit="createUser()">
+                    <form ng-submit="updateUser()">
                         <div class="form-group">
                             <label>First Name</label>
                             <input type="text" class="form-control" ng-model="formUser.first_name"
@@ -43,7 +43,7 @@
                             <input type="number" class="form-control" ng-model="formUser.license_id"
                                 placeholder="License ID" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>

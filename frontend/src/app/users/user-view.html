@@ -31,8 +31,7 @@
                         <td><span ng-show="user.is_staff">✔</span><span ng-show="!user.is_staff">✖</span></td>
                         <td>{{ user.role }}</td>
                         <td>
-                            <button class="btn btn-default btn-xs"
-                                ng-click="selectUserForEdit(user)">Edit</button>
+                            <button class="btn btn-default btn-xs" ng-click="editUser(user.id)">Edit</button>
                             <button class="btn btn-danger btn-xs" ng-click="deleteUser(user.id)">Delete</button>
                         </td>
                     </tr>
