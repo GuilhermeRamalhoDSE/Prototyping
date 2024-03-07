@@ -1,0 +1,27 @@
+<!-- ############ PAGE START-->
+<div class="padding" ng-controller="ChassisController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h2>Create Chassis</h2>
+                </div>
+                <div class="box-divider m-0"></div>
+                <div class="box-body">
+                    <form ng-submit="createChassis()" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" ng-model="newChassis.name" placeholder="Chassis Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>File</label>
+                            <input type="file" file-model="newChassis.file" class="form-control" placeholder="Chassis File">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ############ PAGE END-->

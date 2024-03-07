@@ -93,4 +93,34 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.chassis-new', {
+        url: '/chassis/new',
+        templateUrl: 'app/chassis/chassis-new.html',
+        controller: 'ChassisController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.chassis-view', {
+        url: '/chassis/list',
+        templateUrl: 'app/chassis/chassis-view.html',
+        controller: 'ChassisController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.chassis-update', {
+        url: '/chassis/update/:userId',
+        templateUrl: 'app/chassis/chassis-update.html',
+        controller: 'ChassisUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
 }]);
