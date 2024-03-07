@@ -1,14 +1,14 @@
-angular.module('frontend').controller('UserUpdateController', ['$scope', '$state', 'UserService', function($scope, $state, UserService) {
+angular.module('frontend').controller('UserUpdateController', ['$scope', '$state', 'UserService', 'AuthService', function($scope, $state, UserService, AuthService) {
     $scope.formUser = {};
     $scope.isEditing = true;
+    $scope.isSuperuser = AuthService.isSuperuser();
 
     $scope.loadUser = function() {
-        const userId = $state.params.userId; 
+        const userId = $state.params.userId;
         UserService.getUserById(userId).then(function(response) {
             if (response.data && response.data.length > 0) {
                 $scope.formUser = response.data[0];
             } else {
-                console.error('User not found');
                 $state.go('base.user-view'); 
             }
         }).catch(function(error) {
@@ -23,9 +23,12 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
             email: $scope.formUser.email,
             is_staff: $scope.formUser.is_staff,
             role: $scope.formUser.role,
-            password: $scope.formUser.password, 
-            license_id: $scope.formUser.license_id 
+            license_id: $scope.formUser.license_id
         };
+
+        if (!$scope.isSuperuser) {
+            userDataToUpdate.license_id = AuthService.getLicenseId();
+        }
 
         UserService.updateUser($scope.formUser.id, userDataToUpdate).then(function(response) {
             alert('User updated successfully');

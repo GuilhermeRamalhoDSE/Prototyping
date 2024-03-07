@@ -3,21 +3,23 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
 
     authService.login = function(credentials) {
         return $http.post('http://127.0.0.1:8000/prototyping/api/login/', credentials).then(function(response) {
-            if (credentials.rememberMe) {
-                $window.localStorage.setItem('jwtToken', response.data.token);
-                $window.localStorage.setItem('isSuperuser', response.data.is_superuser);
-                $window.localStorage.setItem('isStaff', response.data.is_staff); 
-                $window.localStorage.setItem('licenseId', response.data.license_id.toString());
+            var storage = credentials.rememberMe ? $window.localStorage : $window.sessionStorage;
+            
+            storage.setItem('jwtToken', response.data.token);
+            storage.setItem('isSuperuser', response.data.is_superuser.toString());
+            storage.setItem('isStaff', response.data.is_staff.toString());
+            
+            if (response.data.license_id != null) {
+                storage.setItem('licenseId', response.data.license_id.toString());
             } else {
-                $window.sessionStorage.setItem('jwtToken', response.data.token);
-                $window.sessionStorage.setItem('isSuperuser', response.data.is_superuser);
-                $window.sessionStorage.setItem('isStaff', response.data.is_staff); 
-                $window.sessionStorage.setItem('licenseId', response.data.license_id.toString());
+               
+                storage.removeItem('licenseId'); 
             }
+            
             return response.data;
         });
     };
-    
+
     authService.isSuperuser = function() {
         return $window.localStorage.getItem('isSuperuser') === 'true' || $window.sessionStorage.getItem('isSuperuser') === 'true';
     };
@@ -27,18 +29,14 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
     };
 
     authService.getLicenseId = function() {
-        return $window.localStorage.getItem('licenseId') || $window.sessionStorage.getItem('licenseId');
+        var licenseId = $window.localStorage.getItem('licenseId') || $window.sessionStorage.getItem('licenseId');
+        return licenseId ? parseInt(licenseId, 10) : null; 
     };
+    
 
     authService.logout = function() {
-        $window.localStorage.removeItem('jwtToken');
-        $window.localStorage.removeItem('isSuperuser');
-        $window.localStorage.removeItem('isStaff'); 
-        $window.localStorage.removeItem('licenseId'); 
-        $window.sessionStorage.removeItem('jwtToken');
-        $window.sessionStorage.removeItem('isSuperuser');
-        $window.sessionStorage.removeItem('isStaff'); 
-        $window.sessionStorage.removeItem('licenseId'); 
+        $window.localStorage.clear();
+        $window.sessionStorage.clear();
     };
 
     authService.isAuthenticated = function() {

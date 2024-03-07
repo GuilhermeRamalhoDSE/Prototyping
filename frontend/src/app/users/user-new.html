@@ -40,8 +40,7 @@
                         </div>
                         <div class="form-group">
                             <label>License ID</label>
-                            <input type="number" class="form-control" ng-model="formUser.license_id"
-                                placeholder="License ID" required>
+                                <input type="number" class="form-control" ng-model="formUser.licenseId" ng-disabled="!isSuperuser" placeholder="License ID" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

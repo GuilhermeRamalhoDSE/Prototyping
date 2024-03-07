@@ -1,5 +1,5 @@
 from ninja import Router
-from typing import List
+from typing import List, Optional
 from django.shortcuts import get_object_or_404
 from prototyping.models.user_models import User
 from prototyping.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema
@@ -7,7 +7,7 @@ from prototyping.auth import JWTAuth
 import jwt
 from django.conf import settings
 from prototyping.utils import check_user_permission, get_user_info_from_token
-from django.http import HttpResponseForbidden
+from ninja.errors import HttpError
 
 user_router = Router(tags=['Users'])
 
@@ -17,14 +17,20 @@ def create_user(request, user_in: UserCreateSchema):
     return user
 
 @user_router.get("/", response=List[UserSchema], auth=JWTAuth())
-def read_users(request):
+def read_users(request, user_id: Optional[int] = None):
     if not check_user_permission(request):
-        return HttpResponseForbidden("You do not have permission to view these users.")
+        raise HttpError(403, "You do not have permission to view these users.")
     
     user_info = get_user_info_from_token(request)
     license_id = user_info.get('license_id')
     
-    users = User.objects.filter(license_id=license_id) if license_id else User.objects.all()
+    if user_id:
+        users = User.objects.filter(id=user_id)
+        if license_id:
+            users = users.filter(license_id=license_id)
+    else:
+        users = User.objects.filter(license_id=license_id) if license_id else User.objects.all()
+    
     return users
 
 @user_router.put("/{user_id}", response=UserSchema, auth=JWTAuth())

@@ -9,8 +9,13 @@ class JWTAuth(HttpBearer):
     def authenticate(self, request, token):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-            user_email = payload.get("email") 
-            return User.objects.get(email=user_email)
+            user_email = payload.get("email")
+            user = User.objects.get(email=user_email)
+
+            if payload.get("is_superuser", False) != user.is_superuser:
+                raise HttpError(403, "Access denied")
+
+            return user
         except jwt.ExpiredSignatureError:
             raise HttpError(401, "Token has expired")
         except jwt.DecodeError:

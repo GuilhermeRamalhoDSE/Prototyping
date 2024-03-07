@@ -1,7 +1,8 @@
-angular.module('frontend').controller('UserController', ['$scope', 'UserService', '$state', function($scope, UserService, $state) {
+angular.module('frontend').controller('UserController', ['$scope', 'UserService', '$state', 'AuthService', function($scope, UserService, $state, AuthService) {
     $scope.users = [];
-    $scope.formUser = {}; 
+    $scope.formUser = {};
     $scope.isEditing = false;
+    $scope.isSuperuser = AuthService.isSuperuser();
 
     $scope.getAllUsers = function() {
         UserService.getAllUsers().then(function(response) {
@@ -11,25 +12,48 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
         });
     };
 
+    $scope.initForm = function() {
+        if (!$scope.isSuperuser) {
+            var userLicenseId = AuthService.getLicenseId();
+            $scope.formUser.licenseId = userLicenseId;
+        }
+    };
+
     $scope.createUser = function() {
-        UserService.createUser($scope.formUser).then(function(response) {
+        var formLicenseId = $scope.formUser.licenseId;
+        var userLicenseId = AuthService.getLicenseId();
+        
+        if (!$scope.isSuperuser && (formLicenseId !== userLicenseId)) {
+            alert('Only superusers can create users in different licenses.');
+            return;
+        }
+
+        var userData = {
+            ...$scope.formUser,
+            license_id: $scope.formUser.licenseId 
+        };
+        delete userData.licenseId; 
+
+        UserService.createUser(userData).then(function(response) {
             alert('User created successfully');
             $scope.getAllUsers();
             $scope.resetForm();
-            $state.go('base.user-view'); 
+            $state.go('base.user-view');
         }).catch(function(error) {
-            alert('Error creating user:', error);
+            console.error('Error creating user:', error);
+            if (error.data && error.data.detail) {
+                alert('Error details: ' + JSON.stringify(error.data.detail));
+            }
         });
     };
 
     $scope.editUser = function(userId) {
         $state.go('base.user-update', { userId: userId });
-    };  
+    };
 
     $scope.deleteUser = function(userId) {
-        if (confirm('Are you sure you want to delete this license?')) {
+        if (confirm('Are you sure you want to delete this user?')) {
             UserService.deleteUser(userId).then(function(response) {
-                console.log('User successfully deleted:', response.data);
                 $scope.getAllUsers();
             }).catch(function(error) {
                 console.error('Error deleting user:', error);
@@ -40,7 +64,9 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
     $scope.resetForm = function() {
         $scope.formUser = {};
         $scope.isEditing = false;
+        $scope.initForm();
     };
 
     $scope.getAllUsers();
+    $scope.initForm();
 }]);

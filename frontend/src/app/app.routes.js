@@ -16,6 +16,15 @@ angular.module('frontend')
         }
     })
     $stateProvider
+    .state('error', {
+        url: '/error',
+        templateUrl: 'app/errors/error.html',
+        controller: 'ErrorController',
+        data: {
+            requireLogin: true
+        }
+    })
+    $stateProvider
     .state('base.home', {
         url: '/home',
         templateUrl: 'app/home/home.html',
