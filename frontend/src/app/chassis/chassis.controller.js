@@ -31,6 +31,10 @@ angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisSe
         });
     };
 
+    $scope.editChassis = function(userId) {
+        $state.go('base.chassis-update', { userId: userId });
+    };
+
     $scope.deleteChassis = function(chassisId) {
         if (confirm('Are you sure you want to delete this chassis?')) {
             ChassisService.deleteChassis(chassisId).then(function(response) {

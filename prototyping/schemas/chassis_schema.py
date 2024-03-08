@@ -7,16 +7,21 @@ from django.db.models.fields.files import FieldFile
 class ChassisBaseSchema(BaseModel):
     name: str
     file: str  
+    license_id: int
 
 class ChassisCreateSchema(ChassisBaseSchema):
-    pass
+    license_id: Optional[int] = None
+
+class ChassisUpdateSchema(BaseModel):
+    name: Optional[str] = None
+    file: Optional[str] = None
 
 class ChassisSchema(BaseModel):
     id: int
     name: str
     file: str  
-    creation_date: datetime = Field(None, alias='data_creazione')
-    last_modified: datetime = Field(None, alias='data_ultima_modifica')
+    creation_date: Optional[datetime] = None
+    last_modified: Optional[datetime] = None
 
     @validator('file', pre=True, always=True)
     def convert_file_to_url(cls, v):
@@ -24,5 +29,4 @@ class ChassisSchema(BaseModel):
             return v.url  
         return v 
     class Config:
-        orm_mode = True
         from_attributes = True

@@ -6,7 +6,7 @@ from ninja import Router
 from ninja.errors import HttpError
 from prototyping.schemas.login_schema import AuthSchema, LoginResponseSchema
 
-login_router = Router()
+login_router = Router(tags=['Login'])
 
 @login_router.post("/", response=LoginResponseSchema)
 def login(request, auth_data: AuthSchema):
