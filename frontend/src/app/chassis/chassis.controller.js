@@ -49,7 +49,9 @@ angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisSe
             console.error('Error creating chassis:', error);
         });
     };
-    
+    $scope.cancelCreate = function() {
+        $state.go('base.chassis-view');
+    };
 
     $scope.editChassis = function(chassisId) {
         $state.go('base.chassis-update', { chassisId: chassisId });

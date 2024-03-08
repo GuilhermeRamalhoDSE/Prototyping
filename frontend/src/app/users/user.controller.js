@@ -46,6 +46,9 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
             }
         });
     };
+    $scope.cancelCreate = function() {
+        $state.go('base.chassis-view');
+    };
 
     $scope.editUser = function(userId) {
         $state.go('base.user-update', { userId: userId });

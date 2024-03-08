@@ -39,5 +39,9 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
         });
     };
 
+    $scope.cancelUpdate = function() {
+        $state.go('base.chassis-view');
+    };
+
     $scope.loadUser(); 
 }]);

@@ -40,6 +40,10 @@ angular.module('frontend').controller('LicenseUpdateController', ['$scope', 'Lic
             alert('Error updating license.');
         });
     };
+    $scope.cancelUpdate = function() {
+        $state.go('base.chassis-view');
+    };
+    
     
 
     $scope.loadLicenseData(); 

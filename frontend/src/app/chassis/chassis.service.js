@@ -14,7 +14,7 @@ angular.module('frontend').factory('ChassisService', ['$http', function($http) {
             });
         },
         updateChassis: function(chassisId, chassisData) {
-            return $http.put(baseUrl + chassisId + '/', chassisData, {
+            return $http.put(baseUrl + chassisId, chassisData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             });

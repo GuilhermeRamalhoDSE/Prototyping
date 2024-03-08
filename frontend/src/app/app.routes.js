@@ -115,7 +115,7 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.chassis-update', {
-        url: '/chassis/update/:userId',
+        url: '/chassis/update/:chassisId',
         templateUrl: 'app/chassis/chassis-update.html',
         controller: 'ChassisUpdateController',
         data: {

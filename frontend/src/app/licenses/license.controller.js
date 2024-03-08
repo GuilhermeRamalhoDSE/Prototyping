@@ -49,6 +49,10 @@ angular.module('frontend').controller('LicenseController', ['$scope', 'LicenseSe
             alert('Error creating license:', error);
         });
     };
+    $scope.cancelCreate = function() {
+        $state.go('base.chassis-view');
+    };
+
     $scope.editLicense = function(licenseId) {
         $state.go('base.licenses-update', { licenseId: licenseId }); 
     };

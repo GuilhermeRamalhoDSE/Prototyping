@@ -38,7 +38,7 @@
               <td>{{ chassis.creation_date | date:'dd/MM/yyyy' }}</td>
               <td>{{ chassis.last_modified | date:'dd/MM/yyyy' }}</td>
               <td>
-                <button class="btn btn-default btn-xs" ng-click="editChassis(user.id)">Edit</button>
+                <button class="btn btn-default btn-xs" ng-click="editChassis(chassis.id)">Edit</button>
                 <button class="btn btn-danger btn-xs" ng-click="deleteChassis(chassis.id)">Delete</button>
               </td>
             </tr>
