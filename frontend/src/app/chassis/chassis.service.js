@@ -5,8 +5,8 @@ angular.module('frontend').factory('ChassisService', ['$http', function($http) {
             return $http.get(baseUrl);
         },
         getChassisById: function(chassisId) {
-            return $http.get(baseUrl + chassisId + '/');
-        },
+            return $http.get(baseUrl, { params: { chassis_id: chassisId } });
+        },        
         createChassis: function(chassisData) {
             return $http.post(baseUrl, chassisData, {
                 transformRequest: angular.identity,
@@ -20,7 +20,7 @@ angular.module('frontend').factory('ChassisService', ['$http', function($http) {
             });
         },
         deleteChassis: function(chassisId) {
-            return $http.delete(baseUrl + chassisId + '/');
+            return $http.delete(baseUrl + chassisId);
         }
     };
 }]);

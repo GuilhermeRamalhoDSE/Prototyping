@@ -1,32 +1,40 @@
-from ninja import Router
 from typing import Optional
+from ninja import Router, File
+from ninja.files import UploadedFile
 from ninja.errors import HttpError
-from prototyping.models.chassis_models import Chassis
-from prototyping.schemas.chassis_schema import ChassisSchema, ChassisCreateSchema, ChassisUpdateSchema
 from django.shortcuts import get_object_or_404
+from prototyping.models.chassis_models import Chassis
+from prototyping.models.license_models import License
+from prototyping.schemas.chassis_schema import ChassisSchema, ChassisUpdateSchema, ChassisCreateSchema
+from django.http import HttpRequest
 from prototyping.auth import JWTAuth
 from prototyping.utils import get_user_info_from_token, check_user_permission
 
 chassis_router = Router(tags=['Chassis'])
 
+
+
 @chassis_router.post("/", response={201: ChassisSchema}, auth=JWTAuth())
-def create_chassis(request, payload: ChassisCreateSchema):
+def create_chassis(request: HttpRequest, chassis_in: ChassisCreateSchema, file: UploadedFile = File(...)):
     user_info = get_user_info_from_token(request)
-    
     is_superuser = check_user_permission(request)
     
-    if is_superuser and payload.license_id is not None:
-        license_id = payload.license_id
+    if is_superuser and chassis_in.license_id is not None:
+        final_license_id = chassis_in.license_id
     else:
-        license_id = user_info.get('license_id')
+        final_license_id = user_info.get('license_id')
     
-    if not license_id:
+    if not final_license_id:
         raise HttpError(400, "license_id is required.")
-    
-    chassis_data = payload.dict(exclude_unset=True)
-    chassis_data['license_id'] = license_id
-    chassis = Chassis.objects.create(**chassis_data)
 
+    license = get_object_or_404(License, id=final_license_id)
+
+    chassis = Chassis.objects.create(
+        name=chassis_in.name, 
+        license=license, 
+        file=file  
+    )
+    
     return 201, chassis
 
 
@@ -47,9 +55,8 @@ def read_chassis(request, chassis_id: Optional[int] = None):
     
     return chassis
 
-
 @chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
-def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema):
+def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile] = File(None)):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to update this chassis.")
 
@@ -61,10 +68,10 @@ def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema):
 
     for attr, value in payload.dict(exclude_none=True).items():
         setattr(chassis, attr, value)
+    if file: 
+        chassis.file = file
     chassis.save()
     return chassis
-
-
 
 @chassis_router.delete("/{chassis_id}", response={204: None}, auth=JWTAuth())
 def delete_chassis(request, chassis_id: int):
@@ -79,5 +86,3 @@ def delete_chassis(request, chassis_id: int):
     
     chassis.delete()
     return 204, None
-
-

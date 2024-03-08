@@ -10,7 +10,7 @@ class ChassisBaseSchema(BaseModel):
     license_id: int
 
 class ChassisCreateSchema(ChassisBaseSchema):
-    license_id: Optional[int] = None
+    license_id: int
 
 class ChassisUpdateSchema(BaseModel):
     name: Optional[str] = None

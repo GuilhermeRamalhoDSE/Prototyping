@@ -1,10 +1,19 @@
-angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisService', '$state', function($scope, ChassisService, $state) {
+angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisService', '$state', 'AuthService', function($scope, ChassisService, $state, AuthService) {
     $scope.chassisList = [];
     $scope.isEditing = false;
+    $scope.isSuperuser = AuthService.isSuperuser();
 
     $scope.newChassis = {
         name: "",
-        file: null
+        file: null,
+        license_id: AuthService.getLicenseId()
+    };
+
+    $scope.initForm = function() {
+        if (!$scope.isSuperuser) {
+            var userLicenseId = AuthService.getLicenseId();
+            $scope.newChassis.license_id = userLicenseId;
+        }
     };
 
     $scope.loadChassis = function() {
@@ -17,22 +26,33 @@ angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisSe
 
     $scope.createChassis = function() {
         var chassisData = new FormData();
-        chassisData.append('name', $scope.newChassis.name);
+        var chassisIn = JSON.stringify({
+            name: $scope.newChassis.name,
+            license_id: $scope.newChassis.license_id,
+
+            file: $scope.newChassis.file ? $scope.newChassis.file.name : null
+        });
+    
+
+        chassisData.append('chassis_in', chassisIn);
+
         if ($scope.newChassis.file) {
             chassisData.append('file', $scope.newChassis.file);
         }
-
+    
         ChassisService.createChassis(chassisData).then(function(response) {
             alert('Chassis created successfully!');
             $scope.loadChassis();
-            $scope.newChassis = { name: "", file: null };
+            $scope.resetForm();
+            $state.go('base.chassis-view');
         }).catch(function(error) {
             console.error('Error creating chassis:', error);
         });
     };
+    
 
-    $scope.editChassis = function(userId) {
-        $state.go('base.chassis-update', { userId: userId });
+    $scope.editChassis = function(chassisId) {
+        $state.go('base.chassis-update', { chassisId: chassisId });
     };
 
     $scope.deleteChassis = function(chassisId) {
@@ -46,5 +66,12 @@ angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisSe
         }
     };
 
+    $scope.resetForm = function() {
+        $scope.newChassis = { name: "", file: null, license_id: AuthService.getLicenseId() };
+        $scope.isEditing = false;
+        $scope.initForm();
+    };
+
     $scope.loadChassis();
+    $scope.initForm();
 }]);

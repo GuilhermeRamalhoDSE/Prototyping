@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from prototyping.models.license_models import License
 
 def chassis_directory_path(instance, filename):
-    return 'chassis/licenza_{0}/{1}'.format(instance.license_id, instance.creation_date.strftime('%Y/%m/%d'), filename)
+    return 'chassis/licenza_{0}/{1}/{2}'.format(instance.license_id, instance.creation_date.strftime('%Y/%m/%d'), filename)
 
 class Chassis(models.Model):
     license = models.ForeignKey(License, on_delete=models.CASCADE, verbose_name=_('id_licenza'))
