@@ -20,7 +20,7 @@ class ChassisSchema(BaseModel):
     name: str
     file_path: Optional[str] = Field(None, alias='file')  
     creation_date: Optional[datetime] = None
-    last_modified: Optional[datetime] = None
+    last_modified_date: Optional[datetime] = None
 
     @validator('file_path', pre=True, always=True)
     def convert_file_to_url(cls, v):

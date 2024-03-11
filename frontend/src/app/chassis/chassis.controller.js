@@ -57,6 +57,10 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         $state.go('base.chassis-update', { chassisId: chassisId });
     };
 
+    $scope.detailingChassis = function(chassisId) {
+        $state.go('base.element-view', { chassisId: chassisId });
+    };
+
     $scope.deleteChassis = function(chassisId) {
         if (confirm('Are you sure you want to delete this chassis?')) {
             ChassisService.deleteChassis(chassisId).then(function(response) {
@@ -91,8 +95,6 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         }
     };
     
-      
-
     $scope.resetForm = function() {
         $scope.newChassis = { name: "", file: null, license_id: AuthService.getLicenseId() };
         $scope.isEditing = false;

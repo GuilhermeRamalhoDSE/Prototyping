@@ -123,4 +123,34 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.element-new', {
+        url: '/element/new',
+        templateUrl: 'app/elements/elements-new.html',
+        controller: 'ElementController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.element-view', {
+        url: '/element/list',
+        templateUrl: 'app/elements/element-view.html',
+        controller: 'ElementController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.element-update', {
+        url: '/element/update/:chassisId',
+        templateUrl: 'app/elements/element-update.html',
+        controller: 'ElementController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
 }]);
