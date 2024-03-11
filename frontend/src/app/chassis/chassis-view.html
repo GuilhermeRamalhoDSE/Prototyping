@@ -34,7 +34,7 @@
             <tr ng-repeat="chassis in chassisList | filter:searchText">
               <td>{{ chassis.id }}</td>
               <td>{{ chassis.name }}</td>
-              <td><a ng-href="{{ chassis.file }}" target="_blank">View File</a></td>
+              <td><a ng-href="{{ chassis.file_path }}" target="_blank">View File</a></td>
               <td>{{ chassis.creation_date | date:'dd/MM/yyyy' }}</td>
               <td>{{ chassis.last_modified | date:'dd/MM/yyyy' }}</td>
               <td>

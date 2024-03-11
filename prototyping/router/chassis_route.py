@@ -56,7 +56,8 @@ def read_chassis(request, chassis_id: Optional[int] = None):
     return chassis
 
 @chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
-def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile] = File(None)):
+def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: UploadedFile = File(...)):
+
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to update this chassis.")
 
