@@ -6,7 +6,6 @@ angular.module('frontend').controller('ChassisUpdateController', ['$scope', '$st
     $scope.loadChassis = function() {
         const chassisId = $state.params.chassisId;
         ChassisService.getChassisById(chassisId).then(function(response) {
-            console.log("Chassis loaded:", response.data);
             if (response.data && response.data.length > 0) {
                 $scope.formChassis = response.data[0];
                 if (!$scope.isSuperuser) {

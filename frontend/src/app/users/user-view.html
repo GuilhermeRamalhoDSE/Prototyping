@@ -5,10 +5,18 @@
             <h2>User Details</h2>
             <small>Details of registered users</small>
         </div>
-        <div class="box-body">
-            Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
-                ng-model="searchText" />
-        </div>
+        <div class="p-a white lt box-shadow">
+            <div class="row">
+              <div class="mb-0 _300">
+                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
+                  ng-model="searchText" />
+              </div>
+              <a class="nav-link" ui-sref="base.user-new">
+                <i class="fa fa-fw fa-plus text-muted"></i>
+                <span>New User</span>
+              </a>
+            </div>
+          </div>
         <div>
             <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="5">
                 <thead>

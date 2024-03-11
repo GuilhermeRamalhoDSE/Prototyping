@@ -1,4 +1,4 @@
-angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisService', '$state', 'AuthService', function($scope, ChassisService, $state, AuthService) {
+angular.module('frontend').controller('ChassisController', ['$scope', '$http', 'ChassisService', '$state', 'AuthService', function($scope, $http, ChassisService, $state, AuthService) {
     $scope.chassisList = [];
     $scope.isEditing = false;
     $scope.isSuperuser = AuthService.isSuperuser();
@@ -67,6 +67,31 @@ angular.module('frontend').controller('ChassisController', ['$scope', 'ChassisSe
             });
         }
     };
+
+    $scope.downloadChassisFile = function(chassisId) {
+        if (chassisId) {
+            var downloadUrl = 'http://localhost:8000/prototyping/api/chassis/download/' + chassisId;
+            
+            $http({
+                url: downloadUrl,
+                method: 'GET',
+                responseType: 'blob', 
+            }).then(function (response) {
+                var blob = new Blob([response.data], {type: response.headers('Content-Type')});
+                var downloadLink = angular.element('<a></a>');
+                downloadLink.attr('href', window.URL.createObjectURL(blob));
+                downloadLink.attr('download', 'ChassisFile-' + chassisId);
+                
+                downloadLink[0].click();
+            }).catch(function (data) {
+                console.error("Download failed: ", data);
+            });
+        } else {
+            console.error("Download failed: Chassis ID is invalid.");
+        }
+    };
+    
+      
 
     $scope.resetForm = function() {
         $scope.newChassis = { name: "", file: null, license_id: AuthService.getLicenseId() };

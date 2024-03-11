@@ -33,91 +33,28 @@
                                 </a>
                             </li>
                             <li ng-if="isSuperuser()">
-                                <a>
-                                    <span class="nav-caret">
-                                        <i class="fa fa-caret-down"></i>
-                                    </span>
+                                <a ui-sref="base.list_licenses">
                                     <span class="nav-icon">
                                         <i class="fa fa-database"></i>
                                     </span>
                                     <span class="nav-text">Licenses</span>
                                 </a>
-                                <ul class="nav-sub">
-                                    <li>
-                                        <a ui-sref="base.list_licenses">
-                                            <span class="nav-icon">
-                                                <i class="fa fa-list"></i>
-                                            </span>
-                                            <span class="nav-text">List</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a ui-sref="base.licenses">
-                                            <span class="nav-icon">
-                                                <i class="material-icons md-24"></i>
-                                            </span>
-                                            <span class="nav-text">New</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li ng-if="isSuperuser() || isStaff()">
-                                <a>
-                                    <span class="nav-caret">
-                                        <i class="fa fa-caret-down"></i>
-                                    </span>
+                                <a ui-sref="base.user-view">
                                     <span class="nav-icon">
                                         <i class="material-icons md-24"></i>
                                     </span>
                                     <span class="nav-text">Users</span>
                                 </a>
-                                <ul class="nav-sub">
-                                    <li>
-                                        <a ui-sref="base.user-view">
-                                            <span class="nav-icon">
-                                                <i class="fa fa-list"></i>
-                                            </span>
-                                            <span class="nav-text">List</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a ui-sref="base.user-new">
-                                            <span class="nav-icon">
-                                                <i class="material-icons md-24"></i>
-                                            </span>
-                                            <span class="nav-text">New</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li ng-if="isSuperuser() || isStaff()">
-                                <a>
-                                    <span class="nav-caret">
-                                        <i class="fa fa-caret-down"></i>
-                                    </span>
+                                <a ui-sref="base.chassis-view">
                                     <span class="nav-icon">
                                         <i class="material-icons md-24"></i>
                                     </span>
                                     <span class="nav-text">Chassis</span>
                                 </a>
-                                <ul class="nav-sub">
-                                    <li>
-                                        <a ui-sref="base.chassis-view">
-                                            <span class="nav-icon">
-                                                <i class="fa fa-list"></i>
-                                            </span>
-                                            <span class="nav-text">List</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a ui-sref="base.chassis-new">
-                                            <span class="nav-icon">
-                                                <i class="material-icons md-24"></i>
-                                            </span>
-                                            <span class="nav-text">New</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
 
                         </ul>

@@ -9,6 +9,9 @@ from prototyping.schemas.chassis_schema import ChassisSchema, ChassisUpdateSchem
 from django.http import HttpRequest
 from prototyping.auth import JWTAuth
 from prototyping.utils import get_user_info_from_token, check_user_permission
+from django.http import FileResponse, Http404
+import os
+from django.conf import settings
 
 chassis_router = Router(tags=['Chassis'])
 
@@ -55,8 +58,26 @@ def read_chassis(request, chassis_id: Optional[int] = None):
     
     return chassis
 
+@chassis_router.get("/download/{chassis_id}", auth=JWTAuth())
+def download_chassis_file(request, chassis_id: int):
+    user_info = get_user_info_from_token(request)
+    chassis = get_object_or_404(Chassis, id=chassis_id)
+    
+    if str(chassis.license_id) != str(user_info.get('license_id')):
+        raise HttpError(403, "You do not have permission to download this file.")
+
+    if chassis.file and hasattr(chassis.file, 'path'):
+        file_path = chassis.file.path
+        if os.path.exists(file_path):
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
+        else:
+            raise Http404("File does not exist.")
+    else:
+        raise Http404("No file associated with this chassis.")
+
+
 @chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
-def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: UploadedFile = File(...)):
+def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile]  = File(None)):
 
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to update this chassis.")
