@@ -125,8 +125,8 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.element-new', {
-        url: '/element/new',
-        templateUrl: 'app/elements/elements-new.html',
+        url: '/chassis/:chassisId/element/new',
+        templateUrl: 'app/elements/element-new.html',
         controller: 'ElementController',
         data: {
             requireLogin: true, 
@@ -135,7 +135,7 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.element-view', {
-        url: '/element/list',
+        url: '/chassis/:chassisId/elements',
         templateUrl: 'app/elements/element-view.html',
         controller: 'ElementController',
         data: {
@@ -145,9 +145,9 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.element-update', {
-        url: '/element/update/:chassisId',
+        url: '/chassis/:chassisId/element/update/:elementId',
         templateUrl: 'app/elements/element-update.html',
-        controller: 'ElementController',
+        controller: 'ElementUpdateController',
         data: {
             requireLogin: true, 
             requiredPermissions: ['superuser', 'staff'] 

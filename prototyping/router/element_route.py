@@ -3,23 +3,43 @@ from ninja import Router
 from typing import List, Optional
 from prototyping.models.element_models import Element
 from prototyping.schemas.element_schema import ElementIn, ElementOut
+from prototyping.models.chassis_models import Chassis
 from prototyping.auth import JWTAuth
+from prototyping.utils import get_user_info_from_token, check_user_permission
+from ninja.errors import HttpError
 
 element_router = Router(tags=["Elements"])
 
 @element_router.post("/", response={201: ElementOut}, auth=JWTAuth())
 def create_element(request, payload: ElementIn):
+    
+    chassis = get_object_or_404(Chassis, id=payload.chassis_id)
+    
     element = Element.objects.create(**payload.dict())
-    return element
+    return 201, element
 
 @element_router.get("/", response=List[ElementOut], auth=JWTAuth())
-def read_elements(request, name: Optional[str] = None, id: Optional[int] = None):
-    query = Element.objects.all()
-    if name:
-        query = query.filter(name__icontains=name)
-    if id:
-        query = query.filter(id=id)
-    return query
+def read_elements(request, chassis_id: Optional[int] = None):
+
+    if not check_user_permission(request):
+        raise HttpError(403, "You do not have permission to view these elements.")
+
+    user_info = get_user_info_from_token(request)
+    license_id = user_info.get('license_id')
+
+    if chassis_id:
+
+        if license_id is not None:
+            chassis = get_object_or_404(Chassis, id=chassis_id, license_id=license_id)
+        else:
+            chassis = get_object_or_404(Chassis, id=chassis_id)
+
+        elements = Element.objects.filter(chassis=chassis)
+    else:
+        raise HttpError(400, "Chassis ID is required.")
+
+    return elements
+
 
 @element_router.put("/{element_id}", response=ElementOut, auth=JWTAuth())
 def update_element(request, element_id: int, payload: ElementIn):
