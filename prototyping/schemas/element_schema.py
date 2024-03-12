@@ -1,8 +1,9 @@
 from ninja import Schema
+from typing import Optional
 
 class ElementIn(Schema):
-    chassis_id: int
-    name: str
+    chassis_id: Optional[int] = None
+    name: Optional[str] = None
     
 
 class ElementOut(Schema):

@@ -7,7 +7,7 @@ angular.module('frontend').factory('ElementService', ['$http', function($http) {
     };
 
     service.getById = function(elementId) {
-        return $http.get(baseUrl + elementId + '/');
+        return $http.get(baseUrl + elementId);
     };
 
     service.create = function(elementData) {
@@ -15,7 +15,7 @@ angular.module('frontend').factory('ElementService', ['$http', function($http) {
     };
 
     service.update = function(id, elementData) {
-        return $http.put(baseUrl + id + '/', elementData);
+        return $http.put(baseUrl + id, elementData);
     };
 
     service.delete = function(id) {

@@ -40,12 +40,28 @@ def read_elements(request, chassis_id: Optional[int] = None):
 
     return elements
 
+@element_router.get("/{element_id}", response=ElementOut, auth=JWTAuth())
+def read_element_by_id(request, element_id: int):
+
+    if not check_user_permission(request):
+        raise HttpError(403, "You do not have permission to view this element.")
+
+    user_info = get_user_info_from_token(request)
+    license_id = user_info.get('license_id')
+
+    element = get_object_or_404(Element, id=element_id, chassis__license_id=license_id)
+
+    return element
 
 @element_router.put("/{element_id}", response=ElementOut, auth=JWTAuth())
 def update_element(request, element_id: int, payload: ElementIn):
     element = get_object_or_404(Element, id=element_id)
-    for attr, value in payload.dict().items():
-        setattr(element, attr, value)
+    
+    if payload.chassis_id is not None:
+        element.chassis_id = payload.chassis_id
+    if payload.name is not None:
+        element.name = payload.name
+    
     element.save()
     return element
 
