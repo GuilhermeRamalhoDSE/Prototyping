@@ -19,7 +19,7 @@ angular.module('frontend').factory('ElementService', ['$http', function($http) {
     };
 
     service.delete = function(id) {
-        return $http.delete(baseUrl + id + '/');
+        return $http.delete(baseUrl + id);
     };
 
     return service;

@@ -50,6 +50,22 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
         $state.go('base.element-update', { elementId: elementId });
     };
 
+    $scope.deleteElement = function(elementId) {
+        if (!elementId) {
+            console.error('Element ID is missing');
+            return;
+        }
+        var isConfirmed = confirm('Are you sure you want to delete this element?');
+        if (isConfirmed) {
+            ElementService.delete(elementId).then(function(response) {
+                alert('Element deleted successfully!');
+                $scope.loadElements();
+            }).catch(function(error) {
+                console.error('Error deleting element:', error);
+            });
+        }
+    };
+    
     $scope.resetForm = function() {
         $scope.newElement = {
             name: "",
