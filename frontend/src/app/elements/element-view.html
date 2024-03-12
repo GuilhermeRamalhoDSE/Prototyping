@@ -31,10 +31,10 @@
                             Name
                         </th>
                         <th data-hide="phone,tablet">
-                            Chassis ID
+                            Chassis
                         </th>
                         <th data-hide="phone">
-                            Component Count
+                            Total components
                         </th>
                         <th>Actions</th>
                     </tr>
@@ -43,7 +43,7 @@
                     <tr ng-repeat="element in elementList | filter:searchText">
                         <td>{{ element.id }}</td>
                         <td>{{ element.name }}</td>
-                        <td>{{ element.chassis_id }}</td>
+                        <td>{{ element.chassis_name }}</td>
                         <td>{{ element.component_count }}</td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editElement(element.id)">Edit</button>

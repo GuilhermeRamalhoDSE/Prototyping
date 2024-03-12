@@ -10,6 +10,7 @@ class ElementOut(Schema):
     chassis_id: int
     name: str
     component_count: int
+    chassis_name: str
     
     @staticmethod
     def resolve_chassis_id(obj):
@@ -18,3 +19,7 @@ class ElementOut(Schema):
     @staticmethod
     def resolve_component_count(obj):
         return obj.component_count
+    
+    @staticmethod
+    def resolve_chassis_name(obj): 
+        return obj.chassis.name

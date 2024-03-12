@@ -2,24 +2,26 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
     $scope.elementList = [];
     $scope.isSuperuser = AuthService.isSuperuser();
 
-   
+    let chassisId = parseInt($stateParams.chassisId || sessionStorage.getItem('lastChassisId'), 10);
+
+    if (isNaN(chassisId)) {
+        console.error('Invalid chassisId');
+        return;
+    }
+
+    sessionStorage.setItem('lastChassisId', chassisId.toString());
+
     $scope.newElement = {
         name: "",
-        chassis_id: $stateParams.chassisId, 
+        chassis_id: chassisId,
     };
 
-    console.log('Current $stateParams:', $stateParams);
-    console.log('Current chassisId:', $stateParams.chassisId);
-
     $scope.loadElements = function() {
-        console.log("Checking chassisId availability:", $stateParams.chassisId);
-        if (!$stateParams.chassisId) {
+        if (!chassisId) {
             console.error('Chassis ID is missing');
-            return; 
+            return;
         }
-        console.log('Loading elements for chassisId:', $stateParams.chassisId);
-        ElementService.getAll($stateParams.chassisId).then(function(response) { 
-            console.log('Elements loaded:', response.data);
+        ElementService.getAll(chassisId).then(function(response) {
             $scope.elementList = response.data;
         }).catch(function(error) {
             console.error('Error fetching elements:', error);
@@ -27,7 +29,10 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
     };
 
     $scope.createElement = function() {
-        console.log("Initial $stateParams check:", $stateParams);
+        if (!chassisId) {
+            console.error('Chassis ID is missing');
+            return;
+        }
         ElementService.create($scope.newElement).then(function(response) {
             alert('Element created successfully!');
             $scope.loadElements();
@@ -43,12 +48,12 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
 
     $scope.editElement = function(elementId) {
         $state.go('base.element-update', { elementId: elementId });
-    };    
+    };
 
     $scope.resetForm = function() {
         $scope.newElement = {
             name: "",
-            chassis_id: $stateParams.chassisId,
+            chassis_id: chassisId,
         };
     };
 
