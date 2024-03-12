@@ -153,4 +153,34 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.component-new', {
+        url: '/chassis/:chassisId/element/:elementId/component/new',
+        templateUrl: 'app/components/component-new.html',
+        controller: 'ComponentController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.component-view', {
+        url: '/chassis/:chassisId/element/:elementId/components',
+        templateUrl: 'app/components/component-view.html',
+        controller: 'ComponentController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.component-update', {
+        url: '/chassis/:chassisId/element/:elementId/update',
+        templateUrl: 'app/components/component-update.html',
+        controller: 'ComponentUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
 }]);

@@ -50,6 +50,10 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
         $state.go('base.element-update', { elementId: elementId });
     };
 
+    $scope.detailElement = function(elementId) {
+        $state.go('base.component-view', { elementId: elementId });
+    };
+
     $scope.deleteElement = function(elementId) {
         if (!elementId) {
             console.error('Element ID is missing');
