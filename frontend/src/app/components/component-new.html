@@ -1,0 +1,80 @@
+<!-- ############ PAGE START-->
+<div class="padding" ng-controller="ComponentController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h2>Create Component</h2>
+                </div>
+                <div class="box-divider m-0"></div>
+                <div class="box-body">
+                    <form ng-submit="createComponent()" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Element ID</label>
+                            <input type="number" class="form-control" ng-model="newComponent.element_id" placeholder="Element ID" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Version ID</label>
+                            <input type="number" class="form-control" ng-model="newComponent.version_id" placeholder="Version ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" ng-model="newComponent.name" placeholder="Component Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Position X</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_position_x" placeholder="Limit Position X" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Position Y</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_position_y" placeholder="Limit Position Y" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Position Z</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_position_z" placeholder="Limit Position Z" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Rotation X</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_rotation_x" placeholder="Limit Rotation X" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Rotation Y</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_rotation_y" placeholder="Limit Rotation Y" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Rotation Z</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_rotation_z" placeholder="Limit Rotation Z" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit Rotation W</label>
+                            <input type="text" class="form-control" ng-model="newComponent.limit_rotation_w" placeholder="Limit Rotation W" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Area Radius</label>
+                            <input type="text" class="form-control" ng-model="newComponent.area_radius" placeholder="Area Radius" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Haptic Stiffness (Optional)</label>
+                            <input type="text" class="form-control" ng-model="newComponent.haptic_stiffness" placeholder="Haptic Stiffness">
+                        </div>
+                        <div class="form-group">
+                            <label>Haptic Temperature (Optional)</label>
+                            <input type="text" class="form-control" ng-model="newComponent.haptic_temperature" placeholder="Haptic Temperature">
+                        </div>
+                        <div class="form-group">
+                            <label>Haptic Texture (Optional)</label>
+                            <input type="number" class="form-control" ng-model="newComponent.haptic_texture" placeholder="Haptic Texture">
+                        </div>
+                        <div class="form-group">
+                            <label>File</label>
+                            <input type="file"  file-model="file" class="form-control" file-model="newComponent.file" placeholder="Upload File">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" ng-click="cancelCreate()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ############ PAGE END-->

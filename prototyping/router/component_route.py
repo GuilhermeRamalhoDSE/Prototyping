@@ -12,21 +12,35 @@ from prototyping.utils import get_user_info_from_token, check_user_permission
 
 component_router = Router(tags=["Components"])
 
-@component_router.post("/", response={201: ComponentSchema}, auth=JWTAuth()) 
-def create_component(request, element_id: int, component_in: ComponentCreateSchema, file: UploadedFile = File(...)):
+@component_router.post("/", response={201: ComponentSchema}, auth=JWTAuth())
+def create_component(request, component_in: ComponentCreateSchema, file: UploadedFile = File(...)):
     user_info = get_user_info_from_token(request)
-    element = get_object_or_404(Element, id=element_id)
-    chassis = get_object_or_404(Chassis, id=element.chassis_id)
+    is_superuser = check_user_permission(request)
 
-    if str(chassis.license_id) != str(user_info.get('license_id')):
-        raise Http404("You do not have permission to add components to this element.")
+    if is_superuser:
+        element_id = component_in.element_id
+    else:
+        element_id = user_info.get('element_id')
+
+    if not element_id:
+        raise Http404("Element ID is required.")
+
+    element = get_object_or_404(Element, id=element_id)
     
+    if not is_superuser and str(element.chassis.license_id) != str(user_info.get('license_id')):
+        raise Http404("You do not have permission to add components to this element.")
+
+    component_data = component_in.dict(exclude_unset=True, exclude={'element_id'})
     component = Component.objects.create(
-        **component_in.dict(exclude_unset=True),
+        **component_data,
         element=element,
         file=file
     )
-    return component
+
+    component_schema = ComponentSchema.from_orm(component)
+
+    return 201, component_schema
+
 
 @component_router.get("/", response=List[ComponentSchema], auth=JWTAuth()) 
 def read_components(request, element_id: Optional[int] = None):

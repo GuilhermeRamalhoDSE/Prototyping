@@ -1,20 +1,25 @@
 angular.module('frontend').controller('ComponentController', ['$scope', 'ComponentService', '$state', '$stateParams', 'AuthService', function($scope, ComponentService, $state, $stateParams, AuthService) {
     $scope.componentList = [];
     $scope.isSuperuser = AuthService.isSuperuser();
-
+    $scope.file = null;
     let elementId = parseInt($stateParams.elementId || sessionStorage.getItem('lastElementId'), 10);
-
-    if (isNaN(elementId)) {
-        console.error('Invalid elementId');
-        return;
-    }
-
     sessionStorage.setItem('lastElementId', elementId.toString());
 
     $scope.newComponent = {
         name: "",
-        version_id: 0, 
+        version_id: 0,
         element_id: elementId,
+        limit_position_x: 0,
+        limit_position_y: 0,
+        limit_position_z: 0,
+        limit_rotation_x: 0,
+        limit_rotation_y: 0,
+        limit_rotation_z: 0,
+        limit_rotation_w: 0,
+        area_radius: 0,
+        haptic_stiffness: 0,
+        haptic_temperature: 0,
+        haptic_texture: 0
     };
 
     $scope.loadComponents = function() {
@@ -30,18 +35,25 @@ angular.module('frontend').controller('ComponentController', ['$scope', 'Compone
     };
 
     $scope.createComponent = function() {
-        if (!elementId) {
-            console.error('Element ID is missing');
+        if (!elementId || !$scope.file) {
+            console.error('Element ID or file is missing');
             return;
         }
-        ComponentService.create($scope.newComponent).then(function(response) {
+    
+        var formData = new FormData();
+        formData.append('file', $scope.file);
+    
+        var componentData = { ...$scope.newComponent };
+        formData.append('component_in', JSON.stringify(componentData));
+    
+        ComponentService.create(formData).then(function(response) {
             alert('Component created successfully!');
             $scope.loadComponents();
             $state.go('base.component-view', {elementId: elementId});
         }).catch(function(error) {
             console.error('Error creating component:', error);
         });
-    };
+    };    
 
     $scope.cancelCreate = function() {
         $state.go('base.component-view', {elementId: elementId});
@@ -50,6 +62,7 @@ angular.module('frontend').controller('ComponentController', ['$scope', 'Compone
     $scope.editComponent = function(componentId) {
         $state.go('base.component-update', {elementId: elementId, componentId: componentId});
     };
+
     $scope.detailComponent = function(componentId) {
         $state.go('base.component-detail', {elementId: elementId, componentId: componentId});
     };
@@ -73,8 +86,19 @@ angular.module('frontend').controller('ComponentController', ['$scope', 'Compone
     $scope.resetForm = function() {
         $scope.newComponent = {
             name: "",
-            version_id: 0, 
+            version_id: 0,
             element_id: elementId,
+            limit_position_x: 0,
+            limit_position_y: 0,
+            limit_position_z: 0,
+            limit_rotation_x: 0,
+            limit_rotation_y: 0,
+            limit_rotation_z: 0,
+            limit_rotation_w: 0,
+            area_radius: 0,
+            haptic_stiffness: 0,
+            haptic_temperature: 0,
+            haptic_texture: 0
         };
     };
 

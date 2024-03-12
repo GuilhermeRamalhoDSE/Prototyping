@@ -9,18 +9,18 @@ class ComponentBaseSchema(BaseModel):
     limit_position_x: float
     limit_position_y: float
     limit_position_z: float
-    rotation_x: float
-    rotation_y: float
-    rotation_z: float
+    limit_rotation_x: float
+    limit_rotation_y: float
+    limit_rotation_z: float
     limit_rotation_w: float
     area_radius: float
     haptic_stiffness: Optional[float] = None
     haptic_temperature: Optional[float] = None
     haptic_texture: Optional[int] = None
-    file_path: Optional[str] = Field(None, alias='file')
+
 
 class ComponentCreateSchema(ComponentBaseSchema):
-    pass
+    element_id: int
 
 class ComponentUpdateSchema(BaseModel):
     version_id: Optional[int] = None
@@ -62,8 +62,7 @@ class ComponentSchema(BaseModel):
     def convert_file_to_url(cls, v):
         if isinstance(v, FieldFile) and v.name:
             return v.url
-        return v  
+        return v
 
     class Config:
         from_attributes = True
-
