@@ -175,7 +175,7 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.component-update', {
-        url: '/chassis/:chassisId/element/:elementId/update',
+        url: '/chassis/:chassisId/element/:elementId/component/update/:componentId',
         templateUrl: 'app/components/component-update.html',
         controller: 'ComponentUpdateController',
         data: {

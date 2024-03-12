@@ -1,4 +1,4 @@
-angular.module('frontend').controller('ComponentController', ['$scope', 'ComponentService', '$state', '$stateParams', 'AuthService', function($scope, ComponentService, $state, $stateParams, AuthService) {
+angular.module('frontend').controller('ComponentController', ['$scope', '$http','ComponentService', '$state', '$stateParams', 'AuthService', function($scope, $http, ComponentService, $state, $stateParams, AuthService) {
     $scope.componentList = [];
     $scope.isSuperuser = AuthService.isSuperuser();
     $scope.file = null;
@@ -101,6 +101,32 @@ angular.module('frontend').controller('ComponentController', ['$scope', 'Compone
             haptic_texture: 0
         };
     };
+
+    $scope.downloadComponentFile = function(componentId) {
+        if (componentId) {
+            var downloadUrl = 'http://localhost:8000/prototyping/api/components/download/' + componentId;
+            
+            $http({
+                url: downloadUrl,
+                method: 'GET',
+                responseType: 'blob',
+            }).then(function (response) {
+                var blob = new Blob([response.data], {type: response.headers('Content-Type')});
+                var downloadLink = angular.element('<a></a>');
+                downloadLink.attr('href', window.URL.createObjectURL(blob));
+                downloadLink.attr('download', 'ComponentFile-' + componentId);
+                
+                document.body.appendChild(downloadLink[0]);
+                downloadLink[0].click();
+                document.body.removeChild(downloadLink[0]);
+            }).catch(function (data) {
+                console.error("Download failed: ", data);
+            });
+        } else {
+            console.error("Download failed: Component ID is invalid.");
+        }
+    };
+    
 
     $scope.loadComponents();
 }]);

@@ -9,6 +9,8 @@ from prototyping.models.element_models import Element
 from prototyping.auth import JWTAuth
 from django.http import Http404
 from prototyping.utils import get_user_info_from_token, check_user_permission
+from django.http import FileResponse
+import os
 
 component_router = Router(tags=["Components"])
 
@@ -61,6 +63,35 @@ def read_components(request, element_id: Optional[int] = None):
     
     return components
 
+@component_router.get("/{component_id}", response=ComponentSchema, auth=JWTAuth())
+def read_component_by_id(request, component_id: int):
+    if not check_user_permission(request):
+        raise HttpError(403, "You do not have permission to view this component.")
+    
+    user_info = get_user_info_from_token(request)
+    license_id = user_info.get('license_id')
+    
+    component = get_object_or_404(Component, id=component_id)
+
+    return component
+
+@component_router.get("/download/{component_id}", auth=JWTAuth())
+def download_component_file(request, component_id: int):
+    user_info = get_user_info_from_token(request)
+    component = get_object_or_404(Component, id=component_id)
+    
+    if str(component.element.chassis.license_id) != str(user_info.get('license_id')):
+        raise HttpError(403, "You do not have permission to download this file.")
+
+    if component.file and hasattr(component.file, 'path'):
+        file_path = component.file.path
+        if os.path.exists(file_path):
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
+        else:
+            raise Http404("File does not exist.")
+    else:
+        raise Http404("No file associated with this component.")
+
 @component_router.put("/{component_id}", response=ComponentSchema, auth=JWTAuth()) 
 def update_component(request, component_id: int, data: ComponentUpdateSchema, file: UploadedFile = File(None)):
     user_info = get_user_info_from_token(request)
@@ -68,15 +99,18 @@ def update_component(request, component_id: int, data: ComponentUpdateSchema, fi
     element = get_object_or_404(Element, id=component.element_id)
     chassis = get_object_or_404(Chassis, id=element.chassis_id)
 
-    if str(chassis.license_id) != str(user_info.get('license_id')):
+    if not user_info.get('is_superuser') and str(chassis.license_id) != str(user_info.get('license_id')):
         raise Http404("You do not have permission to update this component.")
 
     for attribute, value in data.dict(exclude_none=True).items():
         setattr(component, attribute, value)
+
     if file:
         component.file = file
+
     component.save()
     return component
+
 
 @component_router.delete("/{component_id}", response={204: None}, auth=JWTAuth())
 def delete_component(request, component_id: int):
