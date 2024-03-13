@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 # DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','52.210.220.169', 'gruppodse.org']
+ALLOWED_HOSTS = ['localhost','52.50.91.105']
 # ALLOWED_HOSTS = []
 
 
@@ -146,5 +146,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
-    "https://gruppodse.org/"
+    "52.50.91.105"
 ]
