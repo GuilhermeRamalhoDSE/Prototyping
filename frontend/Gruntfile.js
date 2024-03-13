@@ -23,6 +23,13 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+            html: {
+                src: 'src/index.html', 
+                dest: 'dist/index.html'
+            }
+        },
+
         watch: {
             css: {
                 files: ['src/assets/css/**/*.css'],
@@ -47,12 +54,14 @@ module.exports = function(grunt) {
         }
     });
 
- 
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-copy'); 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect'); 
-    grunt.registerTask('default', ['cssmin', 'uglify']);
+
+
+    grunt.registerTask('default', ['cssmin', 'uglify', 'copy']); 
     grunt.registerTask('serve', ['connect:server', 'watch']); 
-    grunt.registerTask('build', ['cssmin', 'uglify']);
+    grunt.registerTask('build', ['cssmin', 'uglify', 'copy']); 
 };
