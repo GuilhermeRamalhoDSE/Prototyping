@@ -39,9 +39,15 @@ module.exports = function(grunt) {
                 cwd: 'src/libs/',
                 src: '**',
                 dest: 'dist/libs/'
+            },
+            app: {
+                expand: true,
+                cwd: 'src/app/',
+                src: '**',
+                dest: 'dist/app/'
             }
         },
-
+        
         watch: {
             css: {
                 files: ['src/assets/css/**/*.css'],

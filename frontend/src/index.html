@@ -2,8 +2,8 @@
 <html lang="en" ng-app="frontend">
 
 <head>
-    <script src="libs/angular/angular/angular.js"></script>
-    <script src="libs/angular/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="libs/angular/angular.js"></script>
+    <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script src="app/app.module.js"></script>
@@ -29,53 +29,39 @@
     <script src="app/components/component.update.controller.js"></script>
     <script src="app/errors/error.controller.js"></script>
 
-
-
     <meta charset="utf-8" />
     <title>Flatkit - HTML Version | Bootstrap 4 Web App Kit with AngularJS</title>
     <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
-    <link rel="apple-touch-icon" href="../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
     <meta name="apple-mobile-web-app-title" content="Flatkit">
-    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" sizes="196x196" href="../assets/images/logo.png">
+    <link rel="shortcut icon" sizes="196x196" href="assets/images/logo.png">
 
-    <!-- style -->
-    <link rel="stylesheet" href="../assets/animate.css/animate.min.css" type="text/css" />
-    <link rel="stylesheet" href="../assets/glyphicons/glyphicons.css" type="text/css" />
-    <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="../assets/material-design-icons/material-design-icons.css" type="text/css" />
+    <link rel="stylesheet" href="assets/animate.css/animate.min.css" type="text/css" />
+    <link rel="stylesheet" href="assets/glyphicons/glyphicons.css" type="text/css" />
+    <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="assets/material-design-icons/material-design-icons.css" type="text/css" />
 
-    <link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
-    <!-- build:css ../assets/styles/app.min.css -->
-    <link rel="stylesheet" href="../assets/styles/app.css" type="text/css" />
-    <!-- endbuild -->
-    <link rel="stylesheet" href="../assets/styles/font.css" type="text/css" />
+    <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles/app.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles/font.css" type="text/css" />
 
 </head>
 
 <body>
     <div ui-view></div>
 
-
-    <!-- build:js scripts/app.html.js -->
-
-
-    <!-- jQuery -->
-    <script src="/libs/jquery/jquery/dist/jquery.js"></script>
-    <!-- Bootstrap -->
-    <script src="/libs/jquery/tether/dist/js/tether.min.js"></script>
-    <script src="/libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
-    <!-- core -->
-    <script src="/libs/jquery/underscore/underscore-min.js"></script>
-    <script src="/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
-    <script src="/libs/jquery/PACE/pace.min.js"></script>
+    <script src="libs/jquery/dist/jquery.js"></script>
+    <script src="libs/tether/dist/js/tether.min.js"></script>
+    <script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="libs/underscore/underscore-min.js"></script>
+    <script src="libs/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+    <script src="libs/PACE/pace.min.js"></script>
 
     <script src="scripts/config.lazyload.js"></script>
 
@@ -92,10 +78,8 @@
 
     <script src="scripts/app.js"></script>
 
-    <!-- ajax -->
-    <script src="/libs/jquery/jquery-pjax/jquery.pjax.js"></script>
+    <script src="libs/jquery-pjax/jquery.pjax.js"></script>
     <script src="scripts/ajax.js"></script>
-    <!-- endbuild -->
 </body>
 
 </html>
