@@ -80,17 +80,20 @@ def download_component_file(request, component_id: int):
     user_info = get_user_info_from_token(request)
     component = get_object_or_404(Component, id=component_id)
     
-    if str(component.element.chassis.license_id) != str(user_info.get('license_id')):
+    is_superuser = user_info.get('is_superuser', False)
+    
+    if is_superuser or str(component.element.chassis.license_id) == str(user_info.get('license_id')):
+        if component.file and hasattr(component.file, 'path'):
+            file_path = component.file.path
+            if os.path.exists(file_path):
+                return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
+            else:
+                raise Http404("File does not exist.")
+        else:
+            raise Http404("No file associated with this component.")
+    else:
         raise HttpError(403, "You do not have permission to download this file.")
 
-    if component.file and hasattr(component.file, 'path'):
-        file_path = component.file.path
-        if os.path.exists(file_path):
-            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
-        else:
-            raise Http404("File does not exist.")
-    else:
-        raise Http404("No file associated with this component.")
 
 @component_router.put("/{component_id}", response=ComponentSchema, auth=JWTAuth()) 
 def update_component(request, component_id: int, data: ComponentUpdateSchema, file: UploadedFile = File(None)):

@@ -40,6 +40,18 @@
                         <th data-hide="phone">
                             Limit Position Z
                         </th>
+                        <th data-hide="phone,tablet">
+                            Limit Rotation X
+                        </th>
+                        <th data-hide="phone">
+                            Limit Rotation Y
+                        </th>
+                        <th data-hide="phone">
+                            Limit Rotation Z
+                        </th>
+                        <th data-hide="phone">
+                            Limit Rotation W
+                        </th>
                         <th data-hide="phone">
                             Area Radius
                         </th>
@@ -60,24 +72,30 @@
                         <td>{{ component.id }}</td>
                         <td>{{ component.name }}</td>
                         <td>
-                            <button class="btn btn-primary btn-xs" ng-click="downloadComponentFile(component.id)">Download File</button>
+                            <button class="btn btn-primary btn-xs"
+                                ng-click="downloadComponentFile(component.id)">Download</button>
                         </td>
                         <td>{{ component.limit_position_x }}</td>
                         <td>{{ component.limit_position_y }}</td>
                         <td>{{ component.limit_position_z }}</td>
+                        <td>{{ component.limit_rotation_x }}</td>
+                        <td>{{ component.limit_rotation_y }}</td>
+                        <td>{{ component.limit_rotation_z }}</td>
+                        <td>{{ component.limit_rotation_w }}</td>
                         <td>{{ component.area_radius }}</td>
                         <td>{{ component.haptic_stiffness }}</td>
                         <td>{{ component.haptic_temperature }}</td>
                         <td>{{ component.haptic_texture }}</td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editComponent(component.id)">Edit</button>
-                            <button class="btn btn-danger btn-xs" ng-click="deleteComponent(component.id)">Delete</button>
+                            <button class="btn btn-danger btn-xs"
+                                ng-click="deleteComponent(component.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot class="hide-if-no-paging">
                     <tr>
-                        <td colspan="11" class="text-center">
+                        <td colspan="14" class="text-center">
                             <ul class="pagination"></ul>
                         </td>
                     </tr>
