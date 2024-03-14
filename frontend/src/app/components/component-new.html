@@ -69,6 +69,10 @@
                             <label>File</label>
                             <input type="file"  file-model="file" class="form-control" file-model="newComponent.file" placeholder="Upload File">
                         </div>
+                        <div>
+                            <label for="componentNumber">Component Number:</label>
+                            <input type="number" id="componentNumber" ng-model="newComponent.component_number" placeholder="Enter Component Number">
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <button type="button" class="btn btn-secondary" ng-click="cancelCreate()">Cancel</button>
                     </form>

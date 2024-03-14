@@ -24,6 +24,7 @@ class Component(models.Model):
     haptic_temperature = models.FloatField(verbose_name=_("aptic temperature"))
     haptic_texture = models.IntegerField(verbose_name=_("aptic texture"))
     created_at = models.DateTimeField(verbose_name=_("data di creazione"), default=now)
+    component_number = models.IntegerField(verbose_name=_("numero componente"), null=True, blank=True)
  
 
     def __str__(self):

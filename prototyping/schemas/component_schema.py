@@ -17,7 +17,7 @@ class ComponentBaseSchema(BaseModel):
     haptic_stiffness: Optional[float] = None
     haptic_temperature: Optional[float] = None
     haptic_texture: Optional[int] = None
-
+    component_number: Optional[int] = None  
 
 class ComponentCreateSchema(ComponentBaseSchema):
     element_id: int
@@ -36,6 +36,7 @@ class ComponentUpdateSchema(BaseModel):
     haptic_stiffness: Optional[float] = None
     haptic_temperature: Optional[float] = None
     haptic_texture: Optional[int] = None
+    component_number: Optional[int] = None 
     file_path: Optional[str] = Field(None, alias='file')
 
 class ComponentSchema(BaseModel):
@@ -54,6 +55,7 @@ class ComponentSchema(BaseModel):
     haptic_stiffness: Optional[float]
     haptic_temperature: Optional[float]
     haptic_texture: Optional[int]
+    component_number: Optional[int]
     file_path: Optional[str] = Field(None, alias='file')
     creation_date: Optional[datetime] = None
     last_modified_date: Optional[datetime] = None

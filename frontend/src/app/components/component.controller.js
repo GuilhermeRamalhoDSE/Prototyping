@@ -19,7 +19,8 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
         area_radius: 0,
         haptic_stiffness: 0,
         haptic_temperature: 0,
-        haptic_texture: 0
+        haptic_texture: 0,
+        component_number: null
     };
 
     $scope.loadComponents = function() {
