@@ -19,6 +19,10 @@
                             <input type="number" class="form-control" ng-model="componentData.element_id"
                                 placeholder="Element ID" required readonly>
                         </div>
+                        <div>
+                            <label for="componentNumber">Component Number:</label>
+                            <input type="number" id="componentNumber" ng-model="newComponent.component_number" placeholder="Enter Component Number">
+                        </div>
                         <div class="form-group">
                             <label>Version</label>
                             <input type="number" class="form-control" ng-model="componentData.version_id"
@@ -87,10 +91,6 @@
                         <div class="form-group">
                             <label>File</label>
                             <input type="file" file-model="file" class="form-control" placeholder="Upload File">
-                        </div>
-                        <div>
-                            <label for="componentNumber">Component Number:</label>
-                            <input type="number" id="componentNumber" ng-model="newComponent.component_number" placeholder="Enter Component Number">
                         </div>
                         <button type="submit" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-secondary" ng-click="cancelUpdate()">Cancel</button>
