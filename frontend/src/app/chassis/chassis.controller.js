@@ -74,7 +74,7 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
 
     $scope.downloadChassisFile = function(chassisId) {
         if (chassisId) {
-            var downloadUrl = 'http://localhost:8000/prototyping/api/chassis/download/' + chassisId;
+            var downloadUrl = 'http://52.50.91.105/prototyping/api/chassis/download/' + chassisId;
             
             $http({
                 url: downloadUrl,
