@@ -46,12 +46,12 @@ module.exports = function(grunt) {
                 src: '**',
                 dest: 'dist/app/'
             },
-            script: {
+            scripts: {
                 expand: true,
                 cwd: 'src/scripts/',
                 src: '**',
-                dest: 'dist/app/'
-            }
+                dest: 'dist/scripts/'
+            },
         },
         
         watch: {
