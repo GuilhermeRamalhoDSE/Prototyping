@@ -84,7 +84,7 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
                 var blob = new Blob([response.data], {type: response.headers('Content-Type')});
                 var downloadLink = angular.element('<a></a>');
                 downloadLink.attr('href', window.URL.createObjectURL(blob));
-                downloadLink.attr('download', 'ChassisFile-' + chassisId);
+                downloadLink.attr('download', 'ChassisFile-' + chassisId + '.fbx');
                 
                 downloadLink[0].click();
             }).catch(function (data) {

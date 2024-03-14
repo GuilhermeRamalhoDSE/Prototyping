@@ -114,7 +114,7 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
                 var blob = new Blob([response.data], {type: response.headers('Content-Type')});
                 var downloadLink = angular.element('<a></a>');
                 downloadLink.attr('href', window.URL.createObjectURL(blob));
-                downloadLink.attr('download', 'ComponentFile-' + componentId);
+                downloadLink.attr('download', 'ComponentFile-' + componentId+ '.fbx');
                 
                 document.body.appendChild(downloadLink[0]);
                 downloadLink[0].click();
