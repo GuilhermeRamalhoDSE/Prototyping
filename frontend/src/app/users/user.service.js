@@ -1,7 +1,7 @@
 angular.module('frontend').factory('UserService', ['$http', function($http) {
     var service = {};
 
-    var baseUrl = 'http://52.50.91.105:8080/prototyping/api/users/';
+    var baseUrl = 'http://prototypingdse.it/prototyping/api/users/';
 
     service.getAllUsers = function() {
         return $http.get(baseUrl);
