@@ -58,24 +58,32 @@ def read_chassis(request, chassis_id: Optional[int] = None):
     
     return chassis
 
-@chassis_router.get("/download/{chassis_id}", auth=JWTAuth())
-def download_chassis_file(request, chassis_id: int):
-    user_info = get_user_info_from_token(request)
+@chassis_router.get("/download/{chassis_id}")
+def download_chassis_file(request, chassis_id: int, token: Optional[str] = None):
+    user_info = None
+    if token:
+        try:
+            jwt_auth = JWTAuth()
+            user_info = jwt_auth.authenticate(request, token)
+        except:
+
+            pass
+    
     chassis = get_object_or_404(Chassis, id=chassis_id)
     
-    is_superuser = user_info.get('is_superuser', False)
-    
-    if is_superuser or str(chassis.license_id) == str(user_info.get('license_id')):
-        if chassis.file and hasattr(chassis.file, 'path'):
-            file_path = chassis.file.path
-            if os.path.exists(file_path):
-                return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
-            else:
-                raise Http404("File does not exist.")
+    if user_info:
+        is_superuser = user_info.get('is_superuser', False)
+        if not (is_superuser or str(chassis.license_id) == str(user_info.get('license_id', ''))):
+            raise Http404("You do not have permission to download this file.")
+
+    if chassis.file and hasattr(chassis.file, 'path'):
+        file_path = chassis.file.path
+        if os.path.exists(file_path):
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=os.path.basename(file_path))
         else:
-            raise Http404("No file associated with this chassis.")
+            raise Http404("File does not exist.")
     else:
-        raise HttpError(403, "You do not have permission to download this file.")
+        raise Http404("No file associated with this chassis.")
 
 
 
