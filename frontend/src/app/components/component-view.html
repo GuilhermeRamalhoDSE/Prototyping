@@ -73,8 +73,8 @@
                 <tbody>
                     <tr ng-repeat="component in componentList | filter:searchText">
                         <td>{{ component.id }}</td>
-                        <td>{{ component.name }}</td>
                         <td>{{ component.version_id }}</td>
+                        <td>{{ component.name }}</td>
                         <td>
                             <button class="btn btn-primary btn-xs"
                                 ng-click="downloadComponentFile(component.id)">Download</button>
