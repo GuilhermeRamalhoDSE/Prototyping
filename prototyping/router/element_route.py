@@ -47,9 +47,13 @@ def read_element_by_id(request, element_id: int):
         raise HttpError(403, "You do not have permission to view this element.")
 
     user_info = get_user_info_from_token(request)
+    is_superuser = user_info.get('is_superuser', False)
     license_id = user_info.get('license_id')
 
-    element = get_object_or_404(Element, id=element_id, chassis__license_id=license_id)
+    if is_superuser:
+        element = get_object_or_404(Element, id=element_id)
+    else:
+        element = get_object_or_404(Element, id=element_id, chassis__license_id=license_id)
 
     return element
 
