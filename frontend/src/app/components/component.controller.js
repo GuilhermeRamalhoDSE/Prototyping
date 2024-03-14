@@ -107,7 +107,7 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
 
     $scope.downloadComponentFile = function(componentId) {
         if (componentId) {
-            var downloadUrl = 'http://prototypingdse.it/prototyping/api/components/download/' + componentId;
+            var downloadUrl = 'https://www.prototypingdse.it/prototyping/api/components/download/' + componentId;
             
             $http({
                 url: downloadUrl,

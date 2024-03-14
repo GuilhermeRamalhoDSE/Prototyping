@@ -2,7 +2,7 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
     var authService = {};
 
     authService.login = function(credentials) {
-        return $http.post('http://prototypingdse.it/prototyping/api/login/', credentials).then(function(response) {
+        return $http.post('https://www.prototypingdse.it/prototyping/api/login/', credentials).then(function(response) {
             var storage = credentials.rememberMe ? $window.localStorage : $window.sessionStorage;
             
             storage.setItem('jwtToken', response.data.token);

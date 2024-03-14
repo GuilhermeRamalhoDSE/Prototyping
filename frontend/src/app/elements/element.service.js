@@ -1,6 +1,6 @@
 angular.module('frontend').factory('ElementService', ['$http', function($http) {
     var service = {};
-    var baseUrl = 'http://prototypingdse.it/prototyping/api/elements/';
+    var baseUrl = 'https://www.prototypingdse.it/prototyping/api/elements/';
 
     service.getAll = function(chassisId) {
         return $http.get(baseUrl, { params: { chassis_id: chassisId } });
