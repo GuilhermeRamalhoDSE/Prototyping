@@ -1,15 +1,13 @@
 angular.module('frontend').controller('ComponentUpdateController', ['$scope', 'ComponentService', '$state', '$stateParams', 'AuthService', function($scope, ComponentService, $state, $stateParams, AuthService) {
     $scope.componentId = $stateParams.componentId;
-    console.log('Component ID:', $scope.componentId); 
+    
 
     $scope.componentData = {};
     $scope.file = null;
 
-    $scope.loadComponentDetails = function() {
-        console.log('Loading component details for ID:', $scope.componentId); 
+    $scope.loadComponentDetails = function() { 
         if ($scope.componentId) {
             ComponentService.getById($scope.componentId).then(function(response) {
-                console.log('Response for component details:', response); 
                 if (response.data) {
                     $scope.componentData = response.data; 
                 } else {

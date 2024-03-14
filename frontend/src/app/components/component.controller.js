@@ -30,6 +30,7 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
         }
         ComponentService.getAll(elementId).then(function(response) {
             $scope.componentList = response.data;
+            console.log(response.data)
         }).catch(function(error) {
             console.error('Error fetching components:', error);
         });
