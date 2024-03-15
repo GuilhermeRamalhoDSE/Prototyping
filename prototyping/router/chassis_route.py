@@ -86,7 +86,6 @@ def download_chassis_file(request, chassis_id: int, token: Optional[str] = None)
         raise Http404("No file associated with this chassis.")
 
 
-
 @chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
 def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile] = File(None)):
 
