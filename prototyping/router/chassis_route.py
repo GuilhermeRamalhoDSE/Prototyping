@@ -63,8 +63,8 @@ def download_chassis_file(request, chassis_id: int, token: Optional[str] = None)
     user_info = None
     if token:
         try:
-            jwt_auth = JWTAuth()
-            user_info = jwt_auth.authenticate(request, token)
+            jwt_auth = CombinedAuth()
+            user_info = CombinedAuth.authenticate(request, token)
         except:
 
             pass
@@ -111,7 +111,7 @@ def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file:
     chassis.save()
     return chassis
 
-@chassis_router.delete("/{chassis_id}", response={204: None}, auth=CombinedAuth())
+@chassis_router.delete("/{chassis_id}", response={204: None}, auth=CombinedAuth()   )
 def delete_chassis(request, chassis_id: int):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to delete this chassis.")
