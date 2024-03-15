@@ -11,7 +11,7 @@ from prototyping.auth import JWTAuth
 from prototyping.utils import get_user_info_from_token, check_user_permission
 from django.http import FileResponse, Http404
 import os
-from django.conf import settings
+from django.core.files.storage import default_storage
 
 chassis_router = Router(tags=['Chassis'])
 
@@ -88,7 +88,7 @@ def download_chassis_file(request, chassis_id: int, token: Optional[str] = None)
 
 
 @chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
-def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile]  = File(None)):
+def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile] = File(None)):
 
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to update this chassis.")
@@ -99,10 +99,16 @@ def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file:
     if not user_info.get('is_superuser') and str(chassis.license_id) != str(user_info.get('license_id')):
         raise HttpError(403, "You do not have permission to update this chassis.")
 
+    if file and chassis.file:
+        if default_storage.exists(chassis.file.name):
+            default_storage.delete(chassis.file.name)
+
     for attr, value in payload.dict(exclude_none=True).items():
         setattr(chassis, attr, value)
+
     if file: 
         chassis.file = file
+
     chassis.save()
     return chassis
 

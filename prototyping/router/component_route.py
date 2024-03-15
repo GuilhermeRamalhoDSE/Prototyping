@@ -11,6 +11,7 @@ from django.http import Http404
 from prototyping.utils import get_user_info_from_token, check_user_permission
 from django.http import FileResponse
 import os
+from django.core.files.storage import default_storage
 
 component_router = Router(tags=["Components"])
 
@@ -108,11 +109,16 @@ def update_component(request, component_id: int, data: ComponentUpdateSchema, fi
     for attribute, value in data.dict(exclude_none=True).items():
         setattr(component, attribute, value)
 
+    if file and component.file:
+        if default_storage.exists(component.file.name):
+            default_storage.delete(component.file.name)
+    
     if file:
         component.file = file
 
     component.save()
     return component
+
 
 
 @component_router.delete("/{component_id}", response={204: None}, auth=JWTAuth())
