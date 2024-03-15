@@ -10,6 +10,14 @@ logger = logging.getLogger(__name__)
 
 class JWTAuth(HttpBearer):
     def authenticate(self, request, token=None):
+        def test_authenticate(token):
+            try:
+                # Simule a lógica de decodificação e autenticação aqui
+                print("Token:", token)
+                # Insira aqui a lógica de decodificação do token
+            except Exception as e:
+                print("Erro durante a autenticação:", e)
+
         logger.info("Iniciando autenticação JWT...")
         if token is None:
             token = request.GET.get('token')
