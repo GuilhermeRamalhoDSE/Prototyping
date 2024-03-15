@@ -7,17 +7,15 @@ from django.conf import settings
 User = get_user_model()
 
 class AuthCheck:
-    def authenticate(self, request, key: str = None):
-        # Tenta obter o token do header ou da query string
-        if not key:
+    def authenticate(self, request, token: str = None):
+        if not token:
             return None
 
         try:
-            payload = jwt.decode(key, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             user_email = payload.get("email")
             user = User.objects.get(email=user_email)
 
-            # Verifica se o usuário tem as permissões necessárias
             if payload.get("is_superuser", False) != user.is_superuser:
                 raise HttpError(403, "Access denied")
 
