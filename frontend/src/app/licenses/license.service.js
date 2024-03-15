@@ -1,7 +1,7 @@
 angular.module('frontend').factory('LicenseService', ['$http', function($http) {
     var service = {};
 
-    var baseUrl = 'https://www.prototypingdse.it/prototyping/api/licenses/';
+    var baseUrl = 'https://prototypingdse.it/prototyping/api/licenses/';
 
     service.getAll = function() {
         return $http.get(baseUrl);

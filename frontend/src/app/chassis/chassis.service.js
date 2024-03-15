@@ -1,5 +1,5 @@
 angular.module('frontend').factory('ChassisService', ['$http', function($http) {
-    var baseUrl = 'https://www.prototypingdse.it/prototyping/api/chassis/'; 
+    var baseUrl = 'https://prototypingdse.it/prototyping/api/chassis/'; 
     return {
         getChassis: function() {
             return $http.get(baseUrl);
