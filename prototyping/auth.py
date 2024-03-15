@@ -5,15 +5,17 @@ import jwt
 from django.conf import settings
 import logging
 
-logger = logging.getLogger(__name__)
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class JWTAuth(HttpBearer):
     def authenticate(self, request, token=None):
+        logger.info("Iniciando autenticação JWT...")
         if token is None:
             token = request.GET.get('token')
-            logger.debug(f"Token from query string: {token}")
+            logger.info(f"Token obtido da query string: {token}")
         if not token:
+            logger.error("Token não fornecido.")
             raise HttpError(401, "Authentication token not provided")
 
         try:
