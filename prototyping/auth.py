@@ -3,7 +3,9 @@ from ninja.errors import HttpError
 from django.contrib.auth import get_user_model
 import jwt
 from django.conf import settings
+import logging
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 class JWTAuth(HttpBearer):
