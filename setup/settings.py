@@ -152,6 +152,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://prototypingdse.it/'
 ]
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -159,7 +160,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/ubuntu/logs/debug.log',
+            'filename': 'debug.log',
         },
     },
     'loggers': {
