@@ -13,10 +13,10 @@ class JWTAuth(HttpBearer):
         def test_authenticate(token):
             try:
                 # Simule a lógica de decodificação e autenticação aqui
-                print("Token:", token)
+                 logger.info("Token:", token)
                 # Insira aqui a lógica de decodificação do token
             except Exception as e:
-                print("Erro durante a autenticação:", e)
+                 logger.info("Erro durante a autenticação:", e)
 
         logger.info("Iniciando autenticação JWT...")
         if token is None:
