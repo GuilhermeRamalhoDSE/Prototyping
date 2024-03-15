@@ -131,6 +131,10 @@ def delete_component(request, component_id: int):
     if not user_info.get('is_superuser', False) and str(chassis.license_id) != str(user_info.get('license_id')):
         raise Http404("You do not have permission to delete this component.")
 
+    if component.file:
+        file_path = component.file.path
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    
     component.delete()
-    return None
-
+    return 204, None

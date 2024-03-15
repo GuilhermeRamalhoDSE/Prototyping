@@ -122,6 +122,11 @@ def delete_chassis(request, chassis_id: int):
 
     if not user_info.get('is_superuser') and str(chassis.license_id) != str(user_info.get('license_id')):
         raise HttpError(403, "You do not have permission to delete this chassis.")
+
+    if chassis.file:
+        file_path = chassis.file.path
+        if os.path.exists(file_path):
+            os.remove(file_path)
     
     chassis.delete()
     return 204, None
