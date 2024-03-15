@@ -29,15 +29,3 @@ class JWTQueryAuth(APIKeyQuery):
         except Exception as e:
             raise HttpError(401, "Invalid token or user does not exist")
 
-class CombinedAuth:
-    def __init__(self):
-        self.header_auth = JWTHeaderAuth()
-        self.query_auth = JWTQueryAuth()
-
-    def authenticate(self, request):
-        token = request.headers.get('Authorization', '').split('Bearer ')[-1]
-        user = self.header_auth.authenticate(request, token)
-        if user:
-            return user
-        token = request.GET.get('token', '')
-        return self.query_auth.authenticate(request, token)
