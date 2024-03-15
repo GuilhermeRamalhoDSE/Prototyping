@@ -2,9 +2,24 @@ import jwt
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from prototyping.models.user_models import User
+from ninja.errors import HttpError
+
+def get_token_from_request(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        try:
+            return auth_header.split(' ')[1]  
+        except IndexError:
+            pass 
+
+    token = request.GET.get('key') or request.GET.get('token')
+    return token
 
 def get_user_info_from_token(request):
-    token = request.headers.get('Authorization').split(' ')[1]
+    token = get_token_from_request(request)
+    if not token:
+        raise HttpError(401, "Token not provided")
+
     decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
     return decoded_token
 
