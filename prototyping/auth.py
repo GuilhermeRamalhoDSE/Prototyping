@@ -10,7 +10,7 @@ class JWTAuth(HttpBearer):
     def authenticate(self, request, token=None):
         if token is None:
             token = request.GET.get('token')
-        
+            print(f"Token from query string: {token}")
         if not token:
             raise HttpError(401, "Authentication token not provided")
 
