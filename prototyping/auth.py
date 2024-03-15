@@ -7,12 +7,12 @@ from django.conf import settings
 User = get_user_model()
 
 class AuthCheck:
-    def authenticate(self, request, token: str = None):
-        if not token:
+    def authenticate(self, request, key: str = None):
+        if not key:
             return None
 
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(key, settings.SECRET_KEY, algorithms=["HS256"])
             user_email = payload.get("email")
             user = User.objects.get(email=user_email)
 
@@ -28,7 +28,7 @@ class AuthCheck:
             raise HttpError(401, "User does not exist")
 
 class QueryTokenAuth(AuthCheck, APIKeyQuery):
-    param_name: str = "token"
+    param_name: str = "key"
 
 class HeaderTokenAuth(AuthCheck, HttpBearer):
     pass
