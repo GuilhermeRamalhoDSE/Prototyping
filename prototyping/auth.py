@@ -1,4 +1,4 @@
-from ninja.security import APIKeyQuery, APIKeyHeader
+from ninja.security import APIKeyQuery, HttpBearer
 from ninja.errors import HttpError
 from django.contrib.auth import get_user_model
 import jwt
@@ -32,5 +32,5 @@ class AuthCheck:
 class QueryTokenAuth(AuthCheck, APIKeyQuery):
     param_name: str = "token"
 
-class HeaderTokenAuth(AuthCheck, APIKeyHeader):
+class HeaderTokenAuth(AuthCheck, HttpBearer):
     pass
