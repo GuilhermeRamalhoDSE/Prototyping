@@ -5,12 +5,12 @@ from prototyping.models.aptica_models import Aptica
 from prototyping.models.license_models import License
 from prototyping.schemas.aptica_schema import ApticaCreate, ApticaUpdate, ApticaOut
 from ninja.errors import HttpError
-from prototyping.auth import JWTAuth
+from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 
 
 aptica_router = Router(tags=["Aptic"])
 
-@aptica_router.post("/", response={201: ApticaOut}, auth=JWTAuth())
+@aptica_router.post("/", response={201: ApticaOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_aptica(request, payload: ApticaCreate):
     license = get_object_or_404(License, id=payload.license_id)
     if request.user.is_superuser or request.user.license_id == license.id:
@@ -19,7 +19,7 @@ def create_aptica(request, payload: ApticaCreate):
     else:
         raise HttpError(403, "You do not have permission to perform this action.")
 
-@aptica_router.get("/", response=List[ApticaOut], auth=JWTAuth())
+@aptica_router.get("/", response=List[ApticaOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_apticas(request, aptica_id: Optional[int] = None):
     if aptica_id:
         aptica = get_object_or_404(Aptica, id=aptica_id, license=request.user.license)
@@ -32,7 +32,7 @@ def read_apticas(request, aptica_id: Optional[int] = None):
         return apticas
 
 
-@aptica_router.put("/{aptica_id}", response=ApticaOut, auth=JWTAuth())
+@aptica_router.put("/{aptica_id}", response=ApticaOut, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_aptica(request, aptica_id: int, payload: ApticaUpdate):
     aptica = get_object_or_404(Aptica, id=aptica_id, license=request.user.license)
     for attr, value in payload.dict().items():
@@ -40,7 +40,7 @@ def update_aptica(request, aptica_id: int, payload: ApticaUpdate):
     aptica.save()
     return aptica
 
-@aptica_router.delete("/{aptica_id}", response={204: None}, auth=JWTAuth())
+@aptica_router.delete("/{aptica_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_aptica(request, aptica_id: int):
     aptica = get_object_or_404(Aptica, id=aptica_id, license=request.user.license)
     aptica.delete()

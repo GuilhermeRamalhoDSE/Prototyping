@@ -6,7 +6,7 @@ from prototyping.schemas.component_schema import ComponentCreateSchema, Componen
 from prototyping.models.component_model import Component
 from prototyping.models.chassis_models import Chassis
 from prototyping.models.element_models import Element
-from prototyping.auth import JWTAuth
+from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 from django.http import Http404
 from prototyping.utils import get_user_info_from_token, check_user_permission
 from django.http import FileResponse
@@ -15,7 +15,7 @@ from django.core.files.storage import default_storage
 
 component_router = Router(tags=["Components"])
 
-@component_router.post("/", response={201: ComponentSchema}, auth=JWTAuth())
+@component_router.post("/", response={201: ComponentSchema}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_component(request, component_in: ComponentCreateSchema, file: UploadedFile = File(...)):
     user_info = get_user_info_from_token(request)
     is_superuser = check_user_permission(request)
@@ -45,7 +45,7 @@ def create_component(request, component_in: ComponentCreateSchema, file: Uploade
     return 201, component_schema
 
 
-@component_router.get("/", response=List[ComponentSchema], auth=JWTAuth()) 
+@component_router.get("/", response=List[ComponentSchema], auth=[QueryTokenAuth(), HeaderTokenAuth()]) 
 def read_components(request, element_id: Optional[int] = None):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to view these components.")
@@ -64,7 +64,7 @@ def read_components(request, element_id: Optional[int] = None):
     
     return components
 
-@component_router.get("/{component_id}", response=ComponentSchema, auth=JWTAuth())
+@component_router.get("/{component_id}", response=ComponentSchema, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_component_by_id(request, component_id: int):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to view this component.")
@@ -76,7 +76,7 @@ def read_component_by_id(request, component_id: int):
 
     return component
 
-@component_router.get("/download/{component_id}", auth=JWTAuth())
+@component_router.get("/download/{component_id}", auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def download_component_file(request, component_id: int):
     user_info = get_user_info_from_token(request)
     component = get_object_or_404(Component, id=component_id)
@@ -96,7 +96,7 @@ def download_component_file(request, component_id: int):
         raise HttpError(403, "You do not have permission to download this file.")
 
 
-@component_router.put("/{component_id}", response=ComponentSchema, auth=JWTAuth()) 
+@component_router.put("/{component_id}", response=ComponentSchema, auth=[QueryTokenAuth(), HeaderTokenAuth()]) 
 def update_component(request, component_id: int, data: ComponentUpdateSchema, file: UploadedFile = File(None)):
     user_info = get_user_info_from_token(request)
     component = get_object_or_404(Component, id=component_id)
@@ -121,7 +121,7 @@ def update_component(request, component_id: int, data: ComponentUpdateSchema, fi
 
 
 
-@component_router.delete("/{component_id}", response={204: None}, auth=JWTAuth())
+@component_router.delete("/{component_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_component(request, component_id: int):
     user_info = get_user_info_from_token(request)
     component = get_object_or_404(Component, id=component_id)

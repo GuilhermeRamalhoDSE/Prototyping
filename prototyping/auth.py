@@ -1,26 +1,23 @@
-from ninja.security import HttpBearer
+from ninja.security import APIKeyQuery, APIKeyHeader
 from ninja.errors import HttpError
 from django.contrib.auth import get_user_model
 import jwt
 from django.conf import settings
 
-
 User = get_user_model()
 
-
-class JWTAuth(HttpBearer):
-    def authenticate(self, request, token=None):
-        
-        if token is None:
-            token = request.GET.get('token')
-        if not token:
-            raise HttpError(401, "Authentication token not provided")
+class AuthCheck:
+    def authenticate(self, request, key: str = None):
+        # Tenta obter o token do header ou da query string
+        if not key:
+            return None
 
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(key, settings.SECRET_KEY, algorithms=["HS256"])
             user_email = payload.get("email")
             user = User.objects.get(email=user_email)
 
+            # Verifica se o usuário tem as permissões necessárias
             if payload.get("is_superuser", False) != user.is_superuser:
                 raise HttpError(403, "Access denied")
 
@@ -31,3 +28,9 @@ class JWTAuth(HttpBearer):
             raise HttpError(401, "Error decoding token")
         except User.DoesNotExist:
             raise HttpError(401, "User does not exist")
+
+class QueryTokenAuth(AuthCheck, APIKeyQuery):
+    param_name: str = "token"
+
+class HeaderTokenAuth(AuthCheck, APIKeyHeader):
+    pass

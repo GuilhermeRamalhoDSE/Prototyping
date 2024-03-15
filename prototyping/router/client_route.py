@@ -3,16 +3,16 @@ from ninja import Router
 from django.shortcuts import get_object_or_404
 from prototyping.models.client_models import Client
 from prototyping.schemas.client_schema import ClientIn, ClientOut
-from prototyping.auth import JWTAuth
+from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 
 client_router = Router(tags=["Clients"])
 
-@client_router.post("/", response={201: ClientOut}, auth=JWTAuth())
+@client_router.post("/", response={201: ClientOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_client(request, payload: ClientIn):
-    Client = Client.objects.create(**payload.dict(), auth=JWTAuth())
+    Client = Client.objects.create(**payload.dict(), auth=[QueryTokenAuth(), HeaderTokenAuth()])
     return Client
 
-@client_router.get("/", response=List[ClientOut], auth=JWTAuth())
+@client_router.get("/", response=List[ClientOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_client(request, Client_id: Optional[int] = None, name: Optional[str] = None):
     if Client_id:
         return [get_object_or_404(Client, id=Client_id)]
@@ -20,7 +20,7 @@ def read_client(request, Client_id: Optional[int] = None, name: Optional[str] = 
         return list(Client.objects.filter(name__icontains=name))
     return list(Client.objects.all())
 
-@client_router.put("/{client_id}", response=ClientOut, auth=JWTAuth())
+@client_router.put("/{client_id}", response=ClientOut, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_client(request, client_id: int, payload: ClientIn):
     client = get_object_or_404(Client, id=client_id)
     for attr, value in payload.dict().items():
@@ -28,7 +28,7 @@ def update_client(request, client_id: int, payload: ClientIn):
     client.save()
     return Client
 
-@client_router.delete("/{client_id}", response={204: None}, auth=JWTAuth())
+@client_router.delete("/{client_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_client(request, client_id: int):
     client = get_object_or_404(Client, id=client_id)
     client.delete()

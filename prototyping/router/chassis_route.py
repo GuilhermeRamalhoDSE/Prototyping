@@ -7,7 +7,7 @@ from prototyping.models.chassis_models import Chassis
 from prototyping.models.license_models import License
 from prototyping.schemas.chassis_schema import ChassisSchema, ChassisUpdateSchema, ChassisCreateSchema
 from django.http import HttpRequest
-from prototyping.auth import JWTAuth
+from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 from prototyping.utils import get_user_info_from_token, check_user_permission
 from django.http import FileResponse, Http404
 import os
@@ -17,7 +17,7 @@ chassis_router = Router(tags=['Chassis'])
 
 
 
-@chassis_router.post("/", response={201: ChassisSchema}, auth=JWTAuth())
+@chassis_router.post("/", response={201: ChassisSchema}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_chassis(request: HttpRequest, chassis_in: ChassisCreateSchema, file: UploadedFile = File(...)):
     user_info = get_user_info_from_token(request)
     is_superuser = check_user_permission(request)
@@ -41,7 +41,7 @@ def create_chassis(request: HttpRequest, chassis_in: ChassisCreateSchema, file: 
     return 201, chassis
 
 
-@chassis_router.get("/", response=list[ChassisSchema], auth=JWTAuth())
+@chassis_router.get("/", response=list[ChassisSchema], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_chassis(request, chassis_id: Optional[int] = None):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to view these chassis.")
@@ -63,8 +63,8 @@ def download_chassis_file(request, chassis_id: int, token: Optional[str] = None)
     user_info = None
     if token:
         try:
-            jwt_auth = JWTAuth()
-            user_info = jwt_auth.authenticate(request, token)
+            jwt_auth = HeaderTokenAuth()
+            user_info = HeaderTokenAuth.authenticate(request, token)
         except:
 
             pass
@@ -86,7 +86,7 @@ def download_chassis_file(request, chassis_id: int, token: Optional[str] = None)
         raise Http404("No file associated with this chassis.")
 
 
-@chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=JWTAuth())
+@chassis_router.put("/{chassis_id}", response={200: ChassisSchema}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file: Optional[UploadedFile] = File(None)):
 
     if not check_user_permission(request):
@@ -111,7 +111,7 @@ def update_chassis(request, chassis_id: int, payload: ChassisUpdateSchema, file:
     chassis.save()
     return chassis
 
-@chassis_router.delete("/{chassis_id}", response={204: None}, auth=JWTAuth())
+@chassis_router.delete("/{chassis_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_chassis(request, chassis_id: int):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to delete this chassis.")
