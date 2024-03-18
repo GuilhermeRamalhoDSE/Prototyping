@@ -26,7 +26,6 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Staff</th>
-                        <th>Role</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -40,7 +39,6 @@
                             <i class="fa fa-check text-success" ng-show="user.is_staff"></i>
                             <i class="fa fa-times text-danger" ng-show="!user.is_staff"></i>
                         </td>
-                        <td>{{ user.role }}</td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editUser(user.id)">Edit</button>
                             <button class="btn btn-danger btn-xs" ng-click="deleteUser(user.id)">Delete</button>
