@@ -34,5 +34,8 @@ angular.module('frontend').controller('ElementUpdateController', ['$scope', '$ht
         }
     };
 
+    $scope.cancelUpdate = function() {
+        $state.go('base.element-view');
+    };
     $scope.loadElementData();
 }]);
