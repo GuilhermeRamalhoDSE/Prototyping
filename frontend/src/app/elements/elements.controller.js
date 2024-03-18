@@ -36,7 +36,7 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
         ElementService.create($scope.newElement).then(function(response) {
             alert('Element created successfully!');
             $scope.loadElements();
-            $state.go('base.element-view');
+            $state.go('base.element-view', { chassisId: chassisId });
         }).catch(function(error) {
             console.error('Error creating element:', error);
         });
