@@ -51,8 +51,10 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
     };
 
     $scope.detailElement = function(elementId) {
-        $state.go('base.component-view', { elementId: elementId });
+        var chassisId = sessionStorage.getItem('lastChassisId'); 
+        $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
+    
 
     $scope.deleteElement = function(elementId) {
         if (!elementId) {
