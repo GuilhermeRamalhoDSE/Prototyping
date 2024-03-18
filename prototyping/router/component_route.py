@@ -1,4 +1,4 @@
-from ninja import Router, UploadedFile, File
+from ninja import Router, UploadedFile, File, Query
 from django.shortcuts import get_object_or_404
 from typing import List, Optional
 from ninja.errors import HttpError
@@ -46,7 +46,7 @@ def create_component(request, component_in: ComponentCreateSchema, file: Uploade
 
 
 @component_router.get("/", response=List[ComponentSchema], auth=[QueryTokenAuth(), HeaderTokenAuth()]) 
-def read_components(request, element_id: Optional[int] = None):
+def read_components(request, element_id: Optional[int] = None, component_number: Optional[int] = Query(None), version_id: Optional[int] = Query(None)):
     if not check_user_permission(request):
         raise HttpError(403, "You do not have permission to view these components.")
     
@@ -55,14 +55,24 @@ def read_components(request, element_id: Optional[int] = None):
 
     if not element_id:
         raise HttpError(400, "Element ID is required.")
+    
     if license_id is not None:
         element = get_object_or_404(Element.objects.select_related('chassis'), id=element_id, chassis__license_id=license_id)
     else:
         element = get_object_or_404(Element, id=element_id)
     
-    components = Component.objects.filter(element=element)
+    components_query = Component.objects.filter(element=element)
+
+    if component_number is not None:
+        components_query = components_query.filter(component_number=component_number)
+    
+    if version_id is not None:
+        components_query = components_query.filter(version_id=version_id)
+    
+    components = [ComponentSchema.from_orm(component) for component in components_query]
     
     return components
+
 
 @component_router.get("/{component_id}", response=ComponentSchema, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_component_by_id(request, component_id: int):
