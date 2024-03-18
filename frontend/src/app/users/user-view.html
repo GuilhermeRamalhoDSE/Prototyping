@@ -7,16 +7,21 @@
         </div>
         <div class="p-a white lt box-shadow">
             <div class="row">
-              <div class="mb-0 _300">
-                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
-                  ng-model="searchText" />
-              </div>
-              <a class="nav-link" ui-sref="base.user-new">
-                <i class="fa fa-fw fa-plus text-muted"></i>
-                <span>New User</span>
-              </a>
+                <div class="col-sm-6">
+                    Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
+                        ng-model="searchText" />
+                </div>
+                <div class="col-sm-6">
+                    <a ui-sref="base.user-new">
+                        <i class="fa fa-fw fa-plus text-muted"></i>
+                        <span>New User</span>
+                      </a>
+                      <a>
+                        <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
+                    </a>
+                </div>
             </div>
-          </div>
+        </div>
         <div>
             <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="5">
                 <thead>

@@ -53,6 +53,9 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
     $scope.editUser = function(userId) {
         $state.go('base.user-update', { userId: userId });
     };
+    $scope.goBack = function() {
+        $state.go('base.home');
+    }; 
 
     $scope.deleteUser = function(userId) {
         if (confirm('Are you sure you want to delete this user?')) {

@@ -56,6 +56,9 @@ angular.module('frontend').controller('LicenseController', ['$scope', 'LicenseSe
     $scope.editLicense = function(licenseId) {
         $state.go('base.licenses-update', { licenseId: licenseId }); 
     };
+    $scope.goBack = function() {
+        $state.go('base.home');
+    }; 
     
     $scope.deleteLicense = function(licenseId) {
         if (confirm('Are you sure you want to delete this license?')) {
