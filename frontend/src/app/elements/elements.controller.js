@@ -54,11 +54,8 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
         var chassisId = sessionStorage.getItem('lastChassisId'); 
         $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
-
-    $scope.goBack = function() {
-        $state.go('base.chassis-view');
-    }; 
     
+
     $scope.deleteElement = function(elementId) {
         if (!elementId) {
             console.error('Element ID is missing');
