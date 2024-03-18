@@ -5,11 +5,14 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
     let elementId = parseInt($stateParams.elementId || sessionStorage.getItem('lastElementId'), 10);
     sessionStorage.setItem('lastElementId', elementId.toString());
 
-    let chassisId = parseInt($stateParams.chassisId, 10);
+    let chassisId = parseInt($stateParams.chassisId || sessionStorage.getItem('lastChassisId'), 10);
+    sessionStorage.setItem('lastChassisId', chassisId.toString());
+
     if (isNaN(chassisId)) {
         alert('Invalid or missing chassisId');
         $state.go('base.chassis-view');
     }
+
 
     $scope.newComponent = {
         name: "",
