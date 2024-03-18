@@ -61,6 +61,10 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         $state.go('base.element-view', { chassisId: chassisId });
     };
 
+    $scope.goBack = function() {
+        $state.go('base.home');
+    };    
+
     $scope.deleteChassis = function(chassisId) {
         if (confirm('Are you sure you want to delete this chassis?')) {
             ChassisService.deleteChassis(chassisId).then(function(response) {

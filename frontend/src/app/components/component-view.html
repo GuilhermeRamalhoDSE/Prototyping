@@ -5,16 +5,18 @@
             <h2>Component Details</h2>
             <small>Details of registered components</small>
         </div>
-        <div class="p-a white lt box-shadow">
-            <div class="row">
-                <div class="mb-0 _300">
-                    Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
-                        ng-model="searchText" />
-                </div>
-
-                <a class="nav-link" ui-sref="base.component-new({ elementId: elementId })">
+        <div class="row">
+            <div class="col-sm-6">
+                Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
+                    ng-model="searchText" />
+            </div>
+            <div class="col-sm-6">
+                <a  ui-sref="base.component-new({ elementId: elementId })">
                     <i class="fa fa-fw fa-plus text-muted"></i>
                     <span>New Component</span>
+                </a>
+                <a class="nav-link">
+                    <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
                 </a>
             </div>
         </div>

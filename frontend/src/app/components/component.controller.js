@@ -77,6 +77,11 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
         $state.go('base.component-detail', {elementId: elementId, componentId: componentId});
     };
 
+    $scope.goBack = function() {
+        $state.go('base.element-view');
+    }; 
+    
+
     $scope.deleteComponent = function(componentId) {
         if (!componentId) {
             console.error('Component ID is missing');
