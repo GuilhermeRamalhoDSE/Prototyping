@@ -21,6 +21,10 @@ angular.module('frontend').controller('LicenseController', ['$scope', 'LicenseSe
         });
     };
 
+    $scope.goToCreateLicense = function() {
+            $state.go('base.licenses');
+    };
+
     $scope.createLicense = function() {
         var licenseData = angular.copy($scope.newLicense);
         
@@ -50,7 +54,7 @@ angular.module('frontend').controller('LicenseController', ['$scope', 'LicenseSe
         });
     };
     $scope.cancelCreate = function() {
-        $state.go('base.chassis-view');
+        $state.go('base.list_licenses');
     };
 
     $scope.editLicense = function(licenseId) {

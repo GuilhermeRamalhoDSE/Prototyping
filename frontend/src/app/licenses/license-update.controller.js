@@ -41,7 +41,7 @@ angular.module('frontend').controller('LicenseUpdateController', ['$scope', 'Lic
         });
     };
     $scope.cancelUpdate = function() {
-        $state.go('base.chassis-view');
+        $state.go('base.list_licenses');
     };
     
     

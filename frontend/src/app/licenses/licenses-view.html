@@ -12,17 +12,16 @@
             ng-model="searchText" />
         </div>
         <div class="col-sm-6">
-          <a class="nav-link" ui-sref="base.licenses">
+          <button class="btn btn-fw primary" ng-click="goToCreateLicense()">
             <i class="fa fa-fw fa-plus text-muted"></i>
             <span>New License</span>
-          </a>
+          </button>
           <a>
-            <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
+            <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
           </a>
         </div>
       </div>
     </div>
-  </div>
     <div>
       <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="5">
         <thead>
@@ -64,13 +63,13 @@
             <td>
               <i class="fa fa-check text-success" ng-show="license.active"></i>
               <i class="fa fa-times text-danger" ng-show="!license.active"></i>
-          </td>
+            </td>
             <td>{{ license.start_date | date:'dd/MM/yyyy' }}</td>
             <td>{{ license.end_date | date:'dd/MM/yyyy' }}</td>
             <td>
               <button class="btn btn-default btn-xs" ng-click="editLicense(license.id)">Edit</button>
               <button class="btn btn-danger btn-xs" ng-click="deleteLicense(license.id)">Delete</button>
-          </td>
+            </td>
           </tr>
         </tbody>
         <tfoot class="hide-if-no-paging">
