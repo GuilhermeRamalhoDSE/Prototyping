@@ -12,12 +12,12 @@
                         ng-model="searchText" />
                 </div>
                 <div class="col-sm-6">
-                    <a ui-sref="base.user-new">
+                    <button class="btn btn-fw primary" ng-click="goToCreateUser()">
                         <i class="fa fa-fw fa-plus text-muted"></i>
                         <span>New User</span>
-                      </a>
-                      <a>
-                        <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
+                    </button>
+                    <a>
+                        <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
                     </a>
                 </div>
             </div>

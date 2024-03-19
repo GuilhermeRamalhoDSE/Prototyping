@@ -19,6 +19,9 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
         }
     };
 
+    $scope.goToCreateUser = function() {
+        $state.go('base.user-new'); 
+    };
     $scope.createUser = function() {
         var formLicenseId = $scope.formUser.licenseId;
         var userLicenseId = AuthService.getLicenseId();
@@ -47,9 +50,8 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
         });
     };
     $scope.cancelCreate = function() {
-        $state.go('base.chassis-view');
+        $state.go('base.user-view');
     };
-
     $scope.editUser = function(userId) {
         $state.go('base.user-update', { userId: userId });
     };
