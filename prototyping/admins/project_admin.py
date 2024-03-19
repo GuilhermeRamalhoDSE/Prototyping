@@ -11,7 +11,7 @@ class ProjectAdminForm(forms.ModelForm):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
-    list_display = ['id', 'name', 'client', 'creation_date', 'last_release_date']
+    list_display = ['id', 'name', 'client', 'start_date', 'end_date']  
     search_fields = ['name', 'client__name']
     filter_horizontal = ['users']
 

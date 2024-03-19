@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
 from decouple import config
 
-load_dotenv()
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,14 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-#DEBUG = True
+# DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','52.50.91.105', 'prototypingdse.it', 'www.prototypingdse.it']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['localhost','52.50.91.105', 'prototypingdse.it', 'www.prototypingdse.it']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -146,28 +146,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    # "http://127.0.0.1:8080",
-    'http://52.50.91.105',
-    'http://prototypingdse.it/',
-    'https://prototypingdse.it/'
+     "http://127.0.0.1:8080",
+    # 'http://52.50.91.105',
+    # 'http://prototypingdse.it/',
+    # 'https://prototypingdse.it/'
 ]
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'debug.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }

@@ -3,5 +3,6 @@
     <div ng-include="'app/licenses/licenses-view.html' " ng-if="isSuperuser()"></div>
     <div ng-include="'app/users/user-view.html'" ng-if="isSuperuser() || isStaff()"></div>
     <div ng-include="'app/chassis/chassis-view.html'" ng-if="isSuperuser() || isStaff()"></div>
-
+    <div ng-include="'app/client/client-view.html'" ng-if="isSuperuser() || isStaff()"></div>
+    <div ng-include="'app/project/project-view.html'"></div>
 </div>

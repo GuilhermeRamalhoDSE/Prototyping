@@ -24,6 +24,11 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         });
     };
 
+    $scope.goToCreateChassis = function() {
+        $state.go('base.chassis-new');
+       
+    };
+
     $scope.createChassis = function() {
         var chassisData = new FormData();
         var chassisIn = JSON.stringify({
@@ -61,6 +66,10 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         $state.go('base.element-view', { chassisId: chassisId });
     };
 
+    $scope.goBack = function() {
+        $state.go('base.home');
+    };    
+
     $scope.deleteChassis = function(chassisId) {
         if (confirm('Are you sure you want to delete this chassis?')) {
             ChassisService.deleteChassis(chassisId).then(function(response) {
@@ -74,7 +83,7 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
 
     $scope.downloadChassisFile = function(chassisId) {
         if (chassisId) {
-            var downloadUrl = 'https://prototypingdse.it/prototyping/api/chassis/download/' + chassisId;
+            var downloadUrl = 'http://127.0.0.1:8000/prototyping/api/chassis/download/' + chassisId;
             
             $http({
                 url: downloadUrl,

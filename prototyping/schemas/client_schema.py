@@ -5,6 +5,7 @@ class ClientIn(Schema):
     email: str
     address: str
     phone: str
+    
 
 class ClientOut(Schema):
     id: int
@@ -12,3 +13,4 @@ class ClientOut(Schema):
     email: str
     address: str
     phone: str
+    license_id: int 

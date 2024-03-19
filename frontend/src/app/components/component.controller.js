@@ -5,7 +5,13 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
     let elementId = parseInt($stateParams.elementId || sessionStorage.getItem('lastElementId'), 10);
     sessionStorage.setItem('lastElementId', elementId.toString());
 
-    let chassisId = parseInt($stateParams.chassisId, 10);
+    let chassisId = parseInt($stateParams.chassisId || sessionStorage.getItem('lastChassisId'), 10);
+    sessionStorage.setItem('lastChassisId', chassisId.toString());
+
+    if (isNaN(chassisId)) {
+        alert('Invalid or missing chassisId');
+        $state.go('base.chassis-view');
+    }
 
 
     $scope.newComponent = {
@@ -37,7 +43,16 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
             console.error('Error fetching components:', error);
         });
     };
-
+    
+    $scope.goToCreateComponent = function() {
+        if (chassisId && elementId) {
+            $state.go('base.component-new', { chassisId: chassisId, elementId: elementId });
+        } else {
+            console.error('Chassis ID or Element ID is missing');
+            $state.go('base.element-view', { chassisId: chassisId }); 
+        }
+    };
+    
     $scope.createComponent = function() {
         if (!elementId || !$scope.file) {
             console.error('Element ID or file is missing');
@@ -53,23 +68,28 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
         ComponentService.create(formData).then(function(response) {
             alert('Component created successfully!');
             $scope.loadComponents();
-            $state.go('base.component-view', {elementId: elementId});
+            $state.go('base.component-view',  { chassisId: chassisId, elementId: elementId });
         }).catch(function(error) {
             console.error('Error creating component:', error);
         });
     };    
 
     $scope.cancelCreate = function() {
-        $state.go('base.component-view', {elementId: elementId});
+        $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
 
     $scope.editComponent = function(componentId) {
-        $state.go('base.component-update', {elementId: elementId, componentId: componentId});
+        $state.go('base.component-update', { chassisId: chassisId, elementId: elementId, componentId: componentId });
     };
 
     $scope.detailComponent = function(componentId) {
-        $state.go('base.component-detail', {elementId: elementId, componentId: componentId});
+        $state.go('base.component-detail', { chassisId: chassisId, elementId: elementId, componentId: componentId });
     };
+
+    $scope.goBack = function() {
+        $state.go('base.element-view', { chassisId: chassisId });
+    }; 
+    
 
     $scope.deleteComponent = function(componentId) {
         if (!componentId) {
@@ -109,7 +129,7 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
 
     $scope.downloadComponentFile = function(componentId) {
         if (componentId) {
-            var downloadUrl = 'https://prototypingdse.it/prototyping/api/components/download/' + componentId;
+            var downloadUrl = 'http://127.0.0.1:8000/prototyping/api/components/download/' + componentId;
             
             $http({
                 url: downloadUrl,

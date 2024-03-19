@@ -22,7 +22,6 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
             last_name: $scope.formUser.last_name,
             email: $scope.formUser.email,
             is_staff: $scope.formUser.is_staff,
-            role: $scope.formUser.role,
             license_id: $scope.formUser.license_id
         };
 
@@ -40,7 +39,7 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
     };
 
     $scope.cancelUpdate = function() {
-        $state.go('base.chassis-view');
+        $state.go('base.user-view');
     };
 
     $scope.loadUser(); 

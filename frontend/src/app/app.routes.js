@@ -183,4 +183,63 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.client-new', {
+        url: '/clients/new',
+        templateUrl: 'app/client/client-new.html',
+        controller: 'ClientController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.client-view', {
+        url: '/clients/list',
+        templateUrl: 'app/client/client-view.html',
+        controller: 'ClientController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.client-update', {
+        url: '/clients/update/:clientId',
+        templateUrl: 'app/client/client-update.html',
+        controller: 'ClientUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.project-new', {
+        url: '/projects/new',
+        templateUrl: 'app/project/project-new.html',
+        controller: 'ProjectController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.project-view', {
+        url: '/project/list',
+        templateUrl: 'app/project/project-view.html',
+        controller: 'ProjectController',
+        data: {
+            requireLogin: true, 
+        }
+    })
+    $stateProvider
+    .state('base.project-update', {
+        url: '/project/update/:projectId',
+        templateUrl: 'app/project/project-update.html',
+        controller: 'ProjectUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
 }]);

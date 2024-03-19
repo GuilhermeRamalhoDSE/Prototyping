@@ -7,14 +7,19 @@
     </div>
     <div class="p-a white lt box-shadow">
       <div class="row">
-        <div class="mb-0 _300">
+        <div class="col-sm-6">
           Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
             ng-model="searchText" />
         </div>
-        <a class="nav-link" ui-sref="base.chassis-new">
-          <i class="fa fa-fw fa-plus text-muted"></i>
-          <span>New Chassis</span>
-        </a>
+        <div class="col-sm-6">
+          <button class="btn btn-fw primary" ng-click="goToCreateChassis()">
+            <i class="fa fa-fw fa-plus text-muted"></i>
+            <span>New Chassis</span>
+          </button>
+          <a>
+            <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
+          </a>
+        </div>
       </div>
     </div>
     <div>
