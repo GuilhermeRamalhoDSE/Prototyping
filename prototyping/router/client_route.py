@@ -1,35 +1,71 @@
 from typing import List, Optional
 from ninja import Router
+from ninja.errors import HttpError
 from django.shortcuts import get_object_or_404
 from prototyping.models.client_models import Client
 from prototyping.schemas.client_schema import ClientIn, ClientOut
 from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
+from prototyping.utils import get_user_info_from_token, check_user_permission
 
 client_router = Router(tags=["Clients"])
 
 @client_router.post("/", response={201: ClientOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_client(request, payload: ClientIn):
-    Client = Client.objects.create(**payload.dict(), auth=[QueryTokenAuth(), HeaderTokenAuth()])
-    return Client
+    user_info = get_user_info_from_token(request)
+    license_id = user_info.get('license_id')
+    
+    client = Client.objects.create(**payload.dict(), license_id=license_id)
+    return client
 
 @client_router.get("/", response=List[ClientOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
-def read_client(request, Client_id: Optional[int] = None, name: Optional[str] = None):
-    if Client_id:
-        return [get_object_or_404(Client, id=Client_id)]
-    if name:
-        return list(Client.objects.filter(name__icontains=name))
-    return list(Client.objects.all())
+def read_clients(request, client_id: Optional[int] = None):
+    user_info = get_user_info_from_token(request)
+    license_id = user_info.get('license_id')
+    is_superuser = user_info.get('is_superuser', False)
+    
+    if is_superuser:
+        if client_id:
+            clients = Client.objects.filter(id=client_id)
+        else:
+            clients = Client.objects.all()
+    else:
+        if client_id:
+            clients = Client.objects.filter(license_id=license_id, id=client_id)
+        else:
+            clients = Client.objects.filter(license_id=license_id)
+    
+    return list(clients)
 
 @client_router.put("/{client_id}", response=ClientOut, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_client(request, client_id: int, payload: ClientIn):
-    client = get_object_or_404(Client, id=client_id)
+    user_info = get_user_info_from_token(request)
+    is_superuser = user_info.get('is_superuser', False) in [True, 'True', 'true', 1, '1']
+
+    if not is_superuser:
+        client = Client.objects.filter(id=client_id, license_id=user_info.get('license_id')).first()
+        if not client:
+            raise HttpError(404, "Client not found or you do not have permission to update this client.")
+    else:
+        client = get_object_or_404(Client, id=client_id)
+    
     for attr, value in payload.dict().items():
         setattr(client, attr, value)
     client.save()
-    return Client
+    return client
+
 
 @client_router.delete("/{client_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_client(request, client_id: int):
-    client = get_object_or_404(Client, id=client_id)
+    user_info = get_user_info_from_token(request)
+    is_superuser = user_info.get('is_superuser', False) in [True, 'True', 'true', 1, '1']
+
+    if not is_superuser:
+        client = Client.objects.filter(id=client_id, license_id=user_info.get('license_id')).first()
+        if not client:
+            raise HttpError(404, "Client not found or you do not have permission to delete this client.")
+    else:
+        client = get_object_or_404(Client, id=client_id)
+
     client.delete()
     return {"success": True}
+

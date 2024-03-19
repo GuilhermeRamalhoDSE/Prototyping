@@ -56,7 +56,14 @@
                                     <span class="nav-text">Chassis</span>
                                 </a>
                             </li>
-
+                            <li ng-if="isSuperuser() || isStaff()">
+                                <a ui-sref="base.client-view">
+                                    <span class="nav-icon">
+                                        <i class="material-icons md-24"></i>
+                                    </span>
+                                    <span class="nav-text">Clients</span>
+                                </a>
+                            </li>
                         </ul>
                         </li>
                         </ul>
