@@ -10,18 +10,13 @@
                 <div class="box-body">
                     <form ng-submit="updateComponent()" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label>Component ID</label>
-                            <input type="number" class="form-control" ng-model="componentData.component_id"
-                                placeholder="Component ID" required readonly>
-                        </div>
-                        <div class="form-group">
                             <label>Element ID</label>
                             <input type="number" class="form-control" ng-model="componentData.element_id"
                                 placeholder="Element ID" required readonly>
                         </div>
                         <div>
                             <label for="componentNumber">Component Number:</label>
-                            <input type="number" class="form-control" id="componentNumber" ng-model="newComponent.component_number" placeholder="Enter Component Number">
+                            <input type="number" class="form-control" id="componentNumber" ng-model="componentData.component_number" placeholder="Enter Component Number">
                         </div>
                         <div class="form-group">
                             <label>Version</label>

@@ -1,6 +1,8 @@
 angular.module('frontend').controller('ComponentUpdateController', ['$scope', 'ComponentService', '$state', '$stateParams', 'AuthService', function($scope, ComponentService, $state, $stateParams, AuthService) {
     $scope.componentId = $stateParams.componentId;
     
+    var chassisId = $stateParams.chassisId;
+    var elementId = $stateParams.elementId;
 
     $scope.componentData = {};
     $scope.file = null;
@@ -41,7 +43,7 @@ angular.module('frontend').controller('ComponentUpdateController', ['$scope', 'C
     };
 
     $scope.cancelUpdate = function() {
-        $state.go('base.component-view', {elementId: $scope.componentData.element_id});
+        $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
 
     $scope.loadComponentDetails();

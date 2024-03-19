@@ -43,7 +43,16 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
             console.error('Error fetching components:', error);
         });
     };
-
+    
+    $scope.goToCreateComponent = function() {
+        if (chassisId && elementId) {
+            $state.go('base.component-new', { chassisId: chassisId, elementId: elementId });
+        } else {
+            console.error('Chassis ID or Element ID is missing');
+            $state.go('base.element-view', { chassisId: chassisId }); 
+        }
+    };
+    
     $scope.createComponent = function() {
         if (!elementId || !$scope.file) {
             console.error('Element ID or file is missing');
@@ -59,26 +68,26 @@ angular.module('frontend').controller('ComponentController', ['$scope', '$http',
         ComponentService.create(formData).then(function(response) {
             alert('Component created successfully!');
             $scope.loadComponents();
-            $state.go('base.component-view', {elementId: elementId});
+            $state.go('base.component-view',  { chassisId: chassisId, elementId: elementId });
         }).catch(function(error) {
             console.error('Error creating component:', error);
         });
     };    
 
     $scope.cancelCreate = function() {
-        $state.go('base.component-view', {elementId: elementId});
+        $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
 
     $scope.editComponent = function(componentId) {
-        $state.go('base.component-update', {elementId: elementId, componentId: componentId});
+        $state.go('base.component-update', { chassisId: chassisId, elementId: elementId, componentId: componentId });
     };
 
     $scope.detailComponent = function(componentId) {
-        $state.go('base.component-detail', {elementId: elementId, componentId: componentId});
+        $state.go('base.component-detail', { chassisId: chassisId, elementId: elementId, componentId: componentId });
     };
 
     $scope.goBack = function() {
-        $state.go('base.element-view');
+        $state.go('base.element-view', { chassisId: chassisId });
     }; 
     
 
