@@ -3,7 +3,6 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
     $scope.isSuperuser = AuthService.isSuperuser();
 
     let chassisId = parseInt($stateParams.chassisId || sessionStorage.getItem('lastChassisId'), 10);
-
     if (isNaN(chassisId)) {
         console.error('Invalid chassisId');
         return;
@@ -28,6 +27,15 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
         });
     };
 
+    $scope.goToCreateElement = function() {
+        if (chassisId) {
+            $state.go('base.element-new', { chassisId: chassisId });
+        } else {
+            console.error('Chassis ID is missing');
+            $state.go('base.element-view', { chassisId: chassisId });
+        }
+    };
+
     $scope.createElement = function() {
         if (!chassisId) {
             console.error('Chassis ID is missing');
@@ -43,18 +51,20 @@ angular.module('frontend').controller('ElementController', ['$scope', '$http', '
     };
 
     $scope.cancelCreate = function() {
-        $state.go('base.element-view');
+        $state.go('base.element-view', { chassisId: chassisId });
     };
 
     $scope.editElement = function(elementId) {
-        $state.go('base.element-update', { elementId: elementId });
+        $state.go('base.element-update', { chassisId: chassisId, elementId: elementId });
     };
 
     $scope.detailElement = function(elementId) {
-        var chassisId = sessionStorage.getItem('lastChassisId'); 
         $state.go('base.component-view', { chassisId: chassisId, elementId: elementId });
     };
-    
+
+    $scope.goBack = function() {
+        $state.go('base.chassis-view');
+    }; 
 
     $scope.deleteElement = function(elementId) {
         if (!elementId) {

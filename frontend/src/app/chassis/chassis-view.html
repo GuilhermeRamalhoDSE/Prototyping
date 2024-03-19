@@ -8,15 +8,16 @@
     <div class="p-a white lt box-shadow">
       <div class="row">
         <div class="col-sm-6">
-          Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r" ng-model="searchText" />
+          Search: <input id="filter" type="text" class="form-control input-sm w-auto inline m-r"
+            ng-model="searchText" />
         </div>
         <div class="col-sm-6">
-          <a ui-sref="base.chassis-new">
+          <button class="btn btn-fw primary" ng-click="goToCreateChassis()">
             <i class="fa fa-fw fa-plus text-muted"></i>
             <span>New Chassis</span>
-          </a>
+          </button>
           <a>
-            <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
+            <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
           </a>
         </div>
       </div>

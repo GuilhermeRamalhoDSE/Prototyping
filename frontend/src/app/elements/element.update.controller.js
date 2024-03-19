@@ -1,5 +1,7 @@
 angular.module('frontend').controller('ElementUpdateController', ['$scope', '$http', 'ElementService', '$state', '$stateParams', function($scope, $http, ElementService, $state, $stateParams) {
     $scope.element = {};
+    
+    $scope.chassisId = null;
 
     $scope.loadElementData = function() {
         const elementId = $stateParams.elementId; 
@@ -7,6 +9,7 @@ angular.module('frontend').controller('ElementUpdateController', ['$scope', '$ht
         ElementService.getById(elementId).then(function(response) {
             if (response.data) { 
                 $scope.element = response.data; 
+                $scope.chassisId = response.data.chassis_id;
             } else {
                 console.error('Element not found');
                 alert('Element not found.');
@@ -26,7 +29,7 @@ angular.module('frontend').controller('ElementUpdateController', ['$scope', '$ht
             };
             ElementService.update($scope.element.id, payload).then(function(response) {
                 alert('Element updated successfully!');
-                $state.go('base.element-view'); 
+                $state.go('base.element-view', { chassisId: $scope.chassisId }); 
             }).catch(function(error) {
                 console.error('Error updating element:', error);
                 alert('Error updating element.');
@@ -35,7 +38,8 @@ angular.module('frontend').controller('ElementUpdateController', ['$scope', '$ht
     };
 
     $scope.cancelUpdate = function() {
-        $state.go('base.element-view');
+        $state.go('base.element-view', { chassisId: $scope.chassisId });
     };
+
     $scope.loadElementData();
 }]);

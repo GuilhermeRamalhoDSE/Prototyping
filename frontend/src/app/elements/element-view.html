@@ -12,12 +12,12 @@
                         ng-model="searchText" />
                 </div>
                 <div class="col-sm-6">
-                    <a ui-sref="base.element-new({ chassisId: chassisId })">
+                    <button class="btn btn-fw primary" ng-click="goToCreateElement()">
                         <i class="fa fa-fw fa-plus text-muted"></i>
                         <span>New Element</span>
-                    </a>
+                    </button>
                     <a>
-                        <button type="button" class="btn btn-primary btn-xs pull-right" ng-click="goBack()">Back</button>
+                        <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
                     </a>
                 </div>
             </div>

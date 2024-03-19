@@ -24,6 +24,11 @@ angular.module('frontend').controller('ChassisController', ['$scope', '$http', '
         });
     };
 
+    $scope.goToCreateChassis = function() {
+        $state.go('base.chassis-new');
+       
+    };
+
     $scope.createChassis = function() {
         var chassisData = new FormData();
         var chassisIn = JSON.stringify({
