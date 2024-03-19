@@ -213,4 +213,33 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.project-new', {
+        url: '/projects/new',
+        templateUrl: 'app/project/project-new.html',
+        controller: 'ProjectController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
+    $stateProvider
+    .state('base.project-view', {
+        url: '/project/list',
+        templateUrl: 'app/project/project-view.html',
+        controller: 'ProjectController',
+        data: {
+            requireLogin: true, 
+        }
+    })
+    $stateProvider
+    .state('base.project-update', {
+        url: '/project/update/:projectId',
+        templateUrl: 'app/project/project-update.html',
+        controller: 'ProjectUpdateController',
+        data: {
+            requireLogin: true, 
+            requiredPermissions: ['superuser', 'staff'] 
+        }
+    })
 }]);
