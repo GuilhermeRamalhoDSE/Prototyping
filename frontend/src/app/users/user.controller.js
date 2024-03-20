@@ -62,6 +62,7 @@ angular.module('frontend').controller('UserController', ['$scope', 'UserService'
     $scope.deleteUser = function(userId) {
         if (confirm('Are you sure you want to delete this user?')) {
             UserService.deleteUser(userId).then(function(response) {
+                alert('User deleted successfully!');
                 $scope.getAllUsers();
             }).catch(function(error) {
                 console.error('Error deleting user:', error);

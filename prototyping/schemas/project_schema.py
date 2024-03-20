@@ -9,10 +9,18 @@ class ProjectIn(Schema):
     end_date: Optional[date] = None
     users_ids: List[int] = []
 
+class UserOut(Schema):
+    id: int
+    full_name: str
+
+class UserIdSchema(Schema):
+    user_id: int
+
+
 class ProjectOut(Schema):
     id: int
     client_id: int
     name: str
-    start_date: date  
-    end_date: date  
-    users_ids: List[int]
+    start_date: date
+    end_date: Optional[date] = None
+    users: List[UserOut] 

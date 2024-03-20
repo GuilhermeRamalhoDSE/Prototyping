@@ -6,7 +6,8 @@ class UserSchema(Schema):
     first_name: str
     last_name: str
     email: str
-    is_staff: Optional[bool] = False  
+    is_staff: Optional[bool] = False 
+    license_id: Optional[int] = None 
     
 class UserCreateSchema(Schema):
     first_name: str

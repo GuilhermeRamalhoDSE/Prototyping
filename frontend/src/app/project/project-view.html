@@ -26,19 +26,17 @@
             <table class="table m-b-none" ui-jp="footable" data-filter="#filter" data-page-size="5">
                 <thead>
                     <tr>
-                        <th>ID</th> 
+                        <th>ID</th>
                         <th data-toggle="true">
                             Name
                         </th>
-                        <th>
-                            Client
-                        </th>
                         <th data-hide="phone">
-                            Creation Date
+                            Start Date
                         </th>
                         <th data-hide="phone,tablet">
-                            Last Release Date
+                            End Date
                         </th>
+                        <th>Team</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -46,9 +44,16 @@
                     <tr ng-repeat="project in projects | filter:searchText">
                         <td>{{ project.id }}</td>
                         <td>{{ project.name }}</td>
-                        <td>{{ project.clientName }}</td> <!-- Supondo que você tenha um campo ou método para obter o nome do cliente -->
-                        <td>{{ project.creationDate | date:'mediumDate' }}</td>
-                        <td>{{ project.lastReleaseDate | date:'mediumDate' }}</td>
+                        <td>{{ project.start_date | date:'mediumDate' }}</td>
+                        <td>{{ project.end_date | date:'mediumDate' }}</td>
+                        <td>
+                            <div ng-repeat="user in users">
+                                <label>
+                                    <input type="checkbox" ng-checked="isUserAssignedToProject(project, user.id)" ng-click="toggleUserAssignment(project, user.id)">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </label>
+                            </div>
+                        </td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editProject(project.id)">Edit</button>
                             <button class="btn btn-danger btn-xs" ng-click="deleteProject(project.id)">Delete</button>
@@ -57,7 +62,7 @@
                 </tbody>
                 <tfoot class="hide-if-no-paging">
                     <tr>
-                        <td colspan="6" class="text-center">
+                        <td colspan="7" class="text-center">
                             <ul class="pagination"></ul>
                         </td>
                     </tr>

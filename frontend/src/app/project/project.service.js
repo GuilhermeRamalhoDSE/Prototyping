@@ -15,6 +15,15 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
         },
         delete: function(projectId) {
             return $http.delete(baseUrl + projectId);
-        }        
+        },   
+        addUserToProject: function(projectId, userId) {
+            return $http.post(baseUrl + projectId + '/add-user/', {user_id: userId});
+        },
+        removeUserFromProject: function(projectId, userId) {
+            return $http.post(baseUrl + projectId + '/remove-user/', {user_id: userId});
+        },  
+        getAllUsers: function() {
+            return $http.get('http://localhost:8000/prototyping/api/users/');
+        }
     };
 }]);
