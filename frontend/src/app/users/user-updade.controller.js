@@ -8,7 +8,7 @@ angular.module('frontend').controller('UserUpdateController', ['$scope', '$state
         UserService.getUserById(userId).then(function(response) {
             if (response.data && response.data.length > 0) {
                 $scope.formUser = response.data[0];
-                console.log("Loaded user data: ", $scope.formUser); // Adicione este log para verificar os dados carregados
+                console.log("Loaded user data: ", $scope.formUser); 
             } else {
                 $state.go('base.user-view');
             }

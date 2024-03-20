@@ -56,13 +56,18 @@ def remove_user_from_project(request, project_id: int, payload: UserIdSchema):
 @project_router.get("/", response=List[ProjectOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_projects(request):
     user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id') 
     is_superuser = user_info.get('is_superuser', False) in [True, 'True', 'true', 1, '1']
+    is_staff = user_info.get('is_staff', False) in [True, 'True', 'true', 1, '1'] 
+  
 
     if is_superuser:
         projects_query = Project.objects.all()
-    else:
+    elif is_staff:
         license_id = user_info.get('license_id')
         projects_query = Project.objects.filter(client__license_id=license_id)
+    else:
+        projects_query = Project.objects.filter(users__id=user_id)
 
     projects = list(projects_query)
 

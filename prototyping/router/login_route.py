@@ -23,7 +23,9 @@ def authenticate_user(email, password):
         token = jwt.encode({
             'email': user.email,
             'exp': expiration_time,
+            'user_id': user.id,
             'is_superuser': user.is_superuser,
+            'is_staff': user.is_staff,
             'license_id': getattr(user, 'license_id', None) if not user.is_superuser else None,
         }, settings.SECRET_KEY, algorithm='HS256')
 

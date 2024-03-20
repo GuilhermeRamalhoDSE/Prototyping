@@ -1,11 +1,13 @@
-angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', '$state', 'AuthService', function($scope, ProjectService, $state, AuthService) {
+angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', 'UserService', '$state', 'AuthService', 
+function($scope, ProjectService, UserService, $state, AuthService) {
     $scope.projects = [];
+    $scope.users = []; 
     $scope.newProject = {
         name: "",
         client_id: null, 
         users_ids: [],
         start_date: new Date(),
-        end_date: new Date() 
+        end_date: new Date()
     };
 
     $scope.loadProjects = function() {
@@ -19,6 +21,15 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
             console.error('Error loading projects:', error);
         });
     };
+
+    $scope.loadUsers = function() {
+        UserService.getAllUsers().then(function(response) {
+            $scope.users = response.data;
+        }).catch(function(error) {
+            console.error('Error loading users:', error);
+        });
+    };
+    
 
     $scope.goToNewProject = function() {
         $state.go('base.project-new');
@@ -39,16 +50,16 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
     };
 
     $scope.isUserAssignedToProject = function(project, userId) {
-        return project.users.some(user => user.id === userId);
-    };
+        return project.users && project.users.some(user => user.id === userId);
+    };    
     
+
     $scope.toggleUserAssignment = function(project, userId) {
         const isAssigned = $scope.isUserAssignedToProject(project, userId);
         if (isAssigned) {
             ProjectService.removeUserFromProject(project.id, userId)
                 .then(function(response) {
-                    alert('User removed from project successfully!');
-                    $scope.loadProjects();
+                    $scope.loadProjects(); 
                 })
                 .catch(function(error) {
                     console.error('Error removing user from project:', error);
@@ -56,15 +67,14 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
         } else {
             ProjectService.addUserToProject(project.id, userId)
                 .then(function(response) {
-                    alert('User added to project successfully!');
-                    $scope.loadProjects();
+                    $scope.loadProjects(); 
                 })
                 .catch(function(error) {
                     console.error('Error adding user to project:', error);
                 });
         }
-    };
-    
+    };    
+
     $scope.editProject = function(projectId) {
         $state.go('base.project-update', { projectId: projectId });
     };
@@ -89,4 +99,5 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
     };
 
     $scope.loadProjects();
+    $scope.loadUsers();
 }]);

@@ -21,6 +21,9 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
         },
         removeUserFromProject: function(projectId, userId) {
             return $http.post(baseUrl + projectId + '/remove-user/', {user_id: userId});
-        }    
+        },  
+        getAllUsers: function() {
+            return $http.get('http://localhost:8000/prototyping/api/users/');
+        }
     };
 }]);

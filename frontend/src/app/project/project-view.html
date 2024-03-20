@@ -48,10 +48,12 @@
                         <td>{{ project.end_date | date:'mediumDate' }}</td>
                         <td>
                             <div ng-repeat="user in users">
-                                <input type="checkbox" ng-checked="isUserAssignedToProject(selectedProject, user.id)" ng-change="toggleUserAssignment(selectedProject, user.id)">
-                                {{ user.full_name }}
-                              </div>                              
-                          </td>
+                                <label>
+                                    <input type="checkbox" ng-checked="isUserAssignedToProject(project, user.id)" ng-click="toggleUserAssignment(project, user.id)">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </label>
+                            </div>
+                        </td>
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editProject(project.id)">Edit</button>
                             <button class="btn btn-danger btn-xs" ng-click="deleteProject(project.id)">Delete</button>
