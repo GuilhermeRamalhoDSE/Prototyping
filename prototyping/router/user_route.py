@@ -11,7 +11,11 @@ user_router = Router(tags=['Users'])
 
 @user_router.post("/", response={201: UserSchema}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def create_user(request, user_in: UserCreateSchema):
-    user = User.objects.create(**user_in.dict())
+    user_data = user_in.dict()
+    password = user_data.pop('password')
+    user = User.objects.create(**user_data)
+    user.set_password(password)
+    user.save()
     return user
 
 @user_router.get("/", response=List[UserSchema], auth=[QueryTokenAuth(), HeaderTokenAuth()])

@@ -28,14 +28,10 @@
                             <label>Is Staff</label>
                             <input type="checkbox" ng-model="formUser.is_staff">
                         </div>
-                        <div class="form-group" ng-if="isSuperuser">
+                        <div class="form-group">
                             <label>License ID</label>
-                            <input type="number" class="form-control" ng-model="formUser.license_id" placeholder="License ID" required>
-                        </div>
-                        <div class="form-group" ng-if="!isSuperuser">
-                            <label>License ID</label>
-                            <p class="form-control-static">{{formUser.license_id}}</p>
-                        </div>
+                            <input type="number" class="form-control" ng-model="formUser.license_id" ng-readonly="!isSuperuser" placeholder="License ID" required>
+                        </div>                        
                         <button type="submit" class="btn btn-primary">Update</button>
                         <button type="button" class="btn btn-secondary" ng-click="cancelUpdate()">Cancel</button>
                     </form>
