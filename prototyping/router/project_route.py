@@ -1,4 +1,4 @@
-from ninja import Router
+from ninja import Router, Query
 from typing import List, Optional
 from django.shortcuts import get_object_or_404
 from prototyping.models.project_models import Project
@@ -53,12 +53,11 @@ def remove_user_from_project(request, project_id: int, payload: UserIdSchema):
     return generate_project_response(project)
 
 @project_router.get("/", response=List[ProjectOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
-def read_projects(request):
+def read_projects(request, client_id: Optional[int] = Query(None)):
     user_info = get_user_info_from_token(request)
     user_id = user_info.get('user_id') 
     is_superuser = user_info.get('is_superuser', False) in [True, 'True', 'true', 1, '1']
-    is_staff = user_info.get('is_staff', False) in [True, 'True', 'true', 1, '1'] 
-  
+    is_staff = user_info.get('is_staff', False) in [True, 'True', 'true', 1, '1']
 
     if is_superuser:
         projects_query = Project.objects.all()
@@ -68,10 +67,12 @@ def read_projects(request):
     else:
         projects_query = Project.objects.filter(users__id=user_id)
 
-    projects = list(projects_query)
+    if client_id is not None:
+        projects_query = projects_query.filter(client__id=client_id)
 
+    projects = list(projects_query)
     projects_response = [generate_project_response(project) for project in projects]
-    
+
     return projects_response
 
 

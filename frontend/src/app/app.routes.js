@@ -225,7 +225,7 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.project-view', {
-        url: '/project/list',
+        url: '/projects/list/:clientId?',
         templateUrl: 'app/project/project-view.html',
         controller: 'ProjectController',
         data: {

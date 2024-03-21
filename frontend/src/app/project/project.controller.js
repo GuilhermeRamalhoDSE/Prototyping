@@ -1,5 +1,5 @@
-angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', 'UserService', '$state', 'AuthService', 
-function($scope, ProjectService, UserService, $state, AuthService) {
+angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', 'UserService', '$state', 'AuthService', '$stateParams',
+function($scope, ProjectService, UserService, $state, AuthService, $stateParams) {
     $scope.projects = [];
     $scope.users = []; 
     $scope.clients = [];
@@ -7,6 +7,8 @@ function($scope, ProjectService, UserService, $state, AuthService) {
 
     $scope.isSuperuser = AuthService.isSuperuser();
     $scope.isStaff = AuthService.isStaff();
+
+    $scope.clientId = $stateParams.clientId;
 
     $scope.newProject = {
         name: "",
@@ -17,15 +19,27 @@ function($scope, ProjectService, UserService, $state, AuthService) {
     };
 
     $scope.loadProjects = function() {
-        ProjectService.getAll().then(function(response) {
-            $scope.projects = response.data.map(project => {
-                project.start_date = new Date(project.start_date);
-                project.end_date = new Date(project.end_date);
-                return project;
+        if ($scope.clientId) {
+            ProjectService.getAllByClientId($scope.clientId).then(function(response) {
+                $scope.projects = response.data.map(project => {
+                    project.start_date = new Date(project.start_date);
+                    project.end_date = new Date(project.end_date);
+                    return project;
+                });
+            }).catch(function(error) {
+                console.error('Error loading projects:', error);
             });
-        }).catch(function(error) {
-            console.error('Error loading projects:', error);
-        });
+        } else {
+            ProjectService.getAll().then(function(response) {
+                $scope.projects = response.data.map(project => {
+                    project.start_date = new Date(project.start_date);
+                    project.end_date = new Date(project.end_date);
+                    return project;
+                });
+            }).catch(function(error) {
+                console.error('Error loading projects:', error);
+            });
+        }
     };
 
     $scope.loadUsers = function() {

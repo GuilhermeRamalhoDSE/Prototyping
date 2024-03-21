@@ -27,6 +27,9 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
         },
         getAllClients: function() {
             return $http.get('http://localhost:8000/prototyping/api/clients/');
-        }
+        },
+        getAllByClientId: function(clientId) {
+            return $http.get(baseUrl, { params: { client_id: clientId } });
+        },        
     };
 }]);
