@@ -8,7 +8,7 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
             return $http.get(baseUrl);
         },
         getById: function(projectId) {
-            return $http.get(baseUrl, { params: { project_id: projectId } });
+            return $http.get(baseUrl, projectId);
         },        
         update: function(projectId, projectData) {
             return $http.put(baseUrl + projectId, projectData);
@@ -24,6 +24,12 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
         },  
         getAllUsers: function() {
             return $http.get('http://localhost:8000/prototyping/api/users/');
-        }
+        },
+        getAllClients: function() {
+            return $http.get('http://localhost:8000/prototyping/api/clients/');
+        },
+        getAllByClientId: function(clientId) {
+            return $http.get(baseUrl, { params: { client_id: clientId } });
+        },        
     };
 }]);

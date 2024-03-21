@@ -39,6 +39,10 @@ angular.module('frontend').controller('ClientController', ['$scope', 'ClientServ
         $state.go('base.home');
     };
 
+    $scope.viewProjects = function(clientId) {
+        $state.go('base.project-view', { clientId: clientId });
+    };
+   
     $scope.deleteClient = function(clientId) {
         if (confirm('Are you sure you want to delete this client?')) {
             ClientService.delete(clientId).then(function(response) {

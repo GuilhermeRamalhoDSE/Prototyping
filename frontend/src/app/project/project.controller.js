@@ -1,7 +1,15 @@
-angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', 'UserService', '$state', 'AuthService', 
-function($scope, ProjectService, UserService, $state, AuthService) {
+angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectService', 'UserService', '$state', 'AuthService', '$stateParams',
+function($scope, ProjectService, UserService, $state, AuthService, $stateParams) {
     $scope.projects = [];
     $scope.users = []; 
+    $scope.clients = [];
+    $scope.searchClient = "";
+
+    $scope.isSuperuser = AuthService.isSuperuser();
+    $scope.isStaff = AuthService.isStaff();
+
+    $scope.clientId = $stateParams.clientId;
+
     $scope.newProject = {
         name: "",
         client_id: null, 
@@ -11,15 +19,27 @@ function($scope, ProjectService, UserService, $state, AuthService) {
     };
 
     $scope.loadProjects = function() {
-        ProjectService.getAll().then(function(response) {
-            $scope.projects = response.data.map(project => {
-                project.start_date = new Date(project.start_date);
-                project.end_date = new Date(project.end_date);
-                return project;
+        if ($scope.clientId) {
+            ProjectService.getAllByClientId($scope.clientId).then(function(response) {
+                $scope.projects = response.data.map(project => {
+                    project.start_date = new Date(project.start_date);
+                    project.end_date = new Date(project.end_date);
+                    return project;
+                });
+            }).catch(function(error) {
+                console.error('Error loading projects:', error);
             });
-        }).catch(function(error) {
-            console.error('Error loading projects:', error);
-        });
+        } else {
+            ProjectService.getAll().then(function(response) {
+                $scope.projects = response.data.map(project => {
+                    project.start_date = new Date(project.start_date);
+                    project.end_date = new Date(project.end_date);
+                    return project;
+                });
+            }).catch(function(error) {
+                console.error('Error loading projects:', error);
+            });
+        }
     };
 
     $scope.loadUsers = function() {
@@ -30,9 +50,24 @@ function($scope, ProjectService, UserService, $state, AuthService) {
         });
     };
     
-
     $scope.goToNewProject = function() {
         $state.go('base.project-new');
+    };
+
+    
+    $scope.loadClients = function() {
+        ProjectService.getAllClients().then(function(response) {
+            $scope.clients = response.data;
+        }).catch(function(error) {
+            console.error('Error loading clients:', error);
+        });
+    };
+
+    $scope.selectClient = function(client) {
+        console.log(client);
+        $scope.newProject.client_id = client.id; 
+        $scope.newProject.client_name = client.name; 
+        $scope.searchClient = client.name; 
     };
 
     $scope.createProject = function() {
@@ -100,4 +135,5 @@ function($scope, ProjectService, UserService, $state, AuthService) {
 
     $scope.loadProjects();
     $scope.loadUsers();
+    $scope.loadClients();
 }]);

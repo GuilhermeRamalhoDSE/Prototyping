@@ -12,7 +12,7 @@
                         ng-model="searchText" />
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-fw primary" ng-click="goToNewProject()">
+                    <button class="btn btn-fw primary" ng-click="goToNewProject()" ng-if="isSuperuser || isStaff">
                         <i class="fa fa-fw fa-plus text-muted"></i>
                         <span>New Project</span>
                     </button>
@@ -30,6 +30,9 @@
                         <th data-toggle="true">
                             Name
                         </th>
+                        <th>
+                            Client
+                        </th>
                         <th data-hide="phone">
                             Start Date
                         </th>
@@ -44,16 +47,26 @@
                     <tr ng-repeat="project in projects | filter:searchText">
                         <td>{{ project.id }}</td>
                         <td>{{ project.name }}</td>
+                        <td>{{ project.client_name }}</td>
                         <td>{{ project.start_date | date:'mediumDate' }}</td>
                         <td>{{ project.end_date | date:'mediumDate' }}</td>
                         <td>
-                            <div ng-repeat="user in users">
-                                <label>
-                                    <input type="checkbox" ng-checked="isUserAssignedToProject(project, user.id)" ng-click="toggleUserAssignment(project, user.id)">
-                                    {{ user.first_name }} {{ user.last_name }}
-                                </label>
+                            <div ng-if="isSuperuser || isStaff">
+                                <div ng-repeat="user in users">
+                                    <label>
+                                        <input type="checkbox" ng-checked="isUserAssignedToProject(project, user.id)"
+                                            ng-click="toggleUserAssignment(project, user.id)">
+                                        {{ user.first_name }} {{ user.last_name }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div ng-if="!isSuperuser && !isStaff">
+                                <div ng-repeat="user in project.users">
+                                    {{ user.full_name }}
+                                </div>
                             </div>
                         </td>
+
                         <td>
                             <button class="btn btn-default btn-xs" ng-click="editProject(project.id)">Edit</button>
                             <button class="btn btn-danger btn-xs" ng-click="deleteProject(project.id)">Delete</button>

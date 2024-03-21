@@ -7,6 +7,7 @@ class AuthSchema(Schema):
 
 class LoginResponseSchema(Schema):
     token: str
+    user_id: int
     is_superuser: bool
     is_staff: bool
     license_id: Optional[int] = None 

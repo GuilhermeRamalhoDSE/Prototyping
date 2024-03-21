@@ -1,0 +1,41 @@
+<div ng-app="frontend" ng-controller="MessageController">
+    <div class="box row-col" style="min-height:450px">
+        <div class="box-header b-b">
+            <strong>Chat</strong>
+        </div>
+        <div class="row-row dker">
+            <div class="row-body">
+                <div class="row-inner">
+                    <div class="p-a-md">
+                        <div ng-repeat="msg in messages">
+                            <div ng-if="msg.user_id === currentUser.id" class="m-b text-right">
+                                <div class="clear">
+                                    <div class="p-a p-y-sm info inline text-left r">{{msg.message}}</div>
+                                    <span class="text-muted text-xs">{{msg.user_name}}</span>
+                                    <div class="text-muted text-xs m-t-xs">{{msg.created_at | date:'medium'}}</div>
+                                </div>
+                            </div>
+                            <div ng-if="msg.user_id !== currentUser.id" class="m-b">
+                                <div class="clear">
+                                    <div class="p-a p-y-sm dark-white inline r">{{msg.message}}</div>
+                                    <span class="text-muted text-xs">{{msg.user_name}}</span>
+                                    <div class="text-muted text-xs m-t-xs">{{msg.created_at | date:'medium'}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer b-t">
+            <form ng-submit="sendMessage()">
+                <div class="input-group">
+                    <input type="text" ng-model="newMessage" class="form-control" placeholder="Say something">
+                    <span class="input-group-btn">
+                        <button class="btn white b-a no-shadow" type="submit">SEND</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
