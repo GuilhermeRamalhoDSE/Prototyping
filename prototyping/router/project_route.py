@@ -75,25 +75,28 @@ def read_projects(request, client_id: Optional[int] = Query(None)):
 
     return projects_response
 
+@project_router.get("/{project_id}", response=ProjectOut, auth=[QueryTokenAuth(), HeaderTokenAuth()])
+def read_project(request, project_id: int):
+    project = get_object_or_404(Project, id=project_id)
+    return generate_project_response(project)
 
 @project_router.put("/{project_id}", response=ProjectOut, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_project(request, project_id: int, payload: ProjectIn):
     project = get_object_or_404(Project, id=project_id)
     
-    for attr, value in payload.dict(exclude={'users_ids', 'creation_date', 'last_release_date'}).items():
-        setattr(project, attr, value)
-    
-    if payload.creation_date:
-        project.creation_date = datetime.strptime(payload.creation_date, "%Y-%m-%d").date()
-    if payload.last_release_date:
-        project.last_release_date = datetime.strptime(payload.last_release_date, "%Y-%m-%d").date()
-    
-    if payload.users_ids is not None:
-        users = User.objects.filter(id__in=payload.users_ids)
-        project.users.set(users)
+    if payload.client_name is not None:
+        client = Client.objects.filter(name=payload.client_name).first()
+        if client:
+            project.client = client
+        else:
+            return {"detail": f"Client with name {payload.client_name} not found."}, 404
+        
+    for attr, value in payload.dict(exclude={'users_ids', 'client_name'}).items():
+        if value is not None:  
+            setattr(project, attr, value)
     
     project.save()
-    return project
+    return generate_project_response(project)
 
 @project_router.delete("/{project_id}", response={204: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def delete_project(request, project_id: int):
