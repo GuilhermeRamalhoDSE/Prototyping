@@ -2,6 +2,10 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
 function($scope, ProjectService, UserService, $state, AuthService) {
     $scope.projects = [];
     $scope.users = []; 
+
+    $scope.isSuperuser = AuthService.isSuperuser();
+    $scope.isStaff = AuthService.isStaff();
+
     $scope.newProject = {
         name: "",
         client_id: null, 
@@ -30,7 +34,6 @@ function($scope, ProjectService, UserService, $state, AuthService) {
         });
     };
     
-
     $scope.goToNewProject = function() {
         $state.go('base.project-new');
     };
