@@ -242,4 +242,22 @@ angular.module('frontend')
             requiredPermissions: ['superuser', 'staff'] 
         }
     })
+    $stateProvider
+    .state('base.chat', {
+        url: '/chat',
+        templateUrl: 'app/message/chat.html',
+        controller: 'MessageController',
+        data: {
+            requireLogin: true, 
+        }
+    })
+    $stateProvider
+    .state('base.inbox', {
+        url: '/inbox',
+        templateUrl: 'app/message/inbox.html',
+        controller: 'MessageController',
+        data: {
+            requireLogin: true, 
+        }
+    })
 }]);

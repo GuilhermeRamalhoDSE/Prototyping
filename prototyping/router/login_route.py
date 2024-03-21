@@ -31,6 +31,7 @@ def authenticate_user(email, password):
 
         return {
             "token": token,
+            "user_id": user.id,
             "is_superuser": user.is_superuser,
             "is_staff": user.is_staff,
             "license_id": getattr(user, 'license_id', None) if not user.is_superuser else None,

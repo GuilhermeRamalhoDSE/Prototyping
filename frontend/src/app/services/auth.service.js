@@ -6,8 +6,10 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
             var storage = credentials.rememberMe ? $window.localStorage : $window.sessionStorage;
             
             storage.setItem('jwtToken', response.data.token);
+            storage.setItem('userId', response.data.user_id.toString());
             storage.setItem('isSuperuser', response.data.is_superuser.toString());
             storage.setItem('isStaff', response.data.is_staff.toString());
+            
             
             if (response.data.license_id != null) {
                 storage.setItem('licenseId', response.data.license_id.toString());
@@ -18,6 +20,10 @@ angular.module('frontend').factory('AuthService', ['$http', '$window', function(
             
             return response.data;
         });
+    };
+
+    authService.getUserId = function() {
+        return $window.localStorage.getItem('userId') || $window.sessionStorage.getItem('userId');
     };
 
     authService.isSuperuser = function() {
