@@ -24,6 +24,9 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
         },  
         getAllUsers: function() {
             return $http.get('http://localhost:8000/prototyping/api/users/');
+        },
+        getAllClients: function() {
+            return $http.get('http://localhost:8000/prototyping/api/clients/');
         }
     };
 }]);

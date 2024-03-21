@@ -2,6 +2,8 @@ angular.module('frontend').controller('ProjectController', ['$scope', 'ProjectSe
 function($scope, ProjectService, UserService, $state, AuthService) {
     $scope.projects = [];
     $scope.users = []; 
+    $scope.clients = [];
+    $scope.searchClient = "";
 
     $scope.isSuperuser = AuthService.isSuperuser();
     $scope.isStaff = AuthService.isStaff();
@@ -36,6 +38,22 @@ function($scope, ProjectService, UserService, $state, AuthService) {
     
     $scope.goToNewProject = function() {
         $state.go('base.project-new');
+    };
+
+    
+    $scope.loadClients = function() {
+        ProjectService.getAllClients().then(function(response) {
+            $scope.clients = response.data;
+        }).catch(function(error) {
+            console.error('Error loading clients:', error);
+        });
+    };
+
+    $scope.selectClient = function(client) {
+        console.log(client);
+        $scope.newProject.client_id = client.id; 
+        $scope.newProject.client_name = client.name; 
+        $scope.searchClient = client.name; 
     };
 
     $scope.createProject = function() {
@@ -103,4 +121,5 @@ function($scope, ProjectService, UserService, $state, AuthService) {
 
     $scope.loadProjects();
     $scope.loadUsers();
+    $scope.loadClients();
 }]);

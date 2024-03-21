@@ -1,0 +1,32 @@
+<div class="padding" ng-controller="ProjectController">
+    <div class="box">
+        <div class="box-header">
+            <h2>Create Project</h2>
+        </div>
+        <div class="box-divider m-0"></div>
+        <div class="box-body">
+            <form ng-submit="createProject()">
+                <div class="form-group">
+                    <label>Client</label>
+                    <select ng-model="selectedClient" ng-options="client as client.name for client in clients" ng-change="selectClient(selectedClient)" class="form-control">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" class="form-control" ng-model="newProject.name" placeholder="Project Name"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="date" class="form-control" ng-model="newProject.start_date" required>
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" class="form-control" ng-model="newProject.end_date" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Project</button>
+                <button type="button" class="btn btn-secondary" ng-click="cancelCreate()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

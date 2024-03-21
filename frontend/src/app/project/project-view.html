@@ -30,6 +30,9 @@
                         <th data-toggle="true">
                             Name
                         </th>
+                        <th>
+                            Client
+                        </th>
                         <th data-hide="phone">
                             Start Date
                         </th>
@@ -44,6 +47,7 @@
                     <tr ng-repeat="project in projects | filter:searchText">
                         <td>{{ project.id }}</td>
                         <td>{{ project.name }}</td>
+                        <td>{{ project.client_name }}</td>
                         <td>{{ project.start_date | date:'mediumDate' }}</td>
                         <td>{{ project.end_date | date:'mediumDate' }}</td>
                         <td>

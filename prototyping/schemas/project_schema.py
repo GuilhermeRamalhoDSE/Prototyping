@@ -3,7 +3,7 @@ from typing import List, Optional
 from datetime import date
 
 class ProjectIn(Schema):
-    client_id: int
+    client_name: str
     name: str
     start_date: Optional[date] = None  
     end_date: Optional[date] = None
@@ -20,6 +20,7 @@ class UserIdSchema(Schema):
 class ProjectOut(Schema):
     id: int
     client_id: int
+    client_name: str
     name: str
     start_date: date
     end_date: Optional[date] = None
