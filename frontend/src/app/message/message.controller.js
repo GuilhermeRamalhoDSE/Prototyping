@@ -1,4 +1,4 @@
-angular.module('frontend').controller('MessageController', ['$scope', 'MessageService', '$stateParams', 'AuthService', function($scope, MessageService, $stateParams, AuthService) {
+angular.module('frontend').controller('MessageController', ['$scope', '$state', 'MessageService', '$stateParams', 'AuthService', 'ProjectService', 'WebSocketService', function($scope, $state, MessageService, $stateParams, AuthService, ProjectService, WebSocketService) {
     $scope.messages = [];
     $scope.newMessage = "";
     $scope.currentUser = {
@@ -6,31 +6,55 @@ angular.module('frontend').controller('MessageController', ['$scope', 'MessageSe
     };
 
     $scope.projectId = $stateParams.projectId;
+    $scope.clientId = null;
+
+    $scope.loadProjectDetails = function() {
+        ProjectService.getById($scope.projectId).then(function(response) {
+            $scope.clientId = response.data.client_id;
+        }, function(error) {
+            console.error("Error loading project details:", error.statusText);
+        });
+    };
 
     $scope.loadMessages = function() {
         MessageService.getMessagesForProject($scope.projectId).then(function(response) {
-            $scope.messages = response.data;
+            $scope.messages = response.data.map(function(message) {
+                message.formattedDate = new Date(message.date).toLocaleString();
+                return message;
+            });
+
+            if ($scope.messages.length > 0 && !$scope.clientId) {
+                $scope.clientId = $scope.messages[0].client_id;
+            }
         }, function(error) {
             console.error("Error loading messages:", error.statusText);
+        });
+
+        WebSocketService.connect($scope.projectId);
+        $scope.$on('newMessage', function(event, data) {
+            $scope.$apply(function() {
+                $scope.messages.push(data.message); 
+            });
         });
     };
 
     $scope.sendMessage = function() {
-        if ($scope.newMessage.trim() !== "") {
+        if ($scope.newMessage.trim() !== "" && $scope.clientId) {
             var messageData = {
+                client_id: $scope.clientId,
                 project_id: $scope.projectId,
                 message: $scope.newMessage,
                 user_id: $scope.currentUser.id
             };
-
-            MessageService.sendMessage(messageData).then(function(response) {
-                $scope.messages.push(response.data);
-                $scope.newMessage = "";
-            }, function(error) {
-                console.error("Error sending message:", error.statusText);
-            });
+            WebSocketService.sendMessage(messageData);
+            $scope.newMessage = "";
         }
     };
 
+    $scope.goBack = function() {
+        $state.go('base.inbox');
+    };
+
+    $scope.loadProjectDetails();
     $scope.loadMessages();
 }]);

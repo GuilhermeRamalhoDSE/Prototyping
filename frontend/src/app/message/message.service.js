@@ -3,7 +3,7 @@ angular.module('frontend').factory('MessageService', ['$http', function($http) {
     
     return {
         getMessagesForProject: function(projectId) {
-            return $http.get(baseUrl, { params: { project_id: projectId } });
+            return $http.get(baseUrl + projectId);
         },
         sendMessage: function(messageData) {
             return $http.post(baseUrl, messageData);
