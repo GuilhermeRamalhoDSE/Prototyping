@@ -13,8 +13,9 @@ angular.module('frontend').controller('ProjectUpdateController', ['$scope', 'Pro
     
     $scope.loadProject = function() {
         ProjectService.getById(projectId).then(function(response) {
-            let projectData = response.data[0];
+            let projectData = response.data;
             $scope.currentProject = projectData;
+
             $scope.currentProject.start_date = new Date(projectData.start_date);
             $scope.currentProject.end_date = new Date(projectData.end_date);
             if (projectData.client_id && $scope.clients) {
@@ -33,7 +34,7 @@ angular.module('frontend').controller('ProjectUpdateController', ['$scope', 'Pro
         };
         ProjectService.update(projectId, projectToUpdate).then(function(response) {
             alert('Project updated successfully!');
-            $state.go('base.project-view', { clientId: $scope.selectedClient.id });
+            $state.go('base.project-view');
         }).catch(function(error) {
             console.error('Error updating project:', error);
         });
