@@ -1,83 +1,29 @@
-<div class="col-sm-12">
-    <div class="box row-col" style="min-height:450px">
-        <div class="box-header b-b">
-          <strong>Chat</strong>
-        </div>
-        <div class="row-row dker">
-          <div class="row-body">
-            <div class="row-inner">
-              <div class="p-a-md">
-                <div class="m-b">
-                  <a href="" class="pull-left w-40 m-r-sm">
-                      <img src="../assets/images/a2.jpg" alt="..." class="w-full img-circle">
-                  </a>
-                  <div class="clear">
-                      <div>
-                        <div class="p-a p-y-sm dark-white inline r">
-                          Hi John, What's up...
-                        </div>
-                    </div>
-                    <div class="m-t-xs">
-                        <div class="p-a p-y-sm dark-white inline r">
-                          hmm...
-                        </div>
-                    </div>
-                    <div class="text-muted text-xs m-t-xs"><i class="fa fa-ok text-success"></i> 2 minutes ago</div>
-                  </div>
+<!-- ############ PAGE START-->
+<div ng-controller="InboxController">
+  <div class="row-col">
+    <div class="col-sm">
+      <div ui-view class="padding pos-rlt">
+        <div>
+          <!-- list -->
+          <div ng-repeat="project in projects" class="list white">
+            <div class="list white">
+              <div class="list-item b-l b-l-2x b-info">
+                <div class="list-left">
+                  <h5>{{ project.name }}</h5>
                 </div>
-                <div class="m-b">
-                  <a href="" class="pull-right w-40 m-l-sm">
-                      <img src="../assets/images/a3.jpg" class="w-full img-circle" alt="...">
-                  </a>
-                  <div class="clear text-right">
-                    <div class="p-a p-y-sm info inline text-left r">
-                      Lorem ipsum dolor soe rooke..
-                    </div>
-                    <div class="text-muted text-xs m-t-xs">1 minutes ago</div>
-                  </div>
-                </div>
-                <div class="m-b">
-                  <a href="" class="pull-left w-40 m-r-sm">
-                      <img src="../assets/images/a2.jpg" alt="..." class="w-full img-circle">
-                  </a>
-                  <div class="clear">
-                    <div class="p-a p-y-sm dark-white inline r">
-                      Good!
-                    </div>
-                    <div class="text-muted text-xs m-t-xs"><i class="fa fa-ok text-success"></i> 5 seconds ago</div>
-                  </div>
-                </div>
-                <div class="m-b">
-                  <a href="" class="pull-right w-40 m-l-sm">
-                      <img src="../assets/images/a3.jpg" class="w-full img-circle" alt="...">
-                  </a>
-                  <div class="clear text-right">
-                      <div>
-                        <div class="p-a p-y-sm info inline text-left r">
-                          Dlor soe isep slie gosese..
-                        </div>
-                    </div>
-                    <div class="m-t-xs">
-                        <div class="p-a p-y-sm info inline text-left r">
-                          Loris aspim..
-                        </div>
-                    </div>
-                    <div class="text-muted text-xs m-t-xs">Just now</div>
+                <div class="list-body">
+                  <div class="pull-right">
+                    <button class="btn btn-fw black" ng-click="goToProject(project.id)">View Project</button>
+                    <button class="btn btn-fw black" ui-sref="base.chat({projectId: project.id})">Read
+                      Messages</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="box-footer b-t">
-          <form>
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Say something">
-              <span class="input-group-btn">
-                <button class="btn white b-a no-shadow" type="button">SEND</button>
-              </span>
-            </div>
-          </form>
-        </div>
       </div>
+    </div>
+    <!-- ############ PAGE END-->
+  </div>
 </div>

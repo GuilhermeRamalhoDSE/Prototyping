@@ -1,5 +1,6 @@
 from datetime import datetime
 from ninja import Schema
+from typing import Optional
 
 class MessageIn(Schema):
     client_id: int
@@ -9,7 +10,7 @@ class MessageIn(Schema):
 
 class UserOut(Schema):
     id: int
-    full_name: str  
+    full_name: Optional[str]
 
 class MessageOut(Schema):
     id: int
@@ -18,9 +19,9 @@ class MessageOut(Schema):
     user: UserOut
     date: datetime
     message: str
-    formatted_date: str = None 
+    formatted_date: str = None
 
-    def __post_init__(self):
-        super().__post_init__() 
+    def __init__(self, **data):
+        super().__init__(**data)
         self.formatted_date = self.date.strftime('%Y-%m-%d %H:%M:%S') if self.date else None
  

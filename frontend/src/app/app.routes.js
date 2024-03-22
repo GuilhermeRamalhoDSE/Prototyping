@@ -244,7 +244,7 @@ angular.module('frontend')
     })
     $stateProvider
     .state('base.chat', {
-        url: '/chat',
+        url: '/projects/:projectId/messages',
         templateUrl: 'app/message/chat.html',
         controller: 'MessageController',
         data: {
@@ -255,7 +255,7 @@ angular.module('frontend')
     .state('base.inbox', {
         url: '/inbox',
         templateUrl: 'app/message/inbox.html',
-        controller: 'MessageController',
+        controller: 'InboxController',
         data: {
             requireLogin: true, 
         }

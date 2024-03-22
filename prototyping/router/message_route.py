@@ -1,29 +1,78 @@
 from ninja import Router
 from django.shortcuts import get_object_or_404
+from prototyping.models.project_models import Project
 from prototyping.models.message_models import Message
 from prototyping.schemas.message_schema import MessageIn, MessageOut, UserOut
 from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
+from prototyping.utils import get_user_info_from_token
+from typing import List, Any
+from ninja.errors import HttpError
 
 message_router = Router(tags=["Messages"])
 
-@message_router.post("/", response={201: MessageOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
-def create_message(request, message_in: MessageIn):
-    message = Message.objects.create(**message_in.dict())
-    return 201, message
+@message_router.post("/", response={201: MessageOut})
+def create_message(request, message_in: MessageIn) -> Any:
+    user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id')
+    is_superuser = user_info.get('is_superuser', False)
+    is_staff = user_info.get('is_staff', False)
 
-@message_router.get("/", response=list[MessageOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
-def read_messages(request):
-    messages = Message.objects.all()
+    project = Project.objects.filter(id=message_in.project_id, client_id=message_in.client_id).first()
+    if not project:
+        raise HttpError(404, "Projeto não encontrado ou cliente inválido")
+
+    if not (is_superuser or is_staff or project.users.filter(id=user_id).exists()):
+        raise HttpError(403, "Usuário não autorizado")
+
+    message = Message.objects.create(
+        client_id=message_in.client_id,
+        project_id=message_in.project_id,
+        user_id=user_id,
+        message=message_in.message
+    )
+
+    return 201, {
+        "id": message.id,
+        "client_id": message.client_id,
+        "project_id": message.project_id,
+        "user": {"id": user_id, "full_name": user_info.get('full_name')},
+        "date": message.date,
+        "message": message.message
+    }
+
+    
+@message_router.get("/{project_id}", response=list[MessageOut])
+def read_messages(request, project_id: int):
+    user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id')
+    is_superuser = user_info.get('is_superuser', False)
+    is_staff = user_info.get('is_staff', False)
+
+    project = Project.objects.filter(id=project_id).first()
+    if not project:
+        raise HttpError(404, "Projeto não encontrado")
+
+    if not (is_superuser or is_staff or project.users.filter(id=user_id).exists()):
+        raise HttpError(403, "Usuário não autorizado")
+
+    messages_query = Message.objects.filter(project_id=project_id).select_related('user')
     result = []
-    for message in messages:
-        user_data = UserOut(id=message.user.id, full_name=f"{message.user.first_name} {message.user.last_name}")
-        message_data = MessageOut(
-            id=message.id,
-            content=message.content,
-            created_at=message.created_at,
-            user=user_data
-        )
+
+    for message in messages_query:
+        user_data = {
+            "id": message.user.id,
+            "full_name": f"{message.user.first_name} {message.user.last_name}"
+        }
+        message_data = {
+            "id": message.id,
+            "client_id": message.client.id,
+            "project_id": message.project.id,
+            "user": user_data,
+            "date": message.date,
+            "message": message.message
+        }
         result.append(message_data)
+    
     return result
 
 @message_router.put("/{message_id}", response={200: MessageOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
