@@ -30,7 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user_id = text_data_json['user_id']
         project_id = text_data_json['project_id']
         client_id = text_data_json['client_id']
-        user_full_name = text_data_json.get('user_full_name')  # Novo campo para o nome do usuário
+        user_full_name = text_data_json.get('user_full_name')  
 
         await self.save_message(user_id, project_id, client_id, message, user_full_name)
 

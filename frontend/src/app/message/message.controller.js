@@ -1,9 +1,10 @@
-angular.module('frontend').controller('MessageController', ['$scope', '$state', 'MessageService', '$stateParams', 'AuthService', 'ProjectService', 'WebSocketService', function($scope, $state, MessageService, $stateParams, AuthService, ProjectService, WebSocketService) {
+angular.module('frontend').controller('MessageController', ['$scope', '$state', 'MessageService', '$stateParams', 'AuthService', 'ProjectService', 'WebSocketService', 'NotificationService', function($scope, $state, MessageService, $stateParams, AuthService, ProjectService, WebSocketService, NotificationService) {
     $scope.messages = [];
     $scope.newMessage = "";
     $scope.currentUser = {
         id: parseInt(AuthService.getUserId(), 10)
     };
+    $scope.notifications = [];
 
     $scope.projectId = $stateParams.projectId;
     $scope.clientId = null;
@@ -33,7 +34,6 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
         WebSocketService.connect($scope.projectId);
         
         $scope.$on('newMessage', function(event, data) {
-            
             $scope.$apply(function() {
             var isCurrentUser = (data.user_id === $scope.currentUser.id);
             const newMessage = {
@@ -44,11 +44,19 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
                 message: data.message,
                 formattedDate: new Date().toLocaleString()
                 };
-            console.log('Evento newMessage capturado', data);
             $scope.messages.push(newMessage); 
             });
         });
     };
+
+    $scope.loadNotifications = function() {
+        NotificationService.getUnreadNotifications().then(function(response) {
+            $scope.notifications = response.data;
+        }, function(error) {
+            console.error("Error loading notifications:", error.statusText);
+        });
+    };
+
     $scope.sendMessage = function() {
         if ($scope.newMessage.trim() !== "" && $scope.clientId) {
             var messageData = {
@@ -70,4 +78,5 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
 
     $scope.loadProjectDetails();
     $scope.loadMessages();
+    $scope.loadNotifications();
 }]);

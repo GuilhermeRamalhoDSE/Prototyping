@@ -1,10 +1,8 @@
-<!-- ############ PAGE START-->
 <div ng-controller="InboxController">
   <div class="row-col">
     <div class="col-sm">
       <div ui-view class="padding pos-rlt">
         <div>
-          <!-- list -->
           <div ng-repeat="project in projects" class="list white">
             <div class="list white">
               <div class="list-item b-l b-l-2x b-info">
@@ -20,10 +18,21 @@
                 </div>
               </div>
             </div>
+            <div ng-if="project.notifications.length > 0">
+              <h6>Unread Notifications:</h6>
+              <ul>
+                <li class="nav-item dropdown pos-stc-xs">
+                  <a class="nav-link mr-2" href data-toggle="dropdown">
+                      <i class="material-icons">&#xe7f5;</i>
+                      <span class="label label-sm up warn">{{ notification.message }}</span>
+                  </a>
+              </li>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- ############ PAGE END-->
   </div>
 </div>

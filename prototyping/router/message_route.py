@@ -2,7 +2,7 @@ from ninja import Router
 from django.shortcuts import get_object_or_404
 from prototyping.models.project_models import Project
 from prototyping.models.message_models import Message
-from prototyping.schemas.message_schema import MessageIn, MessageOut, UserOut
+from prototyping.schemas.message_schema import MessageIn, MessageOut, NotificationOut
 from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 from prototyping.utils import get_user_info_from_token
 from typing import List, Any
@@ -28,7 +28,8 @@ def create_message(request, message_in: MessageIn) -> Any:
         client_id=message_in.client_id,
         project_id=message_in.project_id,
         user_id=user_id,
-        message=message_in.message
+        message=message_in.message,
+        is_read=True
     )
 
     return 201, {
@@ -39,6 +40,7 @@ def create_message(request, message_in: MessageIn) -> Any:
         "date": message.date,
         "message": message.message
     }
+
 
     
 @message_router.get("/{project_id}", response=list[MessageOut])
@@ -88,3 +90,23 @@ def delete_message(request, message_id: int):
     message = get_object_or_404(Message, id=message_id)
     message.delete()
     return 204, None
+
+@message_router.get("/notifications", response=list[NotificationOut])
+def get_unread_notifications(request) -> Any:
+    user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id')
+
+    unread_messages = Message.objects.filter(user_id=user_id, is_read=False)
+    notification_data = [
+        {
+            "id": message.id,
+            "user_id": message.user_id,
+            "message": message.message,
+            "created_at": message.date, 
+            "read": message.is_read
+        }
+        for message in unread_messages
+    ]
+    return notification_data
+
+
