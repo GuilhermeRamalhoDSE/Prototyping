@@ -9,11 +9,11 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
         }
         
         var wsUrl = 'ws://localhost:8000/ws/chat/' + projectId + '/';
-        console.log("Connecting to", wsUrl);
+        console.log("Connecting to WebSocket at", wsUrl);
         ws = new WebSocket(wsUrl);
 
         ws.onopen = function() {
-            console.log('WebSocket connected');
+            console.log('WebSocket connected', ws.readyState);
         };
 
         ws.onmessage = function(message) {
@@ -23,20 +23,27 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
         };
 
         ws.onclose = function() {
-            console.log('WebSocket disconnected');
+            console.log('WebSocket disconnected', ws.readyState);
         };
 
         ws.onerror = function(event) {
-            console.error('WebSocket error observed:', event);
+            console.error('WebSocket error observed:', event, 'State:', ws.readyState);
         };
     };
 
     service.sendMessage = function(message) {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            console.log("Sending message:", message);
-            ws.send(JSON.stringify(message));
+        if (ws) {
+            console.log("WebSocket current state before sending:", ws.readyState);
+            if (ws.readyState === ws.OPEN) {
+                console.log("Sending message:", message);
+                const messageString = JSON.stringify(message);
+                ws.send(messageString);
+                console.log("Message string sent:", messageString); 
+            } else {
+                console.log("WebSocket is not open. Current state:", ws.readyState);
+            }
         } else {
-            console.log("WebSocket is not open.");
+            console.log("WebSocket connection does not exist.");
         }
     };
 
