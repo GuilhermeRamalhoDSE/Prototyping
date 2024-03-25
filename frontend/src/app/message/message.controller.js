@@ -31,13 +31,24 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
         });
 
         WebSocketService.connect($scope.projectId);
+        
         $scope.$on('newMessage', function(event, data) {
+            
             $scope.$apply(function() {
-                $scope.messages.push(data.message); 
+            var isCurrentUser = (data.user_id === $scope.currentUser.id);
+            const newMessage = {
+                user: {
+                    id: data.user_id,
+                    full_name: isCurrentUser ? 'You' : data.user_full_name
+                },
+                message: data.message,
+                formattedDate: new Date().toLocaleString()
+                };
+            console.log('Evento newMessage capturado', data);
+            $scope.messages.push(newMessage); 
             });
         });
     };
-
     $scope.sendMessage = function() {
         if ($scope.newMessage.trim() !== "" && $scope.clientId) {
             var messageData = {
@@ -46,11 +57,13 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
                 message: $scope.newMessage,
                 user_id: $scope.currentUser.id
             };
+            
             WebSocketService.sendMessage(messageData);
+
             $scope.newMessage = "";
         }
     };
-
+    
     $scope.goBack = function() {
         $state.go('base.inbox');
     };

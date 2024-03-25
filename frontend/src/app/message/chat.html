@@ -1,10 +1,8 @@
 <div ng-app="frontend" ng-controller="MessageController">
-    <div class="box row-col" style="min-height:450px">
-        <div class="box-header b-b">
+    <div class="box row-col" style="min-height:900px">
+        <div class="box-header b-b d-flex justify-content-between">
             <strong>Chat</strong>
-            <a>
-                <button type="button" class="btn btn-fw info pull-right" ng-click="goBack()">Back</button>
-            </a>
+            <button type="button" class="btn btn-fw info" ng-click="goBack()">Back</button>
         </div>
         <div class="row-row dker">
             <div class="row-body">
@@ -14,7 +12,7 @@
                             <div ng-if="msg.user.id === currentUser.id" class="m-b text-right">
                                 <div class="clear">
                                     <div class="p-a p-y-sm info inline text-left r">{{msg.message}}</div>
-                                    <span class="text-muted text-xs">{{msg.user.full_name}}</span>
+                                    <span class="text-muted text-xs">You</span>
                                     <div class="text-muted text-xs m-t-xs">{{msg.formattedDate}}</div>
                                 </div>
                             </div>
