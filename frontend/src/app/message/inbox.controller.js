@@ -1,4 +1,4 @@
-angular.module('frontend').controller('InboxController', ['$scope', 'ProjectService', 'MessageService', 'WebSocketService', function($scope, ProjectService, MessageService, WebSocketService) {
+angular.module('frontend').controller('InboxController', ['$scope', '$state', 'ProjectService', 'MessageService', 'WebSocketService', function($scope, $state, ProjectService, MessageService, WebSocketService) {
     $scope.projects = [];
 
     $scope.loadProjects = function() {
@@ -39,7 +39,13 @@ angular.module('frontend').controller('InboxController', ['$scope', 'ProjectServ
         }
     });
     
+    $scope.totalUnreadMessages = function() {
+        return $scope.projects.reduce((total, project) => total + project.unreadMessagesCount, 0);
+    };
     
-
+    // $scope.goToProject = function(projectId) {
+    //     $state.go('base.chat', {projectId: projectId});
+    // };  
+    
     $scope.loadProjects();
 }]);
