@@ -5,19 +5,12 @@ from typing import Optional
 class MessageIn(Schema):
     client_id: int
     project_id: int
-    user_id: int
     message: str
 
 class UserOut(Schema):
     id: int
-    full_name: Optional[str]
+    full_name: Optional[str] = None
 
-class NotificationOut(Schema):
-    id: int
-    user_id: int
-    message: str
-    created_at: datetime
-    read: bool
 
 class MessageOut(Schema):
     id: int
@@ -27,7 +20,7 @@ class MessageOut(Schema):
     date: datetime
     message: str
     formatted_date: str = None
-    notification: Optional[NotificationOut]
+    is_read: Optional[bool] = None
 
     def __init__(self, **data):
         super().__init__(**data)

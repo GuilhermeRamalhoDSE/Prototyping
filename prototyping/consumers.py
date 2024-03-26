@@ -5,6 +5,7 @@ from prototyping.models.message_models import Message
 from prototyping.models.client_models import Client
 from prototyping.models.project_models import Project
 from prototyping.models.user_models import User
+from prototyping.models.notification_models import Notification
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -40,7 +41,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'user_id': user_id,
                 'user_full_name': user_full_name,
-                'message': message
+                'message': message,
+                'project_id': project_id,
             }
         )
 
@@ -48,11 +50,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         user_id = event['user_id']
         user_full_name = event['user_full_name']
+        project_id = event['project_id']
 
         await self.send(text_data=json.dumps({
             'user_id': user_id,
             'user_full_name': user_full_name,
-            'message': message
+            'message': message,
+            'project_id': project_id,
         }))
     
     @database_sync_to_async
@@ -61,3 +65,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
         project = Project.objects.get(id=project_id)
         client = Client.objects.get(id=client_id)
         created_message = Message.objects.create(user=user, project=project, client=client, message=message_text)
+        
+        eligible_users = project.users.exclude(id=user_id)
+        staff_users = User.objects.filter(is_staff=True)
+        all_users_to_notify = set(eligible_users) | set(staff_users)
+        
+        notifications = [
+            Notification(message=created_message, user=other_user) for other_user in all_users_to_notify
+        ]
+        Notification.objects.bulk_create(notifications)
+
+        for notification in notifications:
+            notification_payload = {
+            'type': 'receive_notification',
+            'message': f'Nova mensagem em {project.name}: "{message_text}"',
+            'from': user_full_name,
+            'project_id': project_id
+        }
+        self.channel_layer.group_send(f'user_{notification.user.id}', notification_payload)
+
+async def receive_notification(self, event):
+    await self.send(text_data=json.dumps(event))
+

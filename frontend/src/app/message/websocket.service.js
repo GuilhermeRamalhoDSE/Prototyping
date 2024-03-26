@@ -9,7 +9,6 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
         }
         
         var wsUrl = 'ws://localhost:8000/ws/chat/' + projectId + '/';
-        console.log("Connecting to WebSocket at", wsUrl);
         ws = new WebSocket(wsUrl);
 
         ws.onopen = function() {
@@ -18,8 +17,8 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
 
         ws.onmessage = function(message) {
             var data = JSON.parse(message.data);
+            console.log("Received message:", data);
             $rootScope.$broadcast('newMessage', data);
-            console.log('Message received:', data);
         };
 
         ws.onclose = function() {
@@ -33,12 +32,9 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
 
     service.sendMessage = function(message) {
         if (ws) {
-            console.log("WebSocket current state before sending:", ws.readyState);
             if (ws.readyState === ws.OPEN) {
-                console.log("Sending message:", message);
                 const messageString = JSON.stringify(message);
                 ws.send(messageString);
-                console.log("Message string sent:", messageString); 
             } else {
                 console.log("WebSocket is not open. Current state:", ws.readyState);
             }

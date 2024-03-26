@@ -2,7 +2,8 @@ from ninja import Router
 from django.shortcuts import get_object_or_404
 from prototyping.models.project_models import Project
 from prototyping.models.message_models import Message
-from prototyping.schemas.message_schema import MessageIn, MessageOut, NotificationOut
+from prototyping.models.notification_models import Notification
+from prototyping.schemas.message_schema import MessageIn, MessageOut, UserOut
 from prototyping.auth import QueryTokenAuth, HeaderTokenAuth
 from prototyping.utils import get_user_info_from_token
 from typing import List, Any
@@ -19,17 +20,16 @@ def create_message(request, message_in: MessageIn) -> Any:
 
     project = Project.objects.filter(id=message_in.project_id, client_id=message_in.client_id).first()
     if not project:
-        raise HttpError(404, "Projeto não encontrado ou cliente inválido")
+        raise HttpError(404, "Project not found or invalid client")
 
     if not (is_superuser or is_staff or project.users.filter(id=user_id).exists()):
-        raise HttpError(403, "Usuário não autorizado")
+        raise HttpError(403, "Unauthorized user")
 
     message = Message.objects.create(
         client_id=message_in.client_id,
         project_id=message_in.project_id,
         user_id=user_id,
         message=message_in.message,
-        is_read=True
     )
 
     return 201, {
@@ -40,10 +40,8 @@ def create_message(request, message_in: MessageIn) -> Any:
         "date": message.date,
         "message": message.message
     }
-
-
-    
-@message_router.get("/{project_id}", response=list[MessageOut])
+   
+@message_router.get("/{project_id}", response=List[MessageOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def read_messages(request, project_id: int):
     user_info = get_user_info_from_token(request)
     user_id = user_info.get('user_id')
@@ -52,27 +50,23 @@ def read_messages(request, project_id: int):
 
     project = Project.objects.filter(id=project_id).first()
     if not project:
-        raise HttpError(404, "Projeto não encontrado")
+        raise HttpError(404, "Project not found")
 
     if not (is_superuser or is_staff or project.users.filter(id=user_id).exists()):
-        raise HttpError(403, "Usuário não autorizado")
+        raise HttpError(403, "Unauthorized user")
 
     messages_query = Message.objects.filter(project_id=project_id).select_related('user')
     result = []
 
     for message in messages_query:
-        user_data = {
-            "id": message.user.id,
-            "full_name": f"{message.user.first_name} {message.user.last_name}"
-        }
-        message_data = {
-            "id": message.id,
-            "client_id": message.client.id,
-            "project_id": message.project.id,
-            "user": user_data,
-            "date": message.date,
-            "message": message.message
-        }
+        message_data = MessageOut(
+            id=message.id,
+            client_id=message.client.id,
+            project_id=message.project.id,
+            user=UserOut(id=message.user.id, full_name=f"{message.user.first_name} {message.user.last_name}"),
+            date=message.date,
+            message=message.message
+        )
         result.append(message_data)
     
     return result
@@ -91,22 +85,34 @@ def delete_message(request, message_id: int):
     message.delete()
     return 204, None
 
-@message_router.get("/notifications", response=list[NotificationOut])
+@message_router.get("/notifications", response=List[MessageOut], auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def get_unread_notifications(request) -> Any:
     user_info = get_user_info_from_token(request)
     user_id = user_info.get('user_id')
 
-    unread_messages = Message.objects.filter(user_id=user_id, is_read=False)
-    notification_data = [
-        {
-            "id": message.id,
-            "user_id": message.user_id,
-            "message": message.message,
-            "created_at": message.date, 
-            "read": message.is_read
-        }
-        for message in unread_messages
-    ]
-    return notification_data
+    unread_notifications = Notification.objects.filter(user_id=user_id, is_read=False).select_related('message')
+    
+    return [MessageOut.from_orm(notification.message) for notification in unread_notifications]
+
+@message_router.get("/{project_id}/unread-count", response={200: int}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
+def get_project_unread_messages_count(request, project_id: int) -> Any:
+    user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id')
+
+    unread_count = Notification.objects.filter(
+        message__project_id=project_id,
+        user_id=user_id,
+        is_read=False
+    ).count()
+
+    return 200, unread_count
 
 
+@message_router.patch("/{message_id}/read", response={200: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
+def mark_message_as_read(request, message_id: int):
+    user_info = get_user_info_from_token(request)
+    user_id = user_info.get('user_id')
+
+    Notification.objects.filter(message_id=message_id, user_id=user_id).update(is_read=True)
+
+    return 200, None

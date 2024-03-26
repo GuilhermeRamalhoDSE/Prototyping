@@ -13,6 +13,12 @@ angular.module('frontend').factory('MessageService', ['$http', function($http) {
         },
         deleteMessage: function(messageId) {
             return $http.delete(baseUrl + messageId + '/');
-        }
+        },
+        getUnreadMessagesCount: function(projectId) {
+            return $http.get(baseUrl + projectId + '/unread-count');
+        },
+        markMessageAsRead: function(messageId) {
+            return $http.patch(baseUrl + messageId + '/read');
+        },
     };
 }]);
