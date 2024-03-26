@@ -7,9 +7,14 @@
             <div class="list white">
               <div class="list-item b-l b-l-2x b-info">
                 <div class="list-left">
-                  <h5>{{ project.name }}</h5>
+                  <a class="box-header" ng-if="project.unreadMessagesCount > 0">
+                    <span class="label rounded primary success">{{ project.unreadMessagesCount }}</span>
+                  </a>
                 </div>
                 <div class="list-body">
+                  <div class="pull-left">
+                    <h5>{{ project.name }} </h5>
+                  </div>
                   <div class="pull-right">
                     <button class="btn btn-fw black" ng-click="goToProject(project.id)">View Project</button>
                     <button class="btn btn-fw black" ui-sref="base.chat({projectId: project.id})">Read
@@ -17,18 +22,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div ng-if="project.notifications.length > 0">
-              <h6>Unread Notifications:</h6>
-              <ul>
-                <li class="nav-item dropdown pos-stc-xs">
-                  <a class="nav-link mr-2" href data-toggle="dropdown">
-                      <i class="material-icons">&#xe7f5;</i>
-                      <span class="label label-sm up warn">{{ notification.message }}</span>
-                  </a>
-              </li>
-                </li>
-              </ul>
             </div>
           </div>
         </div>

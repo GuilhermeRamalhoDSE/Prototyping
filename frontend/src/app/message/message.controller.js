@@ -1,4 +1,4 @@
-angular.module('frontend').controller('MessageController', ['$scope', '$state', 'MessageService', '$stateParams', 'AuthService', 'ProjectService', 'WebSocketService', 'NotificationService', function($scope, $state, MessageService, $stateParams, AuthService, ProjectService, WebSocketService, NotificationService) {
+angular.module('frontend').controller('MessageController', ['$scope', '$state', 'MessageService', '$stateParams', 'AuthService', 'ProjectService', 'WebSocketService', function($scope, $state, MessageService, $stateParams, AuthService, ProjectService, WebSocketService) {
     $scope.messages = [];
     $scope.newMessage = "";
     $scope.currentUser = {
@@ -49,14 +49,6 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
         });
     };
 
-    $scope.loadNotifications = function() {
-        NotificationService.getUnreadNotifications().then(function(response) {
-            $scope.notifications = response.data;
-        }, function(error) {
-            console.error("Error loading notifications:", error.statusText);
-        });
-    };
-
     $scope.sendMessage = function() {
         if ($scope.newMessage.trim() !== "" && $scope.clientId) {
             var messageData = {
@@ -78,5 +70,4 @@ angular.module('frontend').controller('MessageController', ['$scope', '$state', 
 
     $scope.loadProjectDetails();
     $scope.loadMessages();
-    $scope.loadNotifications();
 }]);
