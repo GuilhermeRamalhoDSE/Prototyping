@@ -8,7 +8,7 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
             ws.close();
         }
         
-        var wsUrl = 'ws://localhost:8000/ws/chat/' + projectId + '/';
+        var wsUrl = 'wss://prototypingdse.it/ws/chat/' + projectId + '/';
         ws = new WebSocket(wsUrl);
 
         ws.onopen = function() {

@@ -1,5 +1,5 @@
 angular.module('frontend').factory('ProjectService', ['$http', function($http) {
-    const baseUrl = 'http://localhost:8000/prototyping/api/projects/';
+    const baseUrl = 'https://prototypingdse.it/prototyping/api/projects/';
     return {
         create: function(projectData) {
             return $http.post(baseUrl, projectData);
@@ -23,10 +23,10 @@ angular.module('frontend').factory('ProjectService', ['$http', function($http) {
             return $http.post(baseUrl + projectId + '/remove-user/', {user_id: userId});
         },  
         getAllUsers: function() {
-            return $http.get('http://localhost:8000/prototyping/api/users/');
+            return $http.get('https://prototypingdse.it/prototyping/api/users/');
         },
         getAllClients: function() {
-            return $http.get('http://localhost:8000/prototyping/api/clients/');
+            return $http.get('https://prototypingdse.it/prototyping/api/clients/');
         },
         getAllByClientId: function(clientId) {
             return $http.get(baseUrl, { params: { client_id: clientId } });

@@ -1,5 +1,5 @@
 angular.module('frontend').factory('ClientService', ['$http', function($http) {
-    const baseUrl = 'http://localhost:8000/prototyping/api/clients/';
+    const baseUrl = 'https://prototypingdse.it/prototyping/api/clients/';
     return {
         create: function(clientData) {
             return $http.post(baseUrl, clientData);

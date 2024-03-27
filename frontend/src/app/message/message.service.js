@@ -1,5 +1,5 @@
 angular.module('frontend').factory('MessageService', ['$http', function($http) {
-    const baseUrl = 'http://localhost:8000/prototyping/api/messages/';
+    const baseUrl = 'https://prototypingdse.it/prototyping/api/messages/';
     
     return {
         getMessagesForProject: function(projectId) {
