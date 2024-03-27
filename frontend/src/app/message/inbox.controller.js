@@ -1,5 +1,6 @@
 angular.module('frontend').controller('InboxController', ['$scope', '$state', 'ProjectService', 'MessageService', 'WebSocketService', function($scope, $state, ProjectService, MessageService, WebSocketService) {
     $scope.projects = [];
+    var notificationSound = new Audio('../assets/sounds/Messenger.mp3'); // Certifique-se de que o caminho do arquivo está correto.
 
     $scope.loadProjects = function() {
         ProjectService.getAll().then(function(response) {
@@ -31,6 +32,10 @@ angular.module('frontend').controller('InboxController', ['$scope', '$state', 'P
             }
             project.unreadMessagesCount += 1;
             
+            notificationSound.play().catch(function(error) {
+                console.error("Playback failed:", error);
+            });
+
             if(!$scope.$$phase) { 
                 $scope.$apply(); 
             }
@@ -42,10 +47,6 @@ angular.module('frontend').controller('InboxController', ['$scope', '$state', 'P
     $scope.totalUnreadMessages = function() {
         return $scope.projects.reduce((total, project) => total + project.unreadMessagesCount, 0);
     };
-    
-    // $scope.goToProject = function(projectId) {
-    //     $state.go('base.chat', {projectId: projectId});
-    // };  
     
     $scope.loadProjects();
 }]);
