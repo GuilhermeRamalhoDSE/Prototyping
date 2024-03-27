@@ -55,7 +55,7 @@ def read_messages(request, project_id: int):
     if not (is_superuser or is_staff or project.users.filter(id=user_id).exists()):
         raise HttpError(403, "Unauthorized user")
 
-    messages_query = Message.objects.filter(project_id=project_id).select_related('user')
+    messages_query = Message.objects.filter(project_id=project_id).select_related('user').order_by('date')
     result = []
 
     for message in messages_query:
@@ -70,6 +70,7 @@ def read_messages(request, project_id: int):
         result.append(message_data)
     
     return result
+
 
 @message_router.put("/{message_id}", response={200: MessageOut}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
 def update_message(request, message_id: int, payload: MessageIn):
