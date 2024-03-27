@@ -27,24 +27,36 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        user_id = text_data_json['user_id']
-        project_id = text_data_json['project_id']
-        client_id = text_data_json['client_id']
-        user_full_name = text_data_json.get('user_full_name')  
+        action = text_data_json.get('action')
 
-        await self.save_message(user_id, project_id, client_id, message, user_full_name)
+        if action == 'open_conversation':
+            project_id = text_data_json['project_id']
+            user_id = text_data_json['user_id']
+            await self.mark_messages_as_read(project_id, user_id)
+        else:
+            message = text_data_json['message']
+            user_id = text_data_json['user_id']
+            project_id = text_data_json['project_id']
+            client_id = text_data_json['client_id']
+            user_full_name = text_data_json.get('user_full_name')
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'user_id': user_id,
-                'user_full_name': user_full_name,
-                'message': message,
-                'project_id': project_id,
-            }
-        )
+            await self.save_message(user_id, project_id, client_id, message, user_full_name)
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'user_id': user_id,
+                    'user_full_name': user_full_name,
+                    'message': message,
+                    'project_id': project_id,
+                }
+            )
+
+    @database_sync_to_async
+    def mark_messages_as_read(self, project_id, user_id):
+        messages = Message.objects.filter(project_id=project_id, user_id=user_id, is_read=False)
+        messages.update(is_read=True)
 
     async def chat_message(self, event):
         message = event['message']
@@ -83,7 +95,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'project_id': project_id
         }
         self.channel_layer.group_send(f'user_{notification.user.id}', notification_payload)
-
+    
 async def receive_notification(self, event):
     await self.send(text_data=json.dumps(event))
 

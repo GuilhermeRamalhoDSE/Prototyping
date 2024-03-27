@@ -107,12 +107,18 @@ def get_project_unread_messages_count(request, project_id: int) -> Any:
 
     return 200, unread_count
 
-
-@message_router.patch("/{message_id}/read", response={200: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
-def mark_message_as_read(request, message_id: int):
+@message_router.patch("/project/{project_id}/read-all", response={200: None}, auth=[QueryTokenAuth(), HeaderTokenAuth()])
+def mark_project_messages_as_read(request, project_id: int):
     user_info = get_user_info_from_token(request)
     user_id = user_info.get('user_id')
 
-    Notification.objects.filter(message_id=message_id, user_id=user_id).update(is_read=True)
+    notifications_updated = Notification.objects.filter(
+        message__project_id=project_id, 
+        user_id=user_id, 
+        is_read=False
+    ).update(is_read=True)
 
-    return 200, None
+    if notifications_updated:
+        return 200, {"detail": "Notifications marked as read."}
+    else:
+        return 200, {"detail": "No notifications to update."}

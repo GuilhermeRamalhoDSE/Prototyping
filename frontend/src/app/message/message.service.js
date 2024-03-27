@@ -20,5 +20,8 @@ angular.module('frontend').factory('MessageService', ['$http', function($http) {
         markMessageAsRead: function(messageId) {
             return $http.patch(baseUrl + messageId + '/read');
         },
+        markAllMessagesAsRead: function(projectId) {
+            return $http.patch(baseUrl + 'project/' + projectId + '/read-all');
+        },
     };
 }]);

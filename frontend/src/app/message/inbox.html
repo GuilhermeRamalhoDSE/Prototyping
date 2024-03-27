@@ -17,7 +17,7 @@
                   </div>
                   <div class="pull-right">
                     <button class="btn btn-fw black" ng-click="goToProject(project.id)">View Project</button>
-                    <button class="btn btn-fw black" ui-sref="base.chat({projectId: project.id})">Read
+                    <button class="btn btn-fw black" ui-sref="base.chat({projectId: project.id})" ng-click="markMessagesAsRead(project.id)">Read
                       Messages</button>
                   </div>
                 </div>

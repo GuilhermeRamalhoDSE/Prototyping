@@ -43,5 +43,20 @@ angular.module('frontend').factory('WebSocketService', ['$rootScope', function($
         }
     };
 
+    service.markConversationAsOpened = function(projectId, userId) {
+        const openConversationMessage = {
+            action: 'open_conversation',
+            project_id: projectId,
+            user_id: userId
+        };
+
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(openConversationMessage));
+        } else {
+            console.log("WebSocket is not open. Unable to mark conversation as opened.");
+        }
+    };
+
+
     return service;
 }]);
