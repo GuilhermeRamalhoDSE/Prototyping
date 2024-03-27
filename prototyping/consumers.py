@@ -40,6 +40,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             client_id = text_data_json['client_id']
             user_full_name = text_data_json.get('user_full_name')
 
+            if not user_full_name:
+                user_full_name = await self.get_user_full_name(user_id)
+
             await self.save_message(user_id, project_id, client_id, message, user_full_name)
 
             await self.channel_layer.group_send(
@@ -55,25 +58,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def mark_messages_as_read(self, project_id, user_id):
-        messages = Message.objects.filter(project_id=project_id, user_id=user_id, is_read=False)
-        messages.update(is_read=True)
+        Message.objects.filter(project_id=project_id, user_id=user_id, is_read=False).update(is_read=True)
 
     async def chat_message(self, event):
-        message = event['message']
-        user_id = event['user_id']
-        user_full_name = event['user_full_name']
-        project_id = event['project_id']
-
         await self.send(text_data=json.dumps({
-            'user_id': user_id,
-            'user_full_name': user_full_name,
-            'message': message,
-            'project_id': project_id,
+            'user_id': event['user_id'],
+            'user_full_name': event['user_full_name'],
+            'message': event['message'],
+            'project_id': event['project_id'],
         }))
     
     @database_sync_to_async
     def save_message(self, user_id, project_id, client_id, message_text, user_full_name):
         user = User.objects.get(id=user_id)
+        user_full_name = user_full_name or f"{user.first_name} {user.last_name}"
         project = Project.objects.get(id=project_id)
         client = Client.objects.get(id=client_id)
         created_message = Message.objects.create(user=user, project=project, client=client, message=message_text)
@@ -82,20 +80,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
         staff_users = User.objects.filter(is_staff=True)
         all_users_to_notify = set(eligible_users) | set(staff_users)
         
-        notifications = [
-            Notification(message=created_message, user=other_user) for other_user in all_users_to_notify
-        ]
+        notifications = [Notification(message=created_message, user=other_user) for other_user in all_users_to_notify]
         Notification.objects.bulk_create(notifications)
 
         for notification in notifications:
-            notification_payload = {
-            'type': 'receive_notification',
-            'message': f'Nova mensagem em {project.name}: "{message_text}"',
-            'from': user_full_name,
-            'project_id': project_id
-        }
-        self.channel_layer.group_send(f'user_{notification.user.id}', notification_payload)
+            self.channel_layer.group_send(
+                f'user_{notification.user.id}',
+                {
+                    'type': 'receive_notification',
+                    'message': f'Nova mensagem em {project.name}: "{message_text}"',
+                    'from': user_full_name,
+                    'project_id': project_id
+                }
+            )
     
-async def receive_notification(self, event):
-    await self.send(text_data=json.dumps(event))
+    @database_sync_to_async
+    def get_user_full_name(self, user_id):
+        user = User.objects.get(id=user_id)
+        return f"{user.first_name} {user.last_name}"
 
+    async def receive_notification(self, event):
+        await self.send(text_data=json.dumps(event))
