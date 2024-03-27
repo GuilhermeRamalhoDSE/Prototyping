@@ -4,8 +4,8 @@ from channels.db import database_sync_to_async
 from prototyping.models.message_models import Message
 from prototyping.models.client_models import Client
 from prototyping.models.project_models import Project
-from prototyping.models.user_models import User
 from prototyping.models.notification_models import Notification
+from prototyping.models.user_models import User
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
